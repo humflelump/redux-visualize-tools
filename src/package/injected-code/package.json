@@ -5,11 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --watch"
+    "build": "webpack --watch"
   },
   "author": "Cameron Nokes",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^2.7.2"
+    "ts-loader": "^6.0.4",
+    "typescript": "^2.9.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.5"
   }
 }

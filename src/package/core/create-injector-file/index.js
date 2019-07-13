@@ -1,15 +1,13 @@
 const fs = require('fs');
 
 const FILE_TO_WATCH = '../injected-code-dist/index.js'
-const OUTPUT_FILE = '../injection.ts';
+const OUTPUT_FILE = '../src/injection.ts';
 
 console.log('Started watching: ' + FILE_TO_WATCH);
 console.log('Will write to: ' + OUTPUT_FILE);
 
 function mapInputToOutput(contents) {
-    const fileOutput = `export const code: string = ${"`"}
-var exports = {};
-${contents}${"`"}`;
+    const fileOutput = `export const CODE_TO_INJECT: string = ${"`"}${contents}${"`"}`;
 
     return fileOutput;
 }

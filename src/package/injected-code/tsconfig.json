@@ -1,15 +1,11 @@
+
 {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "lib": ["es2017", "es7", "es6", "dom"],
-      "declaration": true,
-      "outDir": "../core/injected-code-dist",
-      "strict": true,
-      "esModuleInterop": true
-    },
-    "exclude": [
-      "node_modules",
-      "dist"
-    ]
+  "compilerOptions": {
+    "outDir": "../../test-app/src/redux-visualize-dist",
+    "noImplicitAny": false,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true
   }
+}
