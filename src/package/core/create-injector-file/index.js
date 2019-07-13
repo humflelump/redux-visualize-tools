@@ -7,7 +7,7 @@ console.log('Started watching: ' + FILE_TO_WATCH);
 console.log('Will write to: ' + OUTPUT_FILE);
 
 function mapInputToOutput(contents) {
-    const fileOutput = `export const CODE_TO_INJECT: string = ${"`"}${contents}${"`"}`;
+    const fileOutput = "export const CODE_TO_INJECT = " + JSON.stringify({code: contents});
 
     return fileOutput;
 }
