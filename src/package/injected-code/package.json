@@ -1,0 +1,15 @@
+{
+  "name": "my-ts-lib",
+  "version": "1.0.0",
+  "description": "My npm package written in TS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --watch"
+  },
+  "author": "Cameron Nokes",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^2.7.2"
+  }
+}
