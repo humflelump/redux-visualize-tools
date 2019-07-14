@@ -1,4 +1,5 @@
 import { CODE_TO_INJECT } from "./injection";
+import { Graph } from './vis/graph';
 
 
 export function openWindow() {
@@ -20,4 +21,6 @@ export function openWindow() {
     `)
     child.document.close();
 }
+
+export const graph = new Graph();
 
