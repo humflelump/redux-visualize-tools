@@ -1,13 +1,16 @@
 import { AnyAction } from "redux";
+import Immutable from 'immutable';
 
 export interface Component1State {
     text: string,
     number: number,
+    immutableYay: any,
 }
 
 const initialState: Component1State = {
     text: 'hey',
     number: 0,
+    immutableYay: Immutable.fromJS({wow: '5454'}),
 };
 
 export type SetTextAction = {type: 'SET_TEXT1', text: string}

@@ -1,4 +1,5 @@
 import { NODE_TYPES } from "./constants";
+import { StoreCreator } from 'redux';
 export interface NodeMetadata {
     description?: string;
     file?: string;
@@ -24,16 +25,26 @@ export declare class Node {
     setDuration(duration: number): void;
     setValue(value: any): void;
     addDependency(node: Node): void;
+    removeDependency(id: string): void;
 }
 export declare class Graph {
     private stack;
     private nodes;
     private lastAction;
+    private store?;
+    private stateInjectorCache;
+    private getterCache;
     constructor();
     setCurrentAction(action: any): void;
     private addNode;
+    getNodeById(id: string): Node | undefined;
     private watch;
+    injectObject(d: any, history: string[], cache: Map<any, any>): any;
+    injectImmutable(d: any, history: string[], cache: Map<any, any>): any;
+    private injectState;
+    enhance<T extends Function>(createStore: StoreCreator): T;
     add<T extends Function>(f: T, metadata?: UserNodeMetadata): T;
+    private addConnect;
     private addFunction;
     private addReselectSelector;
 }

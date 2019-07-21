@@ -3,9 +3,10 @@ import { createSelector } from 'reselect';
 import { graph } from '../redux-visualize-dist/index';
 
 const text = (state: State) => state.Component1.text;
+const wow = (state: State) => state.Component1.immutableYay.get('wow');
 
 export const appendedText = graph.add(createSelector)(
-    [text], t => t + '_wow'
+    [text, wow], t => t + '_wow'
 );
 
 export const isLong = graph.add(createSelector)(

@@ -76,3 +76,32 @@ function getType(f) {
     return 'UNKNOWN';
 }
 exports.getType = getType;
+function isImmutableMap(d) {
+    return d && typeof d === 'object' && 'get' in d && 'keySeq' in d;
+}
+exports.isImmutableMap = isImmutableMap;
+function isObject(d) {
+    return d && typeof d === 'object' && !('get' in d) && !Array.isArray(d);
+}
+exports.isObject = isObject;
+function getStateVariableName(keys) {
+    return "state." + keys.join('.');
+}
+exports.getStateVariableName = getStateVariableName;
+function shallowEqual(o1, o2) {
+    if (!isObject(o1) || !isObject(o2)) {
+        return false;
+    }
+    var keys1 = Object.keys(o1);
+    var keys2 = Object.keys(o2);
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+    for (var i = 0; i < keys1.length; i++) {
+        if (o1[keys1[i]] !== o2[keys2[i]]) {
+            return false;
+        }
+    }
+    return true;
+}
+exports.shallowEqual = shallowEqual;

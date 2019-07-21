@@ -7,6 +7,7 @@ import { openWindow } from './redux-visualize-dist/index';
 import { configureStore } from './store';
 import { Provider } from 'react-redux';
 import { graph } from './redux-visualize-dist/index';
+import Immutable from 'immutable';
 
 console.log(graph);
 

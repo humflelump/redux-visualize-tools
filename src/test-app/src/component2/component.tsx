@@ -7,19 +7,14 @@ import { graph } from '../redux-visualize-dist/index';
 
 const mapStateToProps = (state: State) => {
     return {
+        test: selectors.test(state),
         text: state.Component1.text,
-        isLong: selectors.isLong(state),
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        setText: (text: String) => {
-            dispatch({
-                type: 'SET_TEXT1',
-                text,
-            });
-        },
+
     }
 };
 
@@ -28,12 +23,11 @@ type Props = ReturnType<typeof mapStateToProps> &
 
 const Component_: React.FC<Props> = (props) => {
     return (<div style={{width: 200, height: 100, backgroundColor: 'green'}}>
-        <input value={props.text} onChange={e => props.setText(e.target.value)}/>
-        <div>{props.isLong ? 'long' : 'short'}</div>
+        {props.test}
     </div>);
 }
 
-export const Component1 = graph.add(connect, {name: 'Component1'})(
+export const Component2 = graph.add(connect, {name: 'Component2'})(
     mapStateToProps,
     mapDispatchToProps
   )(Component_);

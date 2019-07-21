@@ -75,3 +75,32 @@ export function getType(f: any) {
 
     return 'UNKNOWN';
 }
+
+export function isImmutableMap(d: any) {
+    return d && typeof d === 'object' && 'get' in d && 'keySeq' in d;
+}
+
+export function isObject(d: any) {
+    return d && typeof d === 'object' && !('get' in d) && !Array.isArray(d);
+}
+
+export function getStateVariableName(keys: string[]) {
+    return `state.${keys.join('.')}`;
+}
+
+export function shallowEqual(o1: {[key: string]: any}, o2: {[key: string]: any}) {
+    if (!isObject(o1) || !isObject(o2)) {
+        return false;
+    }
+    const keys1 = Object.keys(o1);
+    const keys2 = Object.keys(o2);
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+    for (let i = 0; i < keys1.length; i++) {
+        if (o1[keys1[i]] !== o2[keys2[i]]) {
+            return false;
+        }
+    }
+    return true;
+}
