@@ -1,7 +1,7 @@
 import { Component1State, Component1Reducer} from "./component1/reducer";
 import { Component2State, Component2Reducer} from "./component2/reducer";
 import { combineReducers, Dispatch, Reducer, createStore } from 'redux';
-import { graph } from './redux-visualize-dist/index';
+import { graph } from 'redux-visualize-tools';
 
 export interface State {
     Component1: Component1State,

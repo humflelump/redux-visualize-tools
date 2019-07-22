@@ -2,9 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var injection_1 = require("./injection");
 var graph_1 = require("./vis/graph");
+exports.default = graph_1.Graph;
+exports.graph = new graph_1.Graph();
 function openWindow() {
-    window.blah = "yeah";
     var child = window.open(window.location.origin, 'dev-tools', "width=500, height=500");
+    setTimeout(function () {
+        child.commChannel.sendGraph(exports.graph);
+    }, 0);
     if (!child)
         return;
     child.document.open();
@@ -12,4 +16,3 @@ function openWindow() {
     child.document.close();
 }
 exports.openWindow = openWindow;
-exports.graph = new graph_1.Graph();

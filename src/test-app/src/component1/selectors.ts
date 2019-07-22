@@ -1,6 +1,6 @@
 import { State } from '../store';
 import { createSelector } from 'reselect';
-import { graph } from '../redux-visualize-dist/index';
+import { graph } from 'redux-visualize-tools';
 
 const text = (state: State) => state.Component1.text;
 const wow = (state: State) => state.Component1.immutableYay.get('wow');

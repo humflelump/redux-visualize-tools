@@ -1,6 +1,6 @@
 import { State } from '../store';
 import { createSelector } from 'reselect';
-import { graph } from '../redux-visualize-dist/index';
+import { graph } from 'redux-visualize-tools';
 
 const test_ = (state: State) => state.Component2;
 

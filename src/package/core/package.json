@@ -1,9 +1,9 @@
 {
-  "name": "my-ts-lib",
+  "name": "redux-visualize-tools",
   "version": "1.0.0",
   "description": "My npm package written in TS",
-  "main": "../../test-app/src/redux-visualize-dist/index.js",
-  "types": "../../test-app/src/redux-visualize-dist/index.d.ts",
+  "main": "./redux-visualize-dist/index.js",
+  "types": "./redux-visualize-dist/index.d.ts",
   "scripts": {
     "build": "tsc --watch"
   },

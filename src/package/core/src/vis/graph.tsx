@@ -184,7 +184,6 @@ export class Graph {
 
     injectImmutable(d: any, history: string[], cache: Map<any, any>) {
         if (cache.has(d)) {
-
             return cache.get(d);
         }
         let newObj = Immutable.fromJS({});

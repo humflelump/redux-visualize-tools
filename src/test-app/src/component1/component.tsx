@@ -3,7 +3,7 @@ import { State } from '../store';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as selectors from './selectors';
-import { graph } from '../redux-visualize-dist/index';
+import { graph } from 'redux-visualize-tools';
 
 const mapStateToProps = (state: State) => {
     return {

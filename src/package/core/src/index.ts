@@ -1,10 +1,14 @@
 import { CODE_TO_INJECT } from "./injection";
 import { Graph } from './vis/graph';
-
+export default Graph;
+export const graph = new Graph();
 
 export function openWindow() {
-    (<any>window).blah = "yeah"
     const child = window.open(window.location.origin, 'dev-tools', "width=500, height=500");
+    setTimeout(() => {
+       (<any>child).commChannel.sendGraph(graph);
+    }, 0);
+    
     if (!child) return; 
     child.document.open();
     child.document.write(`
@@ -21,6 +25,4 @@ export function openWindow() {
     `)
     child.document.close();
 }
-
-export const graph = new Graph();
 
