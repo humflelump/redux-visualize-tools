@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { attachCommChannelToWindow } from './comm-channel/inject-to-window'
 import { Provider } from "react-redux";
 import { store } from "./store";
+import { GraphComponent } from "./graph/ui";
 
 function add(x: number) {
     return x + 6
@@ -12,7 +13,7 @@ function add(x: number) {
 setTimeout(() => {
     ReactDOM.render(
         <Provider store={store}>
-            <button>omg</button>
+            <GraphComponent />
         </Provider>, 
         document.getElementById('root')
     );

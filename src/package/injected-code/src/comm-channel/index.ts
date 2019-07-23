@@ -8,7 +8,7 @@ export class MultiWindowCommChannel {
     sendGraph(data: any) {
         store.dispatch({
             type: 'SET_GRAPH',
-            graph: data,
+            graph: { ...data },
         });
     }
 }

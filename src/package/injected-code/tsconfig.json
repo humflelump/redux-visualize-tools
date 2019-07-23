@@ -7,7 +7,7 @@
     "lib": ["es2017", "es7", "es6", "dom"],
     "declaration": true,
     "outDir": "../../test-app/src/redux-visualize-dist",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "jsx": "react"
   },
