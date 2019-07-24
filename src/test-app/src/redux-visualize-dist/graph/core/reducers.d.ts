@@ -4,6 +4,7 @@ export declare const initialState: {
     xFrom: number[];
     yTo: number[];
     yFrom: number[];
+    mousePosition: number[];
 };
 export declare type GraphState = typeof initialState;
 export declare function GraphReducer(state: GraphState, action: AnyAction): GraphState;

@@ -1,17 +1,84 @@
-import { UINode } from "../core/gen-renderable-graph";
 import * as d3 from 'd3';
 import { Dictionary } from "lodash";
+import { Scale, ZoomData, UINode, Ctx, RectangleBodyData } from "../types";
+import { COLORS } from './constants';
 
-export function renderRectangles(ctx: CanvasRenderingContext2D, nodes: UINode[]) {
-    ctx.fillStyle = 'blue';
+
+
+function renderRoundedRect(ctx: Ctx, radius: number, x: number, y: number, width: number, height: number) {
+    if (width < 2 * radius) radius = width / 2;
+    if (height < 2 * radius) radius = height / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + width, y, x + width, y + height, radius);
+    ctx.arcTo(x + width, y + height, x, y + height, radius);
+    ctx.arcTo(x, y + height, x, y, radius);
+    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.closePath();
+}
+
+export function renderRectangleContents(
+    nodes: UINode[],
+    ctx: Ctx,
+    getRectangleData: (node: UINode) => RectangleBodyData,
+    scale: number,
+) {
     for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
-        ctx.fillRect(node.x, node.y, node.width, node.height);
+        const data = getRectangleData(node);
+        ctx.fillStyle = "rgb(80,80,80)";
+        ctx.textAlign = "left";
+        const size = 13 * scale;
+        ctx.font = `${size}px "Roboto", sans-serif`;
+        let y = node.y + 48 * scale;
+        let label = 'Return Type: ' + data.returnType;
+        ctx.fillText(label, node.x + node.width / 30, y); 
+        y += size + 5 * scale;
+        label = 'Last Call: ' + data.lastCall;
+        ctx.fillText(label, node.x + node.width / 30, y); 
+        y += size + 5 * scale;
+        label = 'Computation: ' + data.duration;
+        ctx.fillText(label, node.x + node.width / 30, y); 
     }
 }
 
+export function renderRectangles(
+    ctx: Ctx, 
+    nodes: UINode[],
+    hoveredNode: UINode | null,
+    scale: number,
+) {
+    ctx.shadowColor = "rgba(200, 200, 200, 1)";
+    ctx.shadowBlur = 6 * scale;
+    ctx.shadowOffsetX = 6 * scale;
+    ctx.shadowOffsetY = 6 * scale;
+    const NORMAL = 'rgba(240, 240, 240, 1)';
+    const HOVERED = 'rgba(220, 220, 220, 1)';
+    ctx.lineWidth = 1;
+    const radius = 10 * scale;
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        const color = COLORS[node.data.type];
+        ctx.strokeStyle = color;
+        const isHovered = hoveredNode === node;
+        renderRoundedRect(ctx, radius, node.x, node.y, node.width, node.height);
+        if (isHovered) {
+            ctx.fillStyle = HOVERED;
+        } else {
+            ctx.fillStyle = NORMAL;
+        }
+        ctx.fill();
+        ctx.moveTo(node.x, node.y + 28 * scale);
+        ctx.lineTo(node.x + node.width, node.y + 28 * scale);
+        ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+}
+
 export function renderLines(
-    ctx: CanvasRenderingContext2D,
+    ctx: Ctx,
     nodes: UINode[],
     indexedNodes: Dictionary<UINode>
 ) {
@@ -27,19 +94,24 @@ export function renderLines(
             ctx.lineTo(parent.x + parent.width / 2, parent.y);
             ctx.stroke();
         }
-
     }
-
 }
 
-export type Scale = d3.ScaleLinear<number, number>;
-export interface ZoomData {
-    canvas: HTMLCanvasElement, 
-    xScale: Scale,
-    yScale: Scale,
-    dimensions: {width: number, height: number},
-    callback: (xScale: Scale, yScale: Scale) => void
+export function renderText(
+    ctx: Ctx,
+    nodes: UINode[],
+    scale: number,
+) {
+    ctx.fillStyle = "rgb(80,80,80)";
+    ctx.textAlign = "left";
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        const size = 15 * scale;
+        ctx.font = `${size}px "Roboto", sans-serif`;
+        ctx.fillText(node.label, node.x + node.width / 30, node.y + node.height / 5); 
+    }
 }
+
 
 export function listenForResize(
     data: ZoomData,

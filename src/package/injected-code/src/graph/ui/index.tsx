@@ -2,11 +2,13 @@ import React from 'react';
 import { State } from '../../store';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { scaledUiNodes, dimensions, xScale, yScale, indexedUiNodes } from '../core/selectors';
+import { scale, scaledUiNodes, dimensions, xScale, yScale, indexedUiNodes, hoveredNode, getRectangleData } from '../core/selectors';
 import Button from '@material-ui/core/Button';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme } from '@material-ui/core';
-import { renderRectangles, listenForResize, Scale, ZoomData, renderLines } from './renderers';
+import { renderRectangles, listenForResize, renderLines, renderText, renderRectangleContents } from './renderers';
+import { Scale, ZoomData } from '../types';
+import * as d3 from 'd3';
 
 const mapStateToProps = (state: State) => {
     return {
@@ -15,7 +17,9 @@ const mapStateToProps = (state: State) => {
         dimensions: dimensions(state),
         xScale: xScale(state),
         yScale: yScale(state),
-
+        scale: scale(state),
+        hoveredNode: hoveredNode(state),
+        getRectangleData: getRectangleData(state),
     };
 }
 
@@ -30,13 +34,24 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
                 yTo: yScale.range(),
             });
         },
+        setMouse: (x: number, y: number) => {
+            dispatch({
+                type: 'SET_MOUSE_POSITION',
+                position: [x, y],
+            });
+        },
+        resetMouse: () => {
+            dispatch({
+                type: 'SET_MOUSE_POSITION',
+                position: null,
+            });
+        }
     }
 };
 
 const styles = (theme: Theme) => createStyles({
     container: {
         position: 'absolute',
-        backgroundColor: 'red',
     },
 });
 
@@ -54,21 +69,38 @@ class Component extends React.Component<Props> {
 
     componentDidMount() {
         this.update();
+        this.addListeners();
     }
 
     componentDidUpdate() {
         this.update();
     }
 
+    addListeners() {
+        const canvas = document.getElementById('graph-canvas') as HTMLCanvasElement;
+        d3.select('canvas')
+            .on('mousemove', () => {
+                const [x, y] = d3.mouse(canvas);
+                this.props.setMouse(x, y);
+            })
+            .on('mouseleave', () => {
+                this.props.resetMouse();
+            })
+    }
+
     update() {
         const canvas = document.getElementById('graph-canvas') as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
+
         const dim = this.props.dimensions;
+        let t = performance.now();
         ctx.clearRect(0, 0, dim.width, dim.height);
         renderLines(ctx, this.props.nodes, this.props.indexedNodes);
-        renderRectangles(ctx, this.props.nodes);
-        
+        renderRectangles(ctx, this.props.nodes, this.props.hoveredNode, this.props.scale);
+        renderText(ctx, this.props.nodes, this.props.scale);
+        renderRectangleContents(this.props.nodes, ctx, this.props.getRectangleData, this.props.scale);
+        console.log('took', performance.now() - t);
 
         // in order for closures within to work, the data passed in must be mutated
         const data = this.zoomData as ZoomData;
@@ -88,8 +120,11 @@ class Component extends React.Component<Props> {
             nodes,
             dimensions,
         } = this.props;
-        console.log({nodes});
-        return <div className={classes.container} style={dimensions}>
+
+        return <div 
+            className={classes.container} 
+            style={dimensions}
+        >
             <canvas id="graph-canvas" width={dimensions.width} height={dimensions.height} />
         </div>
     }

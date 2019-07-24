@@ -316,6 +316,7 @@ export class Graph {
                 if (!shallowEqual(prevResult, result)) {
                     node.setActionThatCausedCall(this.lastAction);
                     node.setDuration(currentTime() - now);
+                    node.setValue(result);
                 }
                 this.stack.pop();
                 return result;

@@ -26,6 +26,7 @@
     "@types/react-dom": "16.8.4",
     "@types/react-redux": "^7.1.1",
     "@types/redux": "^3.6.0",
+    "@types/redux-logger": "^3.0.7",
     "@types/reselect": "^2.2.0",
     "async-selector": "^1.0.18",
     "d3": "4.10.0",
@@ -37,6 +38,7 @@
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
     "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
     "reselect": "^4.0.0",
     "typescript": "3.5.3",
     "underscore": "^1.9.1"

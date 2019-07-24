@@ -1,17 +1,7 @@
-import { UINode } from "../core/gen-renderable-graph";
-import * as d3 from 'd3';
 import { Dictionary } from "lodash";
-export declare function renderRectangles(ctx: CanvasRenderingContext2D, nodes: UINode[]): void;
-export declare function renderLines(ctx: CanvasRenderingContext2D, nodes: UINode[], indexedNodes: Dictionary<UINode>): void;
-export declare type Scale = d3.ScaleLinear<number, number>;
-export interface ZoomData {
-    canvas: HTMLCanvasElement;
-    xScale: Scale;
-    yScale: Scale;
-    dimensions: {
-        width: number;
-        height: number;
-    };
-    callback: (xScale: Scale, yScale: Scale) => void;
-}
+import { ZoomData, UINode, Ctx, RectangleBodyData } from "../types";
+export declare function renderRectangleContents(nodes: UINode[], ctx: Ctx, getRectangleData: (node: UINode) => RectangleBodyData, scale: number): void;
+export declare function renderRectangles(ctx: Ctx, nodes: UINode[], hoveredNode: UINode | null, scale: number): void;
+export declare function renderLines(ctx: Ctx, nodes: UINode[], indexedNodes: Dictionary<UINode>): void;
+export declare function renderText(ctx: Ctx, nodes: UINode[], scale: number): void;
 export declare function listenForResize(data: ZoomData): void;

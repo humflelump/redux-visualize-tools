@@ -6,10 +6,13 @@ export class MultiWindowCommChannel {
     }
 
     sendGraph(data: any) {
-        store.dispatch({
+
+        const dispatch = () => store.dispatch({
             type: 'SET_GRAPH',
-            graph: { ...data },
+            graph: { ...data, nodes: { ...data.nodes } },
         });
+        data.store.subscribe(dispatch);
+        dispatch();
     }
 }
 export const commChannel = new MultiWindowCommChannel();

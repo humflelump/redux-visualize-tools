@@ -6,13 +6,18 @@ export const initialState = {
     xFrom: [0, 500],
     yTo: [0, 500],
     yFrom: [0, 500],
+    mousePosition: false ? null : [0, 0],
 };
 
 export type GraphState = typeof initialState
 
-
 export function GraphReducer(state: GraphState = initialState, action: AnyAction): GraphState {
     switch(action.type) {
+        case 'SET_MOUSE_POSITION':
+            return {
+                ...state,
+                mousePosition: action.position,
+            };
         case 'SET_SCALES':
             console.log({action})
             return { 

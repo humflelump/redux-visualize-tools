@@ -32,7 +32,7 @@ function makeId(name) {
 }
 exports.makeId = makeId;
 function currentTime() {
-    return Date.now();
+    return performance.now();
 }
 exports.currentTime = currentTime;
 function isClassComponent(component) {

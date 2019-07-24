@@ -313,6 +313,7 @@ var Graph = /** @class */ (function () {
                     if (!functions_1.shallowEqual(prevResult, result)) {
                         node.setActionThatCausedCall(_this.lastAction);
                         node.setDuration(functions_1.currentTime() - now);
+                        node.setValue(result);
                     }
                     _this.stack.pop();
                     return result;

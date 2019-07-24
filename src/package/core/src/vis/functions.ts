@@ -19,7 +19,7 @@ export function makeId(name: string) {
 }
 
 export function currentTime() {
-    return Date.now();
+    return performance.now();
 }
 
 function isClassComponent(component: any) {

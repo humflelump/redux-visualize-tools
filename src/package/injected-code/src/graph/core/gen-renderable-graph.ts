@@ -1,23 +1,15 @@
-import { Node } from './selectors';
-import dagre from 'dagre';
 
-export interface UINode {
-    label: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    data: Node,
-}
+import dagre from 'dagre';
+import { Node, UINode } from '../types';
 
 export function createUiNodes(nodes: Node[]) {
     var g = new dagre.graphlib.Graph({multigraph: true});
-    g.setGraph({rankdir: 'BT', ranksep: 40, ranker: 'longest-path'});
+    g.setGraph({rankdir: 'BT', ranksep: 80, ranker: 'longest-path'});
     g.setDefaultEdgeLabel(function() { return {}; });
     for (const node of nodes) {
         const obj = {
             label: node.name,
-            width: 144,
+            width: 200,
             height: 100,
             data: node,
         }
