@@ -8,7 +8,6 @@ export const initialState = {
 
 export type WindowState = typeof initialState
 
-
 export function WindowReducer(state: WindowState = initialState, action: AnyAction): WindowState {
     switch(action.type) {
         case 'SET_WINDOW_DIMENSIONS':

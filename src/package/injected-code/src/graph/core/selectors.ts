@@ -5,18 +5,15 @@ import * as d3 from 'd3';
 import { keyBy, Dictionary } from 'lodash';
 import { Node, UINode, RectangleBodyData } from '../types';
 import { extractRectangleBodyData } from '../ui/functions';
-
-
+import { windowWidth, windowHeight } from '../../window-dimensions/selectors';
 
 const xTo = (state: State) => state.Graph.xTo;
 const xFrom = (state: State) => state.Graph.xFrom;
 const yTo = (state: State) => state.Graph.yTo;
 const yFrom = (state: State) => state.Graph.yFrom;
-const windowWidth = (state: State) => state.Window.width;
-const windowHeight = (state: State) => state.Window.height;
 const graphData = (state: State) => state.CommChannel.graph;
 const mousePosition = (state: State) => state.Graph.mousePosition;
-
+export const clickedNode = (state: State) => state.Graph.clickedNode;
 
 export const dimensions = createSelector(
     [windowWidth, windowHeight], (width, height) => {
@@ -94,6 +91,12 @@ export const hoveredNode = createSelector(
             }
         }
         return null;
+    }
+);
+
+export const selectedNode = createSelector(
+    [clickedNode, hoveredNode], (clickedNode, hoveredNode) => {
+        return hoveredNode || clickedNode;
     }
 )
 

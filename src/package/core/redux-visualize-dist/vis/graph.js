@@ -38,6 +38,7 @@ var Node = /** @class */ (function () {
         this.value = undefined;
         this.duration = undefined;
         this.action = undefined;
+        this.function = undefined;
     }
     Node.prototype.setActionThatCausedCall = function (action) {
         this.action = action;
@@ -47,6 +48,9 @@ var Node = /** @class */ (function () {
     };
     Node.prototype.setValue = function (value) {
         this.value = value;
+    };
+    Node.prototype.setFunction = function (f) {
+        this.function = f;
     };
     Node.prototype.addDependency = function (node) {
         if (!this.dependencies.find(function (d) { return d.id === node.id; })) {
@@ -301,6 +305,7 @@ var Graph = /** @class */ (function () {
                 _this.addNode(node);
                 var self = _this;
                 var mapState = mapState_ || (function () { return ({}); });
+                node.setFunction(mapState);
                 var newMapState = function (state) {
                     var params = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
@@ -343,6 +348,7 @@ var Graph = /** @class */ (function () {
         var name = functions_1.getFunctionName(f, metadata.name);
         var type = constants_1.NODE_TYPES.FUNCTION;
         var _a = this.watch(f, name, type, metadata), func = _a.func, newNode = _a.newNode;
+        newNode.setFunction(f);
         var returnFunc = function () {
             var params = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -371,6 +377,7 @@ var Graph = /** @class */ (function () {
             if (typeof mainFunction !== 'function') {
                 throw new Error('Last argument of a reselect selector must be a function');
             }
+            console.log(mainFunction);
             var newMainFunc = function () {
                 var params = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
@@ -389,6 +396,7 @@ var Graph = /** @class */ (function () {
             var selector = f.apply(void 0, funcs);
             var _a = _this.watch(selector, name, type, metadata), func = _a.func, newNode = _a.newNode;
             node = newNode;
+            node.setFunction(mainFunction);
             return func;
         };
         return newFunction;

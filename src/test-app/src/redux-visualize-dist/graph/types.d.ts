@@ -36,6 +36,7 @@ export interface Node {
     type: NODE_TYPES;
     name: string;
     action?: Action;
+    function?: Function;
 }
 export interface UINode {
     label: string;

@@ -36,8 +36,9 @@ function currentTime() {
 }
 exports.currentTime = currentTime;
 function isClassComponent(component) {
-    return (typeof component === 'function' &&
-        !!component.prototype.isReactComponent) ? true : false;
+    return (typeof component === 'function'
+        && component.prototype
+        && !!component.prototype.isReactComponent) ? true : false;
 }
 function isFunctionComponent(component) {
     return (typeof component === 'function' &&

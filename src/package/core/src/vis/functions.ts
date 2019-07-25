@@ -24,8 +24,9 @@ export function currentTime() {
 
 function isClassComponent(component: any) {
     return (
-        typeof component === 'function' && 
-        !!component.prototype.isReactComponent
+        typeof component === 'function'
+        && component.prototype
+        && !!component.prototype.isReactComponent
     ) ? true : false
 }
 

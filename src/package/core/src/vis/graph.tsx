@@ -30,6 +30,7 @@ export class Node {
     type: NODE_TYPES;
     name: string;
     action?: Action;
+    function?: Function;
 
     constructor(id: string, name: string, type: NODE_TYPES, metadata: NodeMetadata = {}) {
         this.id = id;
@@ -41,6 +42,7 @@ export class Node {
         this.value = undefined;
         this.duration = undefined;
         this.action = undefined;
+        this.function = undefined;
     }
 
     setActionThatCausedCall(action: Action) {
@@ -53,6 +55,10 @@ export class Node {
 
     setValue(value: any) {
         this.value = value;
+    }
+
+    setFunction(f: Function) {
+        this.function = f;
     }
 
     addDependency(node: Node) {
@@ -308,6 +314,7 @@ export class Graph {
             const self = this;
             
             const mapState = mapState_ || (() => ({}));
+            node.setFunction(mapState);
             const newMapState = (state: any, ...params: any[]) => {
                 this.stack.push(node);
                 const now = currentTime();
@@ -340,6 +347,7 @@ export class Graph {
         const name = getFunctionName(f, metadata.name);
         const type = NODE_TYPES.FUNCTION;
         const { func, newNode } = this.watch(f, name, type, metadata);
+        newNode.setFunction(f);
         const returnFunc = (...params: any[]) => {
             const t = currentTime();
             const result = func(...params);
@@ -359,7 +367,7 @@ export class Graph {
             if (typeof mainFunction !== 'function') {
                 throw new Error('Last argument of a reselect selector must be a function');
             }
-            
+            console.log(mainFunction)
             const newMainFunc = (...params: any[]) => {
                 const t = currentTime();
                 const result = mainFunction(...params);
@@ -374,6 +382,7 @@ export class Graph {
             const selector = f(...funcs);
             const { func, newNode } = this.watch(selector, name, type, metadata);
             node = newNode;
+            node.setFunction(mainFunction);
             return func;
         }
         return newFunction as any as T;

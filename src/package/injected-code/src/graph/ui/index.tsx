@@ -2,13 +2,14 @@ import React from 'react';
 import { State } from '../../store';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { scale, scaledUiNodes, dimensions, xScale, yScale, indexedUiNodes, hoveredNode, getRectangleData } from '../core/selectors';
+import { scale, scaledUiNodes, dimensions, xScale, yScale, indexedUiNodes, hoveredNode, getRectangleData, selectedNode } from '../core/selectors';
 import Button from '@material-ui/core/Button';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme } from '@material-ui/core';
 import { renderRectangles, listenForResize, renderLines, renderText, renderRectangleContents } from './renderers';
 import { Scale, ZoomData } from '../types';
 import * as d3 from 'd3';
+import { onClick } from '../core/actions';
 
 const mapStateToProps = (state: State) => {
     return {
@@ -19,12 +20,14 @@ const mapStateToProps = (state: State) => {
         yScale: yScale(state),
         scale: scale(state),
         hoveredNode: hoveredNode(state),
+        selectedNode: selectedNode(state),
         getRectangleData: getRectangleData(state),
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
+        canvasClicked: onClick,
         setScales: (xScale: Scale, yScale: Scale) => {
             dispatch({
                 type: 'SET_SCALES',
@@ -97,7 +100,7 @@ class Component extends React.Component<Props> {
         let t = performance.now();
         ctx.clearRect(0, 0, dim.width, dim.height);
         renderLines(ctx, this.props.nodes, this.props.indexedNodes);
-        renderRectangles(ctx, this.props.nodes, this.props.hoveredNode, this.props.scale);
+        renderRectangles(ctx, this.props.nodes, this.props.selectedNode, this.props.scale);
         renderText(ctx, this.props.nodes, this.props.scale);
         renderRectangleContents(this.props.nodes, ctx, this.props.getRectangleData, this.props.scale);
         console.log('took', performance.now() - t);
@@ -115,17 +118,21 @@ class Component extends React.Component<Props> {
     }
 
     render() {
-        const {
-            classes,
-            nodes,
-            dimensions,
-        } = this.props;
+        const props = this.props;
 
         return <div 
-            className={classes.container} 
-            style={dimensions}
+            className={props.classes.container} 
+            style={{ 
+                ...props.dimensions,
+                cursor: props.hoveredNode ? 'pointer' : 'default',
+            }}
+            onClick={props.canvasClicked}
         >
-            <canvas id="graph-canvas" width={dimensions.width} height={dimensions.height} />
+            <canvas 
+                id="graph-canvas" 
+                width={props.dimensions.width} 
+                height={props.dimensions.height} 
+            />
         </div>
     }
 }

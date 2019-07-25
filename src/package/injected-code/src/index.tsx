@@ -5,6 +5,7 @@ import { attachCommChannelToWindow } from './comm-channel/inject-to-window'
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { GraphComponent } from "./graph/ui";
+import { SidePanelComponent } from "./side-panel/ui";
 
 function add(x: number) {
     return x + 6
@@ -14,6 +15,7 @@ setTimeout(() => {
     ReactDOM.render(
         <Provider store={store}>
             <GraphComponent />
+            <SidePanelComponent />
         </Provider>, 
         document.getElementById('root')
     );

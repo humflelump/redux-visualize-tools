@@ -2,6 +2,7 @@ import { State } from '../../store';
 import * as d3 from 'd3';
 import { Dictionary } from 'lodash';
 import { UINode, RectangleBodyData } from '../types';
+export declare const clickedNode: (state: State) => UINode;
 export declare const dimensions: import("reselect").OutputSelector<State, {
     left: number;
     top: number;
@@ -19,4 +20,5 @@ export declare const yScale: import("reselect").OutputSelector<State, d3.ScaleLi
 export declare const scaledUiNodes: import("reselect").OutputSelector<State, UINode[], (res1: UINode[], res2: d3.ScaleLinear<number, number>, res3: d3.ScaleLinear<number, number>) => UINode[]>;
 export declare const getRectangleData: import("reselect").OutputSelector<State, (node: UINode) => RectangleBodyData, (res: any) => (node: UINode) => RectangleBodyData>;
 export declare const hoveredNode: import("reselect").OutputSelector<State, UINode, (res1: UINode[], res2: number[]) => UINode>;
+export declare const selectedNode: import("reselect").OutputSelector<State, UINode, (res1: UINode, res2: UINode) => UINode>;
 export declare const indexedUiNodes: import("reselect").OutputSelector<State, Dictionary<UINode>, (res: UINode[]) => Dictionary<UINode>>;
