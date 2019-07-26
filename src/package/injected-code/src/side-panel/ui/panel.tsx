@@ -5,15 +5,13 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, Paper } from '@material-ui/core';
 import { WIDTH } from './constants';
-import { showPanelOnRight, isVisible } from '../core/selectors';
+import { isRightSidePanelOpen } from '../core/selectors';
 import { PanelContents } from './panel-content';
 import { clickedNode } from '../../graph/core/selectors';
 
 const mapStateToProps = (state: State) => {
     return {
-        isVisible: isVisible(state),
-        dockedRight: showPanelOnRight(state),
-        isPermanentMode: Boolean(clickedNode(state)),
+        isVisible: isRightSidePanelOpen(state),
     };
 }
 
@@ -32,50 +30,26 @@ const styles = (theme: Theme) => createStyles({
         zIndex: 1,
         transition: 'right 0.14s, left 0.14s',
         backgroundColor: 'white',
-        pointerEvents: 'none',
+        pointerEvents: 'auto',
     },
 });
-
-function getContainerStyle(
-    isVisible: boolean, 
-    dockedRight: boolean,
-    isPermanentMode: boolean,
-) {
-    if (dockedRight) {
-        return { 
-            right: isVisible ? 0 : -WIDTH,
-            pointerEvents: isPermanentMode ? 'auto' : 'none',
-        };
-    } else {
-        return { 
-            left: isVisible ? 0 : -WIDTH,
-            pointerEvents: isPermanentMode ? 'auto' : 'none',
-        };
-    }
-}
 
 type StateProps = ReturnType<typeof mapStateToProps>
 type DispatchProps =  ReturnType<typeof mapDispatchToProps>
 interface StyleProps extends WithStyles<typeof styles> {} 
-export interface PassedProps { isRightPanel: boolean }
+export interface PassedProps {}
 type Props = StateProps & DispatchProps & StyleProps & PassedProps
 
 class Component extends React.Component<Props> {
     render() {
         const props = this.props;
-        const visible = props.isVisible && props.dockedRight === props.isRightPanel;
+
         return <Paper
             elevation={10}
             className={props.classes.container}
-            style={getContainerStyle(
-                visible, 
-                props.isRightPanel,
-                props.isPermanentMode,
-            ) as any}
+            style={{ right: props.isVisible ? 0 : -WIDTH }}
         >
-        {
-            visible ? <PanelContents /> : null
-        }
+            <PanelContents />
         </Paper>
     }
 }

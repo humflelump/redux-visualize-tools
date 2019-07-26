@@ -5,12 +5,10 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme } from '@material-ui/core';
 import { WIDTH } from './constants';
-import { showPanelOnRight, isVisible } from '../core/selectors';
 import { Panel } from './panel';
 
 const mapStateToProps = (state: State) => {
     return {
-        dockedRight: showPanelOnRight(state),
     };
 }
 
@@ -40,8 +38,7 @@ class Component extends React.Component<Props> {
         return <div 
             className={props.classes.container}
         >
-            <Panel isRightPanel={true} />
-            <Panel isRightPanel={false} />
+            <Panel />
         </div>
     }
 }

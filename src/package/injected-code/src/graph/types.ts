@@ -30,6 +30,13 @@ export enum NODE_TYPES {
     FUNCTION = 'FUNCTION',
 }
 
+export enum NODE_FILTER_TYPE {
+    NO_FILTER = 'No Filter',
+    DEPENDENTS = 'Only Show Dependents',
+    DEPENENCIES = 'Only Show Dependencies',
+    DEPENDENTS_AND_DEPENENCIES = 'Only Show Relatives',
+}
+
 export interface Node {
     id: string,
     metadata: NodeMetadata,
@@ -49,6 +56,8 @@ export interface UINode {
     width: number,
     height: number,
     data: Node,
+    parents: UINode[],
+    children: UINode[],
 }
 
 export interface RectangleBodyData {

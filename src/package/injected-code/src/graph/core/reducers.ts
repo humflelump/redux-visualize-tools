@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import Immutable from 'immutable';
-import { UINode } from "../types";
+import { UINode, NODE_FILTER_TYPE } from "../types";
 
 export const initialState = {
     xTo: [0, 500],
@@ -8,7 +8,8 @@ export const initialState = {
     yTo: [0, 500],
     yFrom: [0, 500],
     mousePosition: null,
-    clickedNode: null,
+    clickedNodeId: null,
+    clickedNodeFilter: NODE_FILTER_TYPE.NO_FILTER,
 };
 
 export interface GraphState {
@@ -17,7 +18,8 @@ export interface GraphState {
     yTo: number[],
     yFrom: number[],
     mousePosition: number[] | null,
-    clickedNode: UINode | null,
+    clickedNodeId: string | null,
+    clickedNodeFilter: NODE_FILTER_TYPE,
 }
 
 export function GraphReducer(state: GraphState = initialState, action: AnyAction): GraphState {
@@ -25,12 +27,13 @@ export function GraphReducer(state: GraphState = initialState, action: AnyAction
         case 'CLICK_NODE':
             return {
                 ...state,
-                clickedNode: action.node,
+                clickedNodeId: action.nodeId,
             };
         case 'CLEAR_CLICKED_NODE':
             return {
                 ...state,
-                clickedNode: null,
+                clickedNodeId: null,
+                clickedNodeFilter: NODE_FILTER_TYPE.NO_FILTER,
             };
         case 'SET_MOUSE_POSITION':
             return {
@@ -38,13 +41,13 @@ export function GraphReducer(state: GraphState = initialState, action: AnyAction
                 mousePosition: action.position,
             };
         case 'SET_SCALES':
-            console.log({action})
             return { 
                 ...state, 
                 yTo: action.yTo || state.yTo,
                 xTo: action.xTo || state.xTo,
                 yFrom: action.yFrom || state.yFrom,
                 xFrom: action.xFrom || state.xFrom,
+                mousePosition: null,
             };
         default:
             return state;

@@ -7,9 +7,14 @@ const dispatch = () => (window as any).store.dispatch as Dispatch;
 
 export function onClick() {
     const node = hoveredNode(state());
-    if (!node) return;
-    dispatch()({
-        type: 'CLICK_NODE',
-        node,
-    });
+    if (node) {
+        dispatch()({
+            type: 'CLICK_NODE',
+            nodeId: node.data.id,
+        });
+    } else {
+        dispatch()({
+            type: 'CLEAR_CLICKED_NODE',
+        });
+    }  
 }

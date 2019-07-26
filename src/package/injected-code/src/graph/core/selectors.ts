@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import { keyBy, Dictionary } from 'lodash';
 import { Node, UINode, RectangleBodyData } from '../types';
 import { extractRectangleBodyData } from '../ui/functions';
-import { windowWidth, windowHeight } from '../../window-dimensions/selectors';
 
 const xTo = (state: State) => state.Graph.xTo;
 const xFrom = (state: State) => state.Graph.xFrom;
@@ -13,18 +12,7 @@ const yTo = (state: State) => state.Graph.yTo;
 const yFrom = (state: State) => state.Graph.yFrom;
 const graphData = (state: State) => state.CommChannel.graph;
 const mousePosition = (state: State) => state.Graph.mousePosition;
-export const clickedNode = (state: State) => state.Graph.clickedNode;
-
-export const dimensions = createSelector(
-    [windowWidth, windowHeight], (width, height) => {
-        return {
-            left: 0,
-            top: 0,
-            width,
-            height,
-        };
-    }
-);
+const clickedNodeId = (state: State) => state.Graph.clickedNodeId;
 
 function getXScale(xTo: number[], xFrom: number[]) {
     return d3.scaleLinear().domain(xFrom).range(xTo);
@@ -72,6 +60,17 @@ export const scaledUiNodes = createSelector(
     }
 );
 
+export const indexedUiNodes = createSelector(
+    [scaledUiNodes], nodes => keyBy(nodes, d => d.data.id)
+);
+
+export const clickedNode = createSelector(
+    [indexedUiNodes, clickedNodeId], (nodes, id) => {
+        if (!id) return null;
+        return nodes[id] || null;
+    } 
+)
+
 export const getRectangleData = createSelector(
     [graphData], (graph) => {
         return (node: UINode) => {
@@ -99,10 +98,6 @@ export const selectedNode = createSelector(
         return hoveredNode || clickedNode;
     }
 )
-
-export const indexedUiNodes = createSelector(
-    [scaledUiNodes], nodes => keyBy(nodes, d => d.data.id)
-);
 
 
 

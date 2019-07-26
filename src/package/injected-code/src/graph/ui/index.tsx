@@ -2,7 +2,7 @@ import React from 'react';
 import { State } from '../../store';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { scale, scaledUiNodes, dimensions, xScale, yScale, indexedUiNodes, hoveredNode, getRectangleData, selectedNode } from '../core/selectors';
+import { scale, scaledUiNodes, xScale, yScale, indexedUiNodes, hoveredNode, getRectangleData, selectedNode } from '../core/selectors';
 import Button from '@material-ui/core/Button';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme } from '@material-ui/core';
@@ -10,6 +10,8 @@ import { renderRectangles, listenForResize, renderLines, renderText, renderRecta
 import { Scale, ZoomData } from '../types';
 import * as d3 from 'd3';
 import { onClick } from '../core/actions';
+import { NodeTooltip } from '../../tooltip/ui';
+import { dimensions } from '../core/dimensions-selectors';
 
 const mapStateToProps = (state: State) => {
     return {
@@ -128,6 +130,7 @@ class Component extends React.Component<Props> {
             }}
             onClick={props.canvasClicked}
         >
+            <NodeTooltip />
             <canvas 
                 id="graph-canvas" 
                 width={props.dimensions.width} 

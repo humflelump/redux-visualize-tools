@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import { GraphComponent } from "./graph/ui";
 import { SidePanelComponent } from "./side-panel/ui";
+import { HeaderComponent } from "./header/ui";
 
 function add(x: number) {
     return x + 6
@@ -16,6 +17,7 @@ setTimeout(() => {
         <Provider store={store}>
             <GraphComponent />
             <SidePanelComponent />
+            <HeaderComponent />
         </Provider>, 
         document.getElementById('root')
     );

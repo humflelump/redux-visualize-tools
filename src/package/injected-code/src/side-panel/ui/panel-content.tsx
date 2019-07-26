@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, Paper, Divider } from '@material-ui/core';
 import { WIDTH } from './constants';
-import { showPanelOnRight, isVisible } from '../core/selectors';
-import { hoveredNode, selectedNode } from '../../graph/core/selectors';
+import { hoveredNode, selectedNode, clickedNode } from '../../graph/core/selectors';
 
 const mapStateToProps = (state: State) => {
     return {
-        node: selectedNode(state),
+        node: clickedNode(state),
     };
 }
 
@@ -36,9 +35,13 @@ const styles = (theme: Theme) => createStyles({
         fontFamily: '"Roboto", sans-serif',
         textAlign: 'left',
         margin: 5,
-        color: 'rgb(100,100,100',
+        color: 'rgb(100,100,100)',
     },
     functionArea: {
+        margin: 10,
+        width: 'calc(100% - 20px)',
+    },
+    returnValueArea: {
         margin: 10,
         width: 'calc(100% - 20px)',
     },
@@ -49,6 +52,14 @@ type DispatchProps =  ReturnType<typeof mapDispatchToProps>
 interface StyleProps extends WithStyles<typeof styles> {} 
 export interface PassedProps {}
 type Props = StateProps & DispatchProps & StyleProps & PassedProps
+
+function stringify(d: any): string {
+    if (d && typeof d === 'object') {
+        return JSON.stringify(d, undefined, 2);
+    } else {
+        return String(d);
+    }
+}
 
 class Component extends React.Component<Props> {
     render() {
@@ -61,12 +72,22 @@ class Component extends React.Component<Props> {
             <Divider />
             <div className={props.classes.functionArea}>
                 <div className={props.classes.label}> 
-                    Content
+                    Function Text:
                 </div>
                 <textarea 
-                    rows={8} 
-                    cols={80} 
+                    rows={6}
+                    style={{width: '100%'}}
                     value={String(props.node.data.function || 'No Content')}
+                />
+            </div>
+            <div className={props.classes.functionArea}>
+                <div className={props.classes.label}> 
+                    Return Value:
+                </div>
+                <textarea 
+                    rows={6}
+                    style={{width: '100%'}}
+                    value={stringify(props.node.data.value)}
                 />
             </div>
         </div>

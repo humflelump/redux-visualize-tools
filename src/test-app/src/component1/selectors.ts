@@ -7,8 +7,8 @@ const wow = (state: State) => state.Component1.immutableYay.get('wow');
 
 export const appendedText = graph.add(createSelector)(
     [text, wow], t => {
-        for (let i = 0; i < 10000000; i++ ){
-            
+        for (let i = 0; i < 1000; i++ ){
+
         }
         return t + '_wow'
     }   
