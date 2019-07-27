@@ -87,6 +87,7 @@ class Component extends React.Component<Props> {
             .on('mousemove', () => {
                 const [x, y] = d3.mouse(canvas);
                 this.props.setMouse(x, y);
+                
             })
             .on('mouseleave', () => {
                 this.props.resetMouse();
@@ -121,7 +122,7 @@ class Component extends React.Component<Props> {
 
     render() {
         const props = this.props;
-
+        
         return <div 
             className={props.classes.container} 
             style={{ 

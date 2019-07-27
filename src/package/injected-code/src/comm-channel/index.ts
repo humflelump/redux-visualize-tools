@@ -13,6 +13,7 @@ export class MultiWindowCommChannel {
         });
         data.store.subscribe(dispatch);
         dispatch();
+        console.log('huh14');
     }
 }
 export const commChannel = new MultiWindowCommChannel();

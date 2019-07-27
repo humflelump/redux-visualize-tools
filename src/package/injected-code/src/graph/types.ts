@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { ScaleLinear } from 'd3';
 
 export type Scale = d3.ScaleLinear<number, number>;
 export type Ctx = CanvasRenderingContext2D;

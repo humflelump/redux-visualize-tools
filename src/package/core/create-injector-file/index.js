@@ -14,7 +14,6 @@ function mapInputToOutput(contents) {
 
 function makeOutputFile() {
     fs.readFile(FILE_TO_WATCH, 'utf8', function(err, contents) {
-        
         const fileOutput = mapInputToOutput(contents);
 
         fs.writeFile(OUTPUT_FILE, fileOutput, function(err) {

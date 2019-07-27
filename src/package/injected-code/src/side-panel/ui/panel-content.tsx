@@ -3,19 +3,26 @@ import { State } from '../../store';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
-import { WithStyles, Theme, Paper, Divider } from '@material-ui/core';
-import { WIDTH } from './constants';
+import { WithStyles, Theme, Paper, Divider, FormControl, InputLabel, Select, MenuItem, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { WIDTH, NODE_FILTER_TYPES } from './constants';
 import { hoveredNode, selectedNode, clickedNode } from '../../graph/core/selectors';
+import { NODE_FILTER_TYPE } from '../../graph/types';
 
 const mapStateToProps = (state: State) => {
     return {
         node: clickedNode(state),
+        clickedNodeFilter: state.Graph.clickedNodeFilter,
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-
+        setFilter: (str: NODE_FILTER_TYPE) => {
+            dispatch({
+                type: 'SET_CLICKED_NODE_FILTER',
+                filter: str,
+            });
+        }
     }
 };
 
@@ -89,6 +96,27 @@ class Component extends React.Component<Props> {
                     style={{width: '100%'}}
                     value={stringify(props.node.data.value)}
                 />
+            </div>
+            <div style={{width: '100%', marginLeft: 10}}>
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Show Relatives of this Node</FormLabel>
+                <RadioGroup
+                    aria-label="gender"
+                    name="gender1"
+                    value={props.clickedNodeFilter}
+                    onChange={(e: any) => props.setFilter(e.target.value)}
+                >
+                {
+                    NODE_FILTER_TYPES.map((type) => {
+                        return <FormControlLabel 
+                            value={type} 
+                            control={<Radio />} 
+                            label={type} 
+                        />
+                    })
+                }
+                </RadioGroup>
+            </FormControl>
             </div>
         </div>
     }

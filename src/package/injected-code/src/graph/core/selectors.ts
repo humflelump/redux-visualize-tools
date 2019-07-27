@@ -1,10 +1,12 @@
 import { State } from '../../store';
 import { createSelector } from 'reselect';
 import { createUiNodes, } from './gen-renderable-graph';
-import * as d3 from 'd3';
-import { keyBy, Dictionary } from 'lodash';
-import { Node, UINode, RectangleBodyData } from '../types';
+import {scaleLinear, ScaleLinear} from 'd3';
+import keyBy from 'lodash/keyBy';
+import { Dictionary } from 'lodash'
+import { Node, UINode, RectangleBodyData, NODE_FILTER_TYPE } from '../types';
 import { extractRectangleBodyData } from '../ui/functions';
+import { getDependencies, getDependents, getRelatives } from './functions';
 
 const xTo = (state: State) => state.Graph.xTo;
 const xFrom = (state: State) => state.Graph.xFrom;
@@ -13,9 +15,10 @@ const yFrom = (state: State) => state.Graph.yFrom;
 const graphData = (state: State) => state.CommChannel.graph;
 const mousePosition = (state: State) => state.Graph.mousePosition;
 const clickedNodeId = (state: State) => state.Graph.clickedNodeId;
+const filter = (state: State) => state.Graph.clickedNodeFilter;
 
 function getXScale(xTo: number[], xFrom: number[]) {
-    return d3.scaleLinear().domain(xFrom).range(xTo);
+    return scaleLinear().domain(xFrom).range(xTo);
 }
 export const xScale = createSelector([xTo, xFrom], getXScale);
 
@@ -29,7 +32,7 @@ export const scale = createSelector(
 );
 
 function getYScale(yTo: number[], yFrom: number[]) {
-    return d3.scaleLinear().domain(yFrom).range(yTo);
+    return scaleLinear().domain(yFrom).range(yTo);
 }
 export const yScale = createSelector([yTo, yFrom], getYScale);
 
@@ -41,8 +44,27 @@ const nodeData = createSelector(
     }
 );
 
+const filteredNodeData = createSelector(
+    [nodeData, filter, clickedNodeId], 
+    (data, filter, nodeId) => {
+        if (!nodeId) {
+            return data;
+        } else if (filter === NODE_FILTER_TYPE.NO_FILTER) {
+            return data;
+        } else if (filter === NODE_FILTER_TYPE.DEPENENCIES) {
+            return getDependencies(data, nodeId);
+        } else if (filter === NODE_FILTER_TYPE.DEPENDENTS) {
+            return getDependents(data, nodeId);
+        } else if (filter === NODE_FILTER_TYPE.DEPENDENTS_AND_DEPENENCIES) {
+            return getRelatives(data, nodeId);
+        } else {
+            throw new Error('Unexpected type');
+        }
+    }
+)
+
 const uiNodes = createSelector(
-    [nodeData], createUiNodes
+    [filteredNodeData], createUiNodes
 );
 
 export const scaledUiNodes = createSelector(

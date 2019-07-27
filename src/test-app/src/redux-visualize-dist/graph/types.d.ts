@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 export declare type Scale = d3.ScaleLinear<number, number>;
 export declare type Ctx = CanvasRenderingContext2D;
 export interface ZoomData {

@@ -24,6 +24,11 @@ export interface GraphState {
 
 export function GraphReducer(state: GraphState = initialState, action: AnyAction): GraphState {
     switch(action.type) {
+        case 'SET_CLICKED_NODE_FILTER':
+            return {
+                ...state,
+                clickedNodeFilter: action.filter,
+            }
         case 'CLICK_NODE':
             return {
                 ...state,

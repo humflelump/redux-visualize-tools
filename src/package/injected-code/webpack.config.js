@@ -2,11 +2,20 @@ const path = require('path');
 
 module.exports = {
   entry: './src/index.tsx',
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+            },
+          },
+        ],
         exclude: /node_modules/
       }
     ]

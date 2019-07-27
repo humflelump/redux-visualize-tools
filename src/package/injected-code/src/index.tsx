@@ -1,4 +1,3 @@
-import { divide } from "./other";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { attachCommChannelToWindow } from './comm-channel/inject-to-window'
@@ -7,10 +6,6 @@ import { store } from "./store";
 import { GraphComponent } from "./graph/ui";
 import { SidePanelComponent } from "./side-panel/ui";
 import { HeaderComponent } from "./header/ui";
-
-function add(x: number) {
-    return x + 6
-}
 
 setTimeout(() => {
     ReactDOM.render(
@@ -22,7 +17,6 @@ setTimeout(() => {
         document.getElementById('root')
     );
 }, 0);
-
 
 attachCommChannelToWindow();
 console.log(window.opener);

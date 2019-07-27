@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import * as selectors from './selectors';
 import * as graphSelectors from './create-graph-selectors';
-import * as d3 from 'd3';
+import { select, event, zoomIdentity } from 'd3';
 import Node from './node';
 import Arrows from './arrow';
 import Header from './header';
@@ -12,7 +12,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
+console.log('huh234');
 function getStyles(chartDimensions) {
     return {
         container: {
@@ -78,7 +78,7 @@ class Graph extends React.Component {
 }
 
 function update(data, dom) {
-    const container = d3.select('#Graph');
+    const container = select('#Graph');
 
     const zoom = data.props.zoom(zoomed);
 
@@ -88,12 +88,12 @@ function update(data, dom) {
             return;
         }
 
-        const newXScale = d3.event.transform.rescaleX(data.props.xScale);
-        const newYScale = d3.event.transform.rescaleY(data.props.yScale);
+        const newXScale = event.transform.rescaleX(data.props.xScale);
+        const newYScale = event.transform.rescaleY(data.props.yScale);
     
         data.props.setScales(newXScale, newYScale);
         data.stopRecursion = true;
-        container.call(zoom.transform, d3.zoomIdentity);
+        container.call(zoom.transform, zoomIdentity);
     }
 
     container.call(zoom);
