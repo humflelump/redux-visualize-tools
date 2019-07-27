@@ -1,6 +1,6 @@
 import { commChannel } from './index';
 
 export function attachCommChannelToWindow() {
-    (<any>window).commChannel = commChannel;
-    console.log('attached wow2');
-} 
+  (window as any).commChannel = commChannel;
+  console.log('attached', commChannel);
+}

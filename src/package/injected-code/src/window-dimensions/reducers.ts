@@ -1,23 +1,24 @@
-import { AnyAction } from "redux";
-import Immutable from 'immutable';
+import { AnyAction } from 'redux';
 
 export const initialState = {
-    width: window.innerWidth,
-    height: window.innerHeight,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
-export type WindowState = typeof initialState
+export type WindowState = typeof initialState;
 
-export function WindowReducer(state: WindowState = initialState, action: AnyAction): WindowState {
-    switch(action.type) {
-        case 'SET_WINDOW_DIMENSIONS':
-            return { 
-                ...state, 
-                width: action.width,
-                height: action.height,
-            };
-        default:
-            return state;
-    }
+export function WindowReducer(
+  state: WindowState = initialState,
+  action: AnyAction
+): WindowState {
+  switch (action.type) {
+    case 'SET_WINDOW_DIMENSIONS':
+      return {
+        ...state,
+        width: action.width,
+        height: action.height,
+      };
+    default:
+      return state;
+  }
 }
-

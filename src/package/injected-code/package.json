@@ -11,14 +11,19 @@
   "author": "Cameron Nokes",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^6.1.0",
     "ts-loader": "^6.0.4",
-    "typescript": "^2.9.2",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.5.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.5"
   },
   "dependencies": {
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",
+    "@material-ui/styles": "^4.2.1",
     "@types/d3": "^5.7.2",
     "@types/dagre": "^0.7.42",
     "@types/jest": "24.0.15",
@@ -41,7 +46,6 @@
     "react-scripts": "3.0.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
-    "reselect": "^4.0.0",
-    "typescript": "3.5.3"
+    "reselect": "^4.0.0"
   }
 }
