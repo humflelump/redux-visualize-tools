@@ -14,12 +14,17 @@ import {
   ILeftPanelState,
   LeftPanelReducer,
 } from './core-dev-tools/left-side-panel/core/reducers';
+import {
+  IStateAnalysisState,
+  StateAnalysisReducer,
+} from './core-dev-tools/state/core/reducers';
 
 export interface IState {
   CommChannel: ICommChannelState;
   Graph: IGraphState;
   Window: WindowState;
   LeftPanel: ILeftPanelState;
+  StateAnalysis: IStateAnalysisState;
 }
 
 const appReducer: Reducer<IState> = combineReducers<IState>({
@@ -27,6 +32,7 @@ const appReducer: Reducer<IState> = combineReducers<IState>({
   Graph: GraphReducer,
   Window: WindowReducer,
   LeftPanel: LeftPanelReducer,
+  StateAnalysis: StateAnalysisReducer,
 });
 
 const middlewares = [createLogger({})];

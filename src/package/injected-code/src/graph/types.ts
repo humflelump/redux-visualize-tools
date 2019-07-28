@@ -17,8 +17,12 @@ export interface INodeMetadata {
 }
 
 export interface IAction {
-  userAction: any;
+  action: any;
+  prevState: any;
+  nextState: any;
   actionNumber: number;
+  startTime: number;
+  endTime: number;
 }
 
 export enum NODE_TYPES {

@@ -16,15 +16,19 @@ module.exports = {
             },
           },
         ],
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     filename: 'index.js',
-    path: __dirname.split('/').slice(0, -1).join('/') + '/core/injected-code-dist'
-  }
+    path:
+      __dirname
+        .split('/')
+        .slice(0, -1)
+        .join('/') + '/core/injected-code-dist',
+  },
 };

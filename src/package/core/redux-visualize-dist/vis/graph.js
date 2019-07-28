@@ -25,8 +25,15 @@ var constants_1 = require("./constants");
 var functions_1 = require("./functions");
 var immutable_1 = __importDefault(require("immutable"));
 var react_1 = __importDefault(require("react"));
-var ctxKey = '__VIS_PARENT_ID__';
-;
+var ctxKey = "__VIS_PARENT_ID__";
+var emptyAction = {
+    action: null,
+    prevState: undefined,
+    nextState: undefined,
+    actionNumber: -1,
+    startTime: -1,
+    endTime: -1
+};
 var Node = /** @class */ (function () {
     function Node(id, name, type, metadata) {
         if (metadata === void 0) { metadata = {}; }
@@ -68,17 +75,20 @@ var Graph = /** @class */ (function () {
         this.getterCache = [];
         this.stack = [];
         this.nodes = {};
-        this.lastAction = {
-            userAction: null,
-            actionNumber: 0,
-        };
+        this.lastAction = emptyAction;
         this.stateInjectorCache = new Map();
+        this.actions = [];
     }
-    Graph.prototype.setCurrentAction = function (action) {
+    Graph.prototype.setCurrentAction = function (action, prevState, nextState, startTime, endTime) {
         this.lastAction = {
-            userAction: action,
+            action: action,
+            prevState: prevState,
+            nextState: nextState,
             actionNumber: this.lastAction.actionNumber + 1,
+            startTime: startTime,
+            endTime: endTime
         };
+        this.actions = this.actions.concat([this.lastAction]);
     };
     Graph.prototype.addNode = function (node) {
         this.nodes[node.id] = node;
@@ -101,7 +111,7 @@ var Graph = /** @class */ (function () {
             newNode.setValue(result);
             var currNode = stack.pop();
             if (!currNode) {
-                throw new Error('Empty stack was popped');
+                throw new Error("Empty stack was popped");
             }
             if (stack.length > 0) {
                 stack[stack.length - 1].addDependency(currNode);
@@ -162,7 +172,7 @@ var Graph = /** @class */ (function () {
                     }
                     return child;
                 },
-                enumerable: true,
+                enumerable: true
             });
         };
         var this_1 = this;
@@ -261,11 +271,22 @@ var Graph = /** @class */ (function () {
             for (var _i = 1; _i < arguments.length; _i++) {
                 params[_i - 1] = arguments[_i];
             }
-            var store = createStore.apply(void 0, [reducer].concat(params));
+            var newReducer = function (state, action) {
+                if (action.type === "SET_STATE") {
+                    return action.state;
+                }
+                return reducer(state, action);
+            };
+            var store = createStore.apply(void 0, [newReducer].concat(params));
             _this.store = store;
             var dispatch = function (action) {
-                _this.setCurrentAction(action);
-                return store.dispatch(action);
+                var prev = store.getState();
+                var startTime = functions_1.currentTime();
+                var result = store.dispatch(action);
+                var endTime = functions_1.currentTime();
+                var next = store.getState();
+                _this.setCurrentAction(action, prev, next, startTime, endTime);
+                return result;
             };
             return __assign({}, store, { dispatch: dispatch });
         };
@@ -274,8 +295,8 @@ var Graph = /** @class */ (function () {
     Graph.prototype.add = function (f, metadata) {
         if (metadata === void 0) { metadata = {}; }
         var type = functions_1.getType(f);
-        if (type === 'UNKNOWN') {
-            throw new Error('Function is not a known type');
+        if (type === "UNKNOWN") {
+            throw new Error("Function is not a known type");
         }
         switch (type) {
             case constants_1.NODE_TYPES.FUNCTION:
@@ -374,8 +395,8 @@ var Graph = /** @class */ (function () {
             }
             var mainFunction = funcs.pop();
             var name = functions_1.getFunctionName(mainFunction, metadata.name);
-            if (typeof mainFunction !== 'function') {
-                throw new Error('Last argument of a reselect selector must be a function');
+            if (typeof mainFunction !== "function") {
+                throw new Error("Last argument of a reselect selector must be a function");
             }
             console.log(mainFunction);
             var newMainFunc = function () {
@@ -386,7 +407,7 @@ var Graph = /** @class */ (function () {
                 var t = functions_1.currentTime();
                 var result = mainFunction.apply(void 0, params);
                 if (!node) {
-                    throw new Error('Node unexpectedly undefined');
+                    throw new Error("Node unexpectedly undefined");
                 }
                 node.setDuration(functions_1.currentTime() - t);
                 node.setActionThatCausedCall(_this.lastAction);

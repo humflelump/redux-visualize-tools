@@ -6,6 +6,7 @@ import { store } from './store';
 import { GraphComponent } from './graph/ui';
 import { SidePanelComponent } from './side-panel/ui';
 import { HeaderComponent } from './header/ui';
+import { LeftPanelComponent } from './core-dev-tools/left-side-panel/ui';
 
 setTimeout(() => {
   ReactDOM.render(
@@ -13,6 +14,7 @@ setTimeout(() => {
       <GraphComponent />
       <SidePanelComponent />
       <HeaderComponent />
+      <LeftPanelComponent />
     </Provider>,
     document.getElementById('root')
   );

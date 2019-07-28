@@ -48,7 +48,7 @@ class Component extends React.Component<Props> {
         className={props.classes.container}
         style={{ right: props.isVisible ? 0 : -WIDTH }}
       >
-        <PanelContents />
+        {props.isVisible ? <PanelContents /> : null}
       </Paper>
     );
   }

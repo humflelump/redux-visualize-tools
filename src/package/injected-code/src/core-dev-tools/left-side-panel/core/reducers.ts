@@ -16,7 +16,7 @@ export function LeftPanelReducer(
     case 'TOGGLE_IF_LEFT_PANEL_OPEN':
       return {
         ...state,
-        isLeftSidePanelOpen: action.bool,
+        isLeftSidePanelOpen: !state.isLeftSidePanelOpen,
       };
     default:
       return state;

@@ -5,6 +5,8 @@ import { WithStyles, Theme, Paper } from '@material-ui/core';
 import { LEFT_PANEL_WIDTH } from './constants';
 import { IState } from '../../../store';
 import { Dispatch } from 'redux';
+import { ActionsList } from '../../actions/ui';
+import { StateAnalysisComponent } from '../../state/ui';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -24,7 +26,8 @@ const styles = (theme: Theme) =>
       width: LEFT_PANEL_WIDTH,
       bottom: 0,
       top: 0,
-      backgroundColor: 'rgb(255, 255, 255, 0.7)',
+      transition: 'all 0.2s',
+      zIndex: 0,
     },
   });
 
@@ -39,14 +42,19 @@ class Component extends React.Component<Props> {
     const props = this.props;
 
     return (
-      <Paper elevation={10} className={props.classes.container}>
-        <div />
+      <Paper
+        elevation={10}
+        className={props.classes.container}
+        style={{ left: props.isOpen ? 0 : -LEFT_PANEL_WIDTH }}
+      >
+        {props.isOpen ? <ActionsList /> : null}
+        {props.isOpen ? <StateAnalysisComponent /> : null}
       </Paper>
     );
   }
 }
 
-export const HeaderComponent = connect(
+export const LeftPanelComponent = connect(
   mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(Component)) as React.ComponentClass<IPassedProps>;

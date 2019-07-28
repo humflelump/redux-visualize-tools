@@ -22,11 +22,13 @@ export function createUiNodes(nodes: INode[]) {
       g.setEdge(dependency.id, node.id);
     }
   }
-
+  const t = performance.now();
   dagre.layout(g);
+  console.log('it took', performance.now() - t);
   const result = g.nodes().map((id: string) => g.node(id));
   giveNodeLinks(result);
   console.log({ result });
+
   return result as IUINode[];
 }
 

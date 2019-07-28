@@ -11,7 +11,13 @@ const mapStateToProps = (state: IState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {};
+  return {
+    togglePanel: () => {
+      dispatch({
+        type: 'TOGGLE_IF_LEFT_PANEL_OPEN',
+      });
+    },
+  };
 };
 
 const styles = (theme: Theme) =>
@@ -24,6 +30,7 @@ const styles = (theme: Theme) =>
       top: 0,
       borderRadius: 24,
       backgroundColor: 'rgb(255, 255, 255, 0.7)',
+      zIndex: 1,
     },
   });
 
@@ -39,7 +46,7 @@ class Component extends React.Component<Props> {
 
     return (
       <div className={props.classes.container}>
-        <IconButton aria-label="Delete">
+        <IconButton onClick={props.togglePanel}>
           <MenuIcon />
         </IconButton>
       </div>

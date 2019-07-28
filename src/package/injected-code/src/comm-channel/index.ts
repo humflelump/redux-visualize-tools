@@ -1,5 +1,5 @@
 import { store } from '../store';
-console.log('omh');
+
 export class MultiWindowCommChannel {
   public sendGraph(data: any) {
     const dispatch = () =>
@@ -7,7 +7,7 @@ export class MultiWindowCommChannel {
         type: 'SET_GRAPH',
         graph: { ...data, nodes: { ...data.nodes } },
       });
-    data.store.subscribe(dispatch);
+    data.store.subscribe(() => setTimeout(dispatch));
     dispatch();
   }
 }
