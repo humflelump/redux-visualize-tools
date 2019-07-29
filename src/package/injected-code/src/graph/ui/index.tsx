@@ -98,7 +98,7 @@ class Component extends React.Component<Props> {
 
   public render() {
     const props = this.props;
-
+    console.log('render', props);
     return (
       <div
         className={props.classes.container}
