@@ -5,7 +5,12 @@ import { scaleLinear, ScaleLinear } from 'd3';
 import { keyBy, Dictionary } from 'lodash';
 import { INode, IUINode, IRectangleBodyData, NODE_FILTER_TYPE } from '../types';
 import { extractRectangleBodyData } from '../ui/functions';
-import { getDependencies, getDependents, getRelatives } from './functions';
+import {
+  getDependencies,
+  getDependents,
+  getRelatives,
+  filterOutIsolatedNodes,
+} from './functions';
 
 const xTo = (state: IState) => state.Graph.xTo;
 const xFrom = (state: IState) => state.Graph.xFrom;
@@ -54,8 +59,13 @@ const nodeData = createSelector(
   }
 );
 
+const nodeDataWithoutLoneNodes = createSelector(
+  [nodeData],
+  filterOutIsolatedNodes
+);
+
 const filteredNodeData = createSelector(
-  [nodeData, filter, clickedNodeId],
+  [nodeDataWithoutLoneNodes, filter, clickedNodeId],
   (data, filter, nodeId) => {
     if (!nodeId) {
       return data;

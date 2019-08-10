@@ -83,3 +83,17 @@ export function getRelatives(nodes: INode[], id: string) {
   });
   return [...withoutExtraDependencies.filter(d => d !== node), ...dependencies];
 }
+
+export function filterOutIsolatedNodes(nodes: INode[]) {
+  const dependencies = new Set<INode>();
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    for (const dependency of node.dependencies) {
+      dependencies.add(dependency);
+    }
+  }
+  const result = nodes.filter(node => {
+    return node.dependencies.length > 0 || dependencies.has(node);
+  });
+  return result;
+}

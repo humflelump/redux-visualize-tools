@@ -9,21 +9,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var constants = __importStar(require("./constants"));
 function getFunctionName(func, defaultName) {
-    if (typeof defaultName === 'string')
+    if (typeof defaultName === "string")
         return defaultName;
-    if (func && func.name && func.name !== '')
+    if (func && func.name && func.name !== "")
         return func.name;
-    return 'Anonymous Function';
+    return "Anonymous Function";
 }
 exports.getFunctionName = getFunctionName;
 function getNameFromComponent(comp, defaultName) {
-    if (typeof defaultName === 'string')
+    if (typeof defaultName === "string")
         return defaultName;
-    if (comp && comp.constructor && comp.constructor.name !== 'Function')
+    if (comp && comp.constructor && comp.constructor.name !== "Function")
         return comp.constructor.name;
-    if (comp && comp.name !== '')
+    if (comp && comp.name !== "")
         return comp.name;
-    return 'Anonymous Component';
+    return "Anonymous Component";
 }
 exports.getNameFromComponent = getNameFromComponent;
 function makeId(name) {
@@ -36,34 +36,39 @@ function currentTime() {
 }
 exports.currentTime = currentTime;
 function isClassComponent(component) {
-    return (typeof component === 'function'
-        && component.prototype
-        && !!component.prototype.isReactComponent) ? true : false;
+    return typeof component === "function" &&
+        component.prototype &&
+        !!component.prototype.isReactComponent
+        ? true
+        : false;
 }
 function isFunctionComponent(component) {
-    return (typeof component === 'function' &&
-        String(component).includes('createElement')) ? true : false;
+    return typeof component === "function" &&
+        String(component).includes("createElement")
+        ? true
+        : false;
 }
 function isReactComponent(component) {
-    return (isClassComponent(component) ||
-        isFunctionComponent(component)) ? true : false;
+    return isClassComponent(component) || isFunctionComponent(component)
+        ? true
+        : false;
 }
 function getType(f) {
     try {
-        if (f().name === 'wrapWithConnect') {
+        if (f().name === "wrapWithConnect") {
             return constants.NODE_TYPES.CONNECT;
         }
     }
     catch (e) { }
     try {
-        if ('resultFunc' in f()) {
+        if ("resultFunc" in f()) {
             return constants.NODE_TYPES.RESELECT_SELECTOR;
         }
     }
     catch (e) { }
     try {
         var sel = f({ async: function () { return null; }, sync: function () { return null; } });
-        if ('forceUpdate' in sel) {
+        if ("forceUpdate" in sel) {
             return constants.NODE_TYPES.ASYNC_SELECTOR;
         }
     }
@@ -71,22 +76,26 @@ function getType(f) {
     if (isReactComponent(f)) {
         return constants.NODE_TYPES.REACT_COMPONENT;
     }
-    if (typeof f === 'function') {
+    if (typeof f === "function") {
         return constants.NODE_TYPES.FUNCTION;
     }
-    return 'UNKNOWN';
+    return "UNKNOWN";
 }
 exports.getType = getType;
 function isImmutableMap(d) {
-    return d && typeof d === 'object' && 'get' in d && 'keySeq' in d;
+    return (d &&
+        typeof d === "object" &&
+        "get" in d &&
+        d.constructor &&
+        d.constructor.name === "Map");
 }
 exports.isImmutableMap = isImmutableMap;
 function isObject(d) {
-    return d && typeof d === 'object' && !('get' in d) && !Array.isArray(d);
+    return d && typeof d === "object" && !("get" in d) && !Array.isArray(d);
 }
 exports.isObject = isObject;
 function getStateVariableName(keys) {
-    return "state." + keys.join('.');
+    return "state." + keys.join(".");
 }
 exports.getStateVariableName = getStateVariableName;
 function shallowEqual(o1, o2) {
