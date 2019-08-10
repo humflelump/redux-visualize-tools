@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es2017", "es7", "es6", "dom"],
+    "declaration": true,
+    "outDir": "../../test-app/src/redux-visualize-dist",
+    "strict": false,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "noUnusedLocals": true
+  },
+  "exclude": ["node_modules", "dist"]
+}
