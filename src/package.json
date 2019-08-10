@@ -1,0 +1,6 @@
+{
+  "name": "redux-visualize",
+  "scripts": {
+    "start": "sh start.sh"
+  }
+}
