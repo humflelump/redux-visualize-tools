@@ -1,14 +1,14 @@
 {
-  "name": "my-ts-lib",
+  "name": "redux-visualize-tools",
   "version": "1.0.0",
-  "description": "My npm package written in TS",
+  "description": "Visualize the dependency graph of a redux app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack --watch",
     "build:stats": "webpack --env production --json > stats.json"
   },
-  "author": "Cameron Nokes",
+  "author": "Mark Metzger",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.1.0",

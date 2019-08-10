@@ -1,4 +1,5 @@
 import { store } from '../store';
+import { throttle } from 'lodash';
 
 export class MultiWindowCommChannel {
   public sendGraph(data: any) {
@@ -7,7 +8,8 @@ export class MultiWindowCommChannel {
         type: 'SET_GRAPH',
         graph: { ...data, nodes: { ...data.nodes } },
       });
-    data.store.subscribe(() => setTimeout(dispatch));
+
+    data.store.subscribe(() => setTimeout(throttle(dispatch, 500)));
     dispatch();
   }
 }
