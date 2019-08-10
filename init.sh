@@ -1,3 +1,4 @@
+yarn install
 cd test-app
 yarn install
 cd ..

@@ -2,6 +2,23 @@
   "name": "redux-visualize",
   "scripts": {
     "start": "sh start.sh",
-    "init": "sh init.sh"
+    "init": "sh init.sh",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.17",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/package/core/src",
+      "<rootDir>/package/core/injected-code/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$"
   }
 }
