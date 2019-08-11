@@ -29,6 +29,7 @@ const styles = (theme: Theme) =>
       transition: 'right 0.14s, left 0.14s',
       backgroundColor: 'white',
       pointerEvents: 'auto',
+      overflow: 'auto',
     },
   });
 

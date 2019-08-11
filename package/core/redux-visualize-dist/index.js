@@ -5,10 +5,10 @@ var graph_1 = require("./vis/graph");
 exports.default = graph_1.Graph;
 exports.graph = new graph_1.Graph();
 function openWindow() {
-    var child = window.open(window.location.origin, 'dev-tools', "width=500, height=500");
+    var child = window.open(window.location.origin, 'dev-tools', "width=800, height=500");
     setTimeout(function () {
         child.commChannel.sendGraph(exports.graph);
-    }, 0);
+    }, 1000);
     if (!child)
         return;
     child.document.open();

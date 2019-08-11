@@ -16,6 +16,7 @@ import {
 import { NODE_FILTER_TYPES } from './constants';
 import { clickedNode } from '../../graph/core/selectors';
 import { NODE_FILTER_TYPE } from '../../graph/types';
+import { JsonViewer } from './json-viewer';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -96,11 +97,7 @@ class Component extends React.Component<Props> {
         </div>
         <div className={props.classes.functionArea}>
           <div className={props.classes.label}>Return Value:</div>
-          <textarea
-            rows={6}
-            style={{ width: '100%' }}
-            value={stringify(props.node.data.value)}
-          />
+          <JsonViewer data={props.node.data.value} />
         </div>
         <div style={{ width: '100%', marginLeft: 10 }}>
           <FormControl component="fieldset">

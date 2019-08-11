@@ -2,7 +2,7 @@ import { IState } from '../../store';
 import { createSelector } from 'reselect';
 import { createUiNodes } from './gen-renderable-graph';
 import { scaleLinear, ScaleLinear } from 'd3';
-import { keyBy, Dictionary } from 'lodash';
+import { keyBy, Dictionary, isEqual } from 'lodash';
 import { INode, IUINode, IRectangleBodyData, NODE_FILTER_TYPE } from '../types';
 import { extractRectangleBodyData } from '../ui/functions';
 import {
@@ -12,10 +12,10 @@ import {
   filterOutIsolatedNodes,
 } from './functions';
 
-const xTo = (state: IState) => state.Graph.xTo;
-const xFrom = (state: IState) => state.Graph.xFrom;
-const yTo = (state: IState) => state.Graph.yTo;
-const yFrom = (state: IState) => state.Graph.yFrom;
+export const xTo = (state: IState) => state.Graph.xTo;
+export const xFrom = (state: IState) => state.Graph.xFrom;
+export const yTo = (state: IState) => state.Graph.yTo;
+export const yFrom = (state: IState) => state.Graph.yFrom;
 const graphData = (state: IState) => state.CommChannel.graph;
 const mousePosition = (state: IState) => state.Graph.mousePosition;
 const clickedNodeId = (state: IState) => state.Graph.clickedNodeId;
@@ -83,7 +83,7 @@ const filteredNodeData = createSelector(
   }
 );
 
-const uiNodes = createSelector(
+export const uiNodes = createSelector(
   [filteredNodeData],
   createUiNodes
 );

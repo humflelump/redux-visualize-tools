@@ -1,4 +1,5 @@
-import { INode } from '../types';
+import { INode, IUINode } from '../types';
+import * as d3 from 'd3';
 
 function getDependenciesHelper(node: INode, set: Set<INode>) {
   if (set.has(node)) {
@@ -96,4 +97,65 @@ export function filterOutIsolatedNodes(nodes: INode[]) {
     return node.dependencies.length > 0 || dependencies.has(node);
   });
   return result;
+}
+
+export function getZoomedOutScales(
+  rectangles: IUINode[],
+  chartDimensions: { width: number; height: number }
+) {
+  const windowAspectRatio = chartDimensions.width / chartDimensions.height;
+  const pad = (extent: number[]) => {
+    const size = extent[1] - extent[0];
+    const FRACTION = 1 / 12;
+    return [extent[0] - size * FRACTION, extent[1] + size * FRACTION];
+  };
+  const result = {
+    x: pad([
+      d3.min(rectangles.map(d => d.x)),
+      d3.max(rectangles.map(d => d.x + d.width)),
+    ]),
+    y: pad([
+      d3.min(rectangles.map(d => d.y)),
+      d3.max(rectangles.map(d => d.y + d.height)),
+    ]),
+  };
+
+  const rectsAspectRatio =
+    (result.x[1] - result.x[0]) / (result.y[1] - result.y[0]);
+  if (rectsAspectRatio >= windowAspectRatio) {
+    const heightFraction = windowAspectRatio / rectsAspectRatio;
+    const topFraction = (1 - heightFraction) / 2;
+    const xExtent = [0, chartDimensions.width];
+    const yExtent = [
+      chartDimensions.height * topFraction,
+      chartDimensions.height * (topFraction + heightFraction),
+    ];
+    return {
+      x: d3
+        .scaleLinear()
+        .domain(result.x)
+        .range(xExtent),
+      y: d3
+        .scaleLinear()
+        .domain(result.y)
+        .range(yExtent),
+    };
+  }
+  const widthFraction = rectsAspectRatio / windowAspectRatio;
+  const leftFraction = (1 - widthFraction) / 2;
+  const yExtent = [0, chartDimensions.height];
+  const xExtent = [
+    chartDimensions.width * leftFraction,
+    chartDimensions.width * (leftFraction + widthFraction),
+  ];
+  return {
+    x: d3
+      .scaleLinear()
+      .domain(result.x)
+      .range(xExtent),
+    y: d3
+      .scaleLinear()
+      .domain(result.y)
+      .range(yExtent),
+  };
 }

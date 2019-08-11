@@ -26,6 +26,7 @@ import * as d3 from 'd3';
 import { onClick } from '../core/actions';
 import { NodeTooltip } from '../../tooltip/ui';
 import { dimensions } from '../core/dimensions-selectors';
+import { ZoomOutButton } from './zoom-out';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -109,6 +110,8 @@ class Component extends React.Component<Props> {
         onClick={props.canvasClicked}
       >
         <NodeTooltip />
+
+        <ZoomOutButton />
         <canvas
           id="graph-canvas"
           width={props.dimensions.width}
