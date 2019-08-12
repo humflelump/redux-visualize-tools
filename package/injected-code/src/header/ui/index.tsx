@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, IconButton } from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const mapStateToProps = (state: IState) => {
   return {};

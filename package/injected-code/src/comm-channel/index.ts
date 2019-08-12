@@ -1,6 +1,6 @@
 import { store } from '../store';
 import { throttle } from 'lodash';
-import { resetZoom } from '../graph/core/actions';
+import { triggerResetZoomWhenGraphIsFinishedCalculating } from '../graph/core/selectors';
 
 export class MultiWindowCommChannel {
   public sendGraph(data: any) {
@@ -11,7 +11,7 @@ export class MultiWindowCommChannel {
       });
     data.store.subscribe(() => setTimeout(throttle(dispatch, 500)));
     dispatch();
-    setTimeout(resetZoom);
+    triggerResetZoomWhenGraphIsFinishedCalculating();
   }
 }
 export const commChannel = new MultiWindowCommChannel();

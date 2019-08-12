@@ -1,7 +1,6 @@
 import { INode, IUINode } from '../types';
 import * as d3 from 'd3';
 import { keyBy, Dictionary, isEqual } from 'lodash';
-import { TrainRounded } from '@material-ui/icons';
 
 function getDependenciesHelper(node: INode, set: Set<INode>) {
   if (set.has(node)) {

@@ -1,5 +1,5 @@
 cd injected-code
-yarn build &
+yarn start &
 cd ..
 cd core
 cd create-injector-file

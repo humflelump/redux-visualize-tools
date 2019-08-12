@@ -2,7 +2,6 @@ import { IState } from '../../store';
 import { hoveredNode, filteredNodeData } from './selectors';
 import { Dispatch } from 'redux';
 import { zoomedOutScales } from './zoom-selectors';
-import { createUiNodes } from './gen-renderable-graph';
 import { asyncGraphRender } from '../../gen-graph-layout';
 
 const state = () => (window as any).store.getState() as IState;

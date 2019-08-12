@@ -1,6 +1,5 @@
 import { IState } from '../../store';
 import { createSelector } from 'reselect';
-import { createUiNodes } from './gen-renderable-graph';
 import { scaleLinear, ScaleLinear } from 'd3';
 import { keyBy, Dictionary, isEqual } from 'lodash';
 import { INode, IUINode, IRectangleBodyData, NODE_FILTER_TYPE } from '../types';
@@ -58,6 +57,9 @@ export const yScale = createSelector(
 const nodeData = createSelector(
   [graphData],
   (data: any) => {
+    if (!data) {
+      return [] as INode[];
+    }
     const ids = Object.keys(data.nodes);
     return ids.map(id => data.nodes[id] as INode);
   }

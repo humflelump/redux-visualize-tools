@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "webpack --watch",
+    "start": "webpack --env.NODE_ENV=development --watch",
+    "build": "webpack --env.NODE_ENV=production",
     "build:stats": "webpack --env production --json > stats.json"
   },
   "author": "Mark Metzger",
@@ -19,6 +20,7 @@
     "tslint-react": "^4.0.0",
     "typescript": "^3.5.3",
     "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.5",
     "worker-loader": "^2.0.0"
   },
@@ -27,7 +29,6 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/styles": "^4.2.1",
     "@types/d3": "^5.7.2",
-    "@types/dagre": "^0.7.42",
     "@types/jest": "24.0.15",
     "@types/lodash": "^4.14.136",
     "@types/node": "12.6.2",
@@ -41,7 +42,6 @@
     "@types/reselect": "^2.2.0",
     "async-selector": "^1.0.18",
     "d3": "4.10.0",
-    "dagre": "^0.8.4",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "react": "^16.8.6",
