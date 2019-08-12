@@ -1,11 +1,11 @@
 const path = require('path');
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin;
 
-module.exports = {
+module.exports = env => ({
   entry: './src/index.tsx',
-  mode: 'development' /*process.env.NODE_ENV*/,
+  mode: env.NODE_ENV,
   // plugins: [new BundleAnalyzerPlugin()],
   module: {
     rules: [
@@ -39,4 +39,4 @@ module.exports = {
         .slice(0, -1)
         .join('/') + '/core/injected-code-dist',
   },
-};
+});

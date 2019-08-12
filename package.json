@@ -2,6 +2,7 @@
   "name": "redux-visualize",
   "scripts": {
     "start": "sh start.sh",
+    "build": "cd package && sh build.sh",
     "init": "sh init.sh",
     "test": "jest"
   },

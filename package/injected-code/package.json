@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "webpack --env.NODE_ENV=development --watch",
-    "build": "webpack --env.NODE_ENV=production",
-    "build:stats": "webpack --env production --json > stats.json"
+    "build": "webpack --env.NODE_ENV=production"
   },
   "author": "Mark Metzger",
   "license": "MIT",
