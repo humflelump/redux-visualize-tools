@@ -25,3 +25,15 @@ export function openWindow(options = "width=800, height=500") {
     `);
   child.document.close();
 }
+
+export function appendIcon(
+  callback: () => any = openWindow,
+  buttonText = "Dev Tools",
+  cssText = "position:fixed;right:10px;bottom:10px;z-index:100;"
+) {
+  var button = document.createElement("button");
+  button.style.cssText = cssText;
+  button.innerText = buttonText;
+  button.onclick = callback;
+  document.body.appendChild(button);
+}

@@ -6,7 +6,7 @@ cd create-injector-file
 node index.js &
 cd ..
 cd core
-yarn build
+yarn start
 cd ..
 cd graph-render-web-worker
 yarn start

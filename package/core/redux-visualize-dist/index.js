@@ -17,3 +17,14 @@ function openWindow(options) {
     child.document.close();
 }
 exports.openWindow = openWindow;
+function appendIcon(callback, buttonText, cssText) {
+    if (callback === void 0) { callback = openWindow; }
+    if (buttonText === void 0) { buttonText = "Dev Tools"; }
+    if (cssText === void 0) { cssText = "position:fixed;right:10px;bottom:10px;z-index:100;"; }
+    var button = document.createElement("button");
+    button.style.cssText = cssText;
+    button.innerText = buttonText;
+    button.onclick = callback;
+    document.body.appendChild(button);
+}
+exports.appendIcon = appendIcon;

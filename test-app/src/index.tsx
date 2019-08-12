@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { openWindow, graph } from "redux-visualize-tools";
+import { openWindow, graph, appendIcon } from "redux-visualize-tools";
 import { configureStore } from "./store";
 import { Provider } from "react-redux";
 import Immutable from "immutable";
@@ -11,18 +11,13 @@ import { D3Test } from "./component1/test";
 
 console.log(graph);
 
+appendIcon();
+
 const store = configureStore();
 (window as any).store = store;
 
 ReactDOM.render(
   <Provider store={store}>
-    <button
-      onClick={() => {
-        openWindow("width=1100, height=500");
-      }}
-    >
-      click me
-    </button>
     <App />
     <D3Test />
   </Provider>,

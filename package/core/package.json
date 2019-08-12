@@ -1,11 +1,13 @@
 {
   "name": "redux-visualize-tools",
-  "version": "1.0.0",
-  "description": "My npm package written in TS",
+  "version": "0.0.1-alpha.0",
+  "description": "Visualize the dependency graph of your web app",
   "main": "./redux-visualize-dist/index.js",
   "types": "./redux-visualize-dist/index.d.ts",
   "scripts": {
-    "build": "tsc --watch"
+    "start": "tsc --watch",
+    "build": "tsc",
+    "prepublish": "tsc"
   },
   "author": "Cameron Nokes",
   "license": "MIT",
