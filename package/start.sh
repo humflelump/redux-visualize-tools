@@ -7,5 +7,8 @@ node index.js &
 cd ..
 cd core
 yarn build
+cd ..
+cd graph-render-web-worker
+yarn start
 
 

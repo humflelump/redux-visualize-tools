@@ -7,7 +7,7 @@ module.exports = {
     minimize: true
   },
   output: {
-    filename: "main.js",
+    filename: "worker.txt",
     path:
       __dirname
         .split("/")

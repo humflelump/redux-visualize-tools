@@ -11,6 +11,8 @@ function keyBy(L, f) {
 }
 
 function createUiNodes(nodes) {
+  const t = performance.now();
+
   const g = new dagre.graphlib.Graph({ multigraph: true });
   g.setGraph({ rankdir: "BT", ranksep: 80, ranker: "longest-path" });
   g.setDefaultEdgeLabel(() => {
@@ -30,9 +32,9 @@ function createUiNodes(nodes) {
       g.setEdge(dependency.id, node.id);
     }
   }
-  const t = performance.now();
+
   dagre.layout(g);
-  console.log("it took", performance.now() - t);
+  console.log("it took", performance.now() - t, "to generate the graph");
   const result = g.nodes().map(id => g.node(id));
   giveNodeLinks(result);
   console.log({ result });
