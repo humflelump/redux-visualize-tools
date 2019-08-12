@@ -5,6 +5,7 @@ import {
   createStore,
   Store,
   applyMiddleware,
+  AnyAction,
 } from 'redux';
 import { IGraphState, GraphReducer } from './graph/core/reducers';
 import { listenForResizeEvents } from './window-dimensions/listener';
@@ -18,6 +19,7 @@ import {
   IStateAnalysisState,
   StateAnalysisReducer,
 } from './core-dev-tools/state/core/reducers';
+import { ISettingsState, SettingsReducer } from './settings/core/reducers';
 
 export interface IState {
   CommChannel: ICommChannelState;
@@ -25,6 +27,7 @@ export interface IState {
   Window: WindowState;
   LeftPanel: ILeftPanelState;
   StateAnalysis: IStateAnalysisState;
+  Settings: ISettingsState;
 }
 
 const appReducer: Reducer<IState> = combineReducers<IState>({
@@ -33,12 +36,20 @@ const appReducer: Reducer<IState> = combineReducers<IState>({
   Window: WindowReducer,
   LeftPanel: LeftPanelReducer,
   StateAnalysis: StateAnalysisReducer,
+  Settings: SettingsReducer,
 });
+
+const withAsyncSelector = (state: IState, action: AnyAction) => {
+  if (action.type === 'RERENDER') {
+    return { ...state };
+  }
+  return appReducer(state, action);
+};
 
 const middlewares = [createLogger({})];
 
 export const store: Store = createStore(
-  appReducer,
+  withAsyncSelector,
   applyMiddleware(...middlewares)
 );
 listenForResizeEvents(store);

@@ -1,7 +1,9 @@
 import { IState } from '../../store';
-import { hoveredNode } from './selectors';
+import { hoveredNode, filteredNodeData } from './selectors';
 import { Dispatch } from 'redux';
 import { zoomedOutScales } from './zoom-selectors';
+import { createUiNodes } from './gen-renderable-graph';
+import { asyncGraphRender } from '../../gen-graph-layout';
 
 const state = () => (window as any).store.getState() as IState;
 const dispatch = () => (window as any).store.dispatch as Dispatch;
@@ -13,15 +15,11 @@ export function onClick() {
       type: 'CLICK_NODE',
       nodeId: node.data.id,
     });
-  } else {
-    dispatch()({
-      type: 'CLEAR_CLICKED_NODE',
-    });
   }
 }
 
 export function resetZoom() {
-  const { x, y } = zoomedOutScales(state());
+  const { x, y } = zoomedOutScales({ ...state() });
   dispatch()({
     type: 'SET_SCALES',
     xTo: x.range(),
@@ -30,3 +28,4 @@ export function resetZoom() {
     yFrom: y.domain(),
   });
 }
+(window as any).resetZoom = resetZoom;

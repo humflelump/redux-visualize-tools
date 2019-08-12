@@ -36,6 +36,10 @@ const wow = graph.add(function grr() {
   console.log("this is my func");
   j();
   f();
+  blah();
+  blah2();
+  blah3();
+  blah4();
 });
 
 export const test = graph.add(createSelector)([test_], function wowtest(t) {

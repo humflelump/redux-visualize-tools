@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
-import { IUINode, NODE_FILTER_TYPE } from '../types';
+import { IUINode, NODE_FILTER_TYPE, INode } from '../types';
+import { NODE_FILTER_TYPES } from '../../side-panel/ui/constants';
 
 export const initialState = {
   xTo: [0, 500],
@@ -8,7 +9,10 @@ export const initialState = {
   yFrom: [0, 500],
   mousePosition: null,
   clickedNodeId: null,
-  clickedNodeFilter: NODE_FILTER_TYPE.NO_FILTER,
+  nodeFilter: {
+    filterType: NODE_FILTER_TYPE.NO_FILTER,
+    nodeId: null,
+  },
 };
 
 export interface IGraphState {
@@ -18,7 +22,10 @@ export interface IGraphState {
   yFrom: number[];
   mousePosition: number[] | null;
   clickedNodeId: string | null;
-  clickedNodeFilter: NODE_FILTER_TYPE;
+  nodeFilter: {
+    filterType: NODE_FILTER_TYPE;
+    nodeId: string | null;
+  };
 }
 
 export function GraphReducer(
@@ -26,10 +33,21 @@ export function GraphReducer(
   action: AnyAction
 ): IGraphState {
   switch (action.type) {
-    case 'SET_CLICKED_NODE_FILTER':
+    case 'SET_NODE_FILTER':
       return {
         ...state,
-        clickedNodeFilter: action.filter,
+        nodeFilter: {
+          filterType: action.filterType,
+          nodeId: action.nodeId,
+        },
+      };
+    case 'CLEAR_NODE_FILTER':
+      return {
+        ...state,
+        nodeFilter: {
+          filterType: NODE_FILTER_TYPE.NO_FILTER,
+          nodeId: null,
+        },
       };
     case 'CLICK_NODE':
       return {
@@ -40,7 +58,6 @@ export function GraphReducer(
       return {
         ...state,
         clickedNodeId: null,
-        clickedNodeFilter: NODE_FILTER_TYPE.NO_FILTER,
       };
     case 'SET_MOUSE_POSITION':
       return {

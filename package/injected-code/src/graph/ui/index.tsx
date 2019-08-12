@@ -10,7 +10,6 @@ import {
   indexedUiNodes,
   hoveredNode,
   getRectangleData,
-  selectedNode,
 } from '../core/selectors';
 import { Button, WithStyles, Theme } from '@material-ui/core';
 import { withStyles, createStyles } from '@material-ui/styles';
@@ -26,7 +25,8 @@ import * as d3 from 'd3';
 import { onClick } from '../core/actions';
 import { NodeTooltip } from '../../tooltip/ui';
 import { dimensions } from '../core/dimensions-selectors';
-import { ZoomOutButton } from './zoom-out';
+import { ActionButtons } from './buttons';
+import { LoadingIndicator } from './loading';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -37,7 +37,6 @@ const mapStateToProps = (state: IState) => {
     yScale: yScale(state),
     scale: scale(state),
     hoveredNode: hoveredNode(state),
-    selectedNode: selectedNode(state),
     getRectangleData: getRectangleData(state),
   };
 };
@@ -99,7 +98,6 @@ class Component extends React.Component<Props> {
 
   public render() {
     const props = this.props;
-    console.log('render', props);
     return (
       <div
         className={props.classes.container}
@@ -110,8 +108,8 @@ class Component extends React.Component<Props> {
         onClick={props.canvasClicked}
       >
         <NodeTooltip />
-
-        <ZoomOutButton />
+        <ActionButtons />
+        <LoadingIndicator />
         <canvas
           id="graph-canvas"
           width={props.dimensions.width}
@@ -141,13 +139,12 @@ class Component extends React.Component<Props> {
     }
 
     const dim = this.props.dimensions;
-    const t = performance.now();
     ctx.clearRect(0, 0, dim.width, dim.height);
     renderLines(ctx, this.props.nodes, this.props.indexedNodes);
     renderRectangles(
       ctx,
       this.props.nodes,
-      this.props.selectedNode,
+      this.props.hoveredNode,
       this.props.scale
     );
     renderText(ctx, this.props.nodes, this.props.scale);
@@ -157,8 +154,6 @@ class Component extends React.Component<Props> {
       this.props.getRectangleData,
       this.props.scale
     );
-    console.log('took', performance.now() - t);
-
     // in order for closures within to work, the data passed in must be mutated
     const data = this.zoomData as IZoomData;
     data.canvas = canvas;

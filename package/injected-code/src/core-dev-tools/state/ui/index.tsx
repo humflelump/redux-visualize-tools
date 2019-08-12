@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme } from '@material-ui/core';
 import { IState } from '../../../store';
-import { stateAnalysisDimensions, selectedAction } from '../core/selectors';
+import {
+  stateAnalysisDimensions,
+  selectedAction,
+  currentState,
+} from '../core/selectors';
 import JSONTree from 'react-json-tree';
 
 const theme = {
@@ -32,6 +36,7 @@ const mapStateToProps = (state: IState) => {
   return {
     dimensions: stateAnalysisDimensions(state),
     action: selectedAction(state),
+    currentState: currentState(state),
   };
 };
 
@@ -58,7 +63,7 @@ class Component extends React.Component<Props> {
         <JSONTree
           theme={theme}
           invertTheme={true}
-          data={props.action ? props.action.nextState : {}}
+          data={props.action ? props.action.nextState : props.currentState}
         />
       </div>
     );

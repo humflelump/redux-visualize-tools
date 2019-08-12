@@ -1,5 +1,7 @@
 import { INode, IUINode } from '../types';
 import * as d3 from 'd3';
+import { keyBy, Dictionary, isEqual } from 'lodash';
+import { TrainRounded } from '@material-ui/icons';
 
 function getDependenciesHelper(node: INode, set: Set<INode>) {
   if (set.has(node)) {
@@ -82,7 +84,10 @@ export function getRelatives(nodes: INode[], id: string) {
       }),
     };
   });
-  return [...withoutExtraDependencies.filter(d => d !== node), ...dependencies];
+  return [
+    ...withoutExtraDependencies.filter(d => d.id !== node.id),
+    ...dependencies,
+  ];
 }
 
 export function filterOutIsolatedNodes(nodes: INode[]) {
@@ -158,4 +163,43 @@ export function getZoomedOutScales(
       .domain(result.y)
       .range(yExtent),
   };
+}
+
+// Takes UI Nodes and updates there data with their most recent data
+export function updateNodeData(nodes: INode[], uiNodes: IUINode[]): IUINode[] {
+  const indexedNodes = keyBy(nodes, d => d.id);
+  const result = uiNodes.map(uiNode => {
+    const node = indexedNodes[uiNode.data.id];
+    if (!node) {
+      return uiNode;
+    }
+    return {
+      ...uiNode,
+      data: {
+        ...node,
+        dependencies: uiNode.data.dependencies,
+      },
+    };
+  });
+  return result;
+}
+
+export function isGraphShapeDifferent(nodes: INode[], uiNodes: IUINode[]) {
+  if (nodes.length !== uiNodes.length) {
+    return true;
+  }
+  const indexedNodes = keyBy(nodes, d => d.id);
+  for (let i = 0; i < uiNodes.length; i++) {
+    const node = uiNodes[i];
+    const otherNode = indexedNodes[node.data.id];
+    if (!otherNode) {
+      return true;
+    }
+    const parents1 = node.parents.map(d => d.data.id);
+    const parents2 = otherNode.dependencies.map(d => d.id);
+    if (!isEqual(parents1, parents2)) {
+      return true;
+    }
+  }
+  return false;
 }

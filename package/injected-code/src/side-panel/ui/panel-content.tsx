@@ -14,23 +14,28 @@ import {
   Radio,
 } from '@material-ui/core';
 import { NODE_FILTER_TYPES } from './constants';
-import { clickedNode } from '../../graph/core/selectors';
+import {
+  clickedNode,
+  triggerResetZoomWhenGraphIsFinishedCalculating,
+} from '../../graph/core/selectors';
 import { NODE_FILTER_TYPE } from '../../graph/types';
 import { JsonViewer } from './json-viewer';
 
 const mapStateToProps = (state: IState) => {
   return {
     node: clickedNode(state),
-    clickedNodeFilter: state.Graph.clickedNodeFilter,
+    nodeFilter: state.Graph.nodeFilter,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setFilter: (str: NODE_FILTER_TYPE) => {
+    setFilter: (str: NODE_FILTER_TYPE, nodeId: string) => {
+      triggerResetZoomWhenGraphIsFinishedCalculating();
       dispatch({
-        type: 'SET_CLICKED_NODE_FILTER',
-        filter: str,
+        type: 'SET_NODE_FILTER',
+        filterType: str,
+        nodeId,
       });
     },
   };
@@ -107,8 +112,14 @@ class Component extends React.Component<Props> {
             <RadioGroup
               aria-label="gender"
               name="gender1"
-              value={props.clickedNodeFilter}
-              onChange={(e: any) => props.setFilter(e.target.value)}
+              value={
+                props.node.data.id === props.nodeFilter.nodeId
+                  ? props.nodeFilter.filterType
+                  : NODE_FILTER_TYPE.NO_FILTER
+              }
+              onChange={(e: any) =>
+                props.setFilter(e.target.value, props.node.data.id)
+              }
             >
               {NODE_FILTER_TYPES.map(type => {
                 return (

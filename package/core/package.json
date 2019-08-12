@@ -10,7 +10,8 @@
   "author": "Cameron Nokes",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "2.9"
+    "typescript": "2.9",
+    "worker-loader": "^2.0.0"
   },
   "dependencies": {
     "@types/react": "16.8.23",
