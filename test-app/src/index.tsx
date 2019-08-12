@@ -18,7 +18,7 @@ ReactDOM.render(
   <Provider store={store}>
     <button
       onClick={() => {
-        openWindow();
+        openWindow("width=1100, height=500");
       }}
     >
       click me

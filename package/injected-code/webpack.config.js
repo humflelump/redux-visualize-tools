@@ -6,7 +6,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.txt$/i,
+        test: /\.txt.js$/i,
         use: 'raw-loader',
       },
       {

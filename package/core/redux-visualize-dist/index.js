@@ -4,8 +4,9 @@ var injection_1 = require("./injection");
 var graph_1 = require("./vis/graph");
 exports.default = graph_1.Graph;
 exports.graph = new graph_1.Graph();
-function openWindow() {
-    var child = window.open(window.location.origin, 'dev-tools', "width=800, height=500");
+function openWindow(options) {
+    if (options === void 0) { options = "width=800, height=500"; }
+    var child = window.open(window.location.origin, "dev-tools", options);
     setTimeout(function () {
         child.commChannel.sendGraph(exports.graph);
     }, 1000);

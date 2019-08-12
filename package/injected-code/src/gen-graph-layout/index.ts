@@ -1,6 +1,6 @@
 import { INode, IUINode } from '../graph/types';
 // @ts-ignore
-import workerTxt from './worker.txt';
+import workerTxt from './worker.txt.js';
 import { keyBy, isEqual } from 'lodash';
 
 function makeWorker() {
