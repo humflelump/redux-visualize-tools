@@ -5,11 +5,12 @@ cd ..
 cd package
 cd core
 yarn install
-cd injected-code-dist
 yarn link
 cd ..
-cd ..
 cd injected-code
+yarn install
+cd ..
+cd graph-render-web-worker
 yarn install
 cd ..
 cd ..

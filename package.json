@@ -3,7 +3,7 @@
   "scripts": {
     "start": "sh start.sh",
     "build": "cd package && sh build.sh",
-    "init": "sh init.sh",
+    "bootstrap": "sh init.sh",
     "test": "jest"
   },
   "devDependencies": {
