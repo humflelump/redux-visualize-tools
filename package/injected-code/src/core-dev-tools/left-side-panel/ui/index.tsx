@@ -7,10 +7,17 @@ import { IState } from '../../../store';
 import { Dispatch } from 'redux';
 import { ActionsList } from '../../actions/ui';
 import { StateAnalysisComponent } from '../../state/ui';
+import { stateAnalysisDimensions } from '../../state/core/selectors';
+import { LEFT_PANEL_TABS } from '../../drag-region/types';
+import { DragRegion } from '../../drag-region/ui';
+import { StateDiff } from '../../diff/index';
+import { ActionJsonTree } from '../../actions/ui/action-json-tree';
 
 const mapStateToProps = (state: IState) => {
   return {
     isOpen: state.LeftPanel.isLeftSidePanelOpen,
+    bottomDimensions: stateAnalysisDimensions(state),
+    tab: state.DragRegion.selectedTab,
   };
 };
 
@@ -29,6 +36,7 @@ const styles = (theme: Theme) =>
       transition: 'all 0.2s',
       zIndex: 0,
     },
+    bottomSection: {},
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -48,7 +56,12 @@ class Component extends React.Component<Props> {
         style={{ left: props.isOpen ? 0 : -LEFT_PANEL_WIDTH }}
       >
         {props.isOpen ? <ActionsList /> : null}
-        {props.isOpen ? <StateAnalysisComponent /> : null}
+        <div style={props.bottomDimensions}>
+          <DragRegion />
+          {props.tab === LEFT_PANEL_TABS.STATE && <StateAnalysisComponent />}
+          {props.tab === LEFT_PANEL_TABS.DIFF && <StateDiff />}
+          {props.tab === LEFT_PANEL_TABS.ACTION && <ActionJsonTree />}
+        </div>
       </Paper>
     );
   }

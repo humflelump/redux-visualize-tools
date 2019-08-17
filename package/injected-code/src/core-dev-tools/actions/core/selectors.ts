@@ -4,8 +4,12 @@ import { createSelector } from 'reselect';
 import { windowHeight } from '../../../window-dimensions/selectors';
 import { LEFT_PANEL_WIDTH } from '../../left-side-panel/ui/constants';
 
-export const actions = (state: IState) =>
-  state.CommChannel.graph.actions as IAction[];
+export const actions = (state: IState) => {
+  if (state.CommChannel.graph) {
+    return state.CommChannel.graph.actions as IAction[];
+  }
+  return [] as IAction[];
+};
 
 export const actionsListDimensions = createSelector(
   [windowHeight],
