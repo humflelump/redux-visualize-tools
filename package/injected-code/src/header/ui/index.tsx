@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import BackIcon from '@material-ui/icons/ArrowBack';
+import { LEFT_PANEL_WIDTH } from '../../core-dev-tools/left-side-panel/ui/constants';
 
 const mapStateToProps = (state: IState) => {
-  return {};
+  return {
+    width: LEFT_PANEL_WIDTH,
+    isOpen: state.LeftPanel.isLeftSidePanelOpen,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -24,13 +29,13 @@ const styles = (theme: Theme) =>
   createStyles({
     container: {
       position: 'absolute',
-      left: 0,
       width: 48,
       height: 48,
       top: 0,
       borderRadius: 24,
       backgroundColor: 'rgb(255, 255, 255, 0.7)',
       zIndex: 1,
+      transition: 'all 0.3s',
     },
   });
 
@@ -45,9 +50,12 @@ class Component extends React.Component<Props> {
     const props = this.props;
 
     return (
-      <div className={props.classes.container}>
+      <div
+        className={props.classes.container}
+        style={{ left: props.isOpen ? props.width - 48 : 0 }}
+      >
         <IconButton onClick={props.togglePanel}>
-          <MenuIcon />
+          {props.isOpen ? <BackIcon /> : <MenuIcon />}
         </IconButton>
       </div>
     );

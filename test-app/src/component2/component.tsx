@@ -16,8 +16,8 @@ const mapStateToProps = (state: State) => {
   blah3();
   blah4();
   return {
-    test: selectors.test(state),
-    text: state.Component1.text
+    test: selectors.test(state)
+    //text: state.Component1.text
   };
 };
 

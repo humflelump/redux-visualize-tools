@@ -12,6 +12,8 @@ import { Delta } from '../../diff/dist';
 const userSelectedAction = (state: IState) =>
   state.StateAnalysis.userSelectedAction;
 
+const topFraction = (state: IState) => state.DragRegion.dividerTop;
+
 export const selectedAction = createSelector(
   [userSelectedAction, actions],
   (action, actions) => {
@@ -47,12 +49,26 @@ export const stateDiff = createSelector(
   }
 );
 
-export const stateAnalysisDimensions = createSelector(
-  [windowHeight],
-  height => {
+export const bottomHalfDimensions = createSelector(
+  [windowHeight, topFraction],
+  (height, topFraction) => {
     return {
       width: LEFT_PANEL_WIDTH,
-      height: (height - 48) / 2,
+      height: height - topFraction * height,
+      left: 0,
+      top: topFraction * height,
+    };
+  }
+);
+
+export const topHalfDimensions = createSelector(
+  [bottomHalfDimensions, windowHeight],
+  (bottom, height) => {
+    return {
+      width: bottom.width,
+      height: height - bottom.height,
+      left: 0,
+      top: 0,
     };
   }
 );

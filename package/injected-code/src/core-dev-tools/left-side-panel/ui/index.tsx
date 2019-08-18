@@ -7,17 +7,24 @@ import { IState } from '../../../store';
 import { Dispatch } from 'redux';
 import { ActionsList } from '../../actions/ui';
 import { StateAnalysisComponent } from '../../state/ui';
-import { stateAnalysisDimensions } from '../../state/core/selectors';
+import {
+  bottomHalfDimensions,
+  topHalfDimensions,
+} from '../../state/core/selectors';
 import { LEFT_PANEL_TABS } from '../../drag-region/types';
 import { DragRegion } from '../../drag-region/ui';
 import { StateDiff } from '../../diff/index';
 import { ActionJsonTree } from '../../actions/ui/action-json-tree';
+import { HeaderTabs } from '../../../header/ui/tabs';
+import { HEADER_TABS } from '../../../header/types';
 
 const mapStateToProps = (state: IState) => {
   return {
     isOpen: state.LeftPanel.isLeftSidePanelOpen,
-    bottomDimensions: stateAnalysisDimensions(state),
-    tab: state.DragRegion.selectedTab,
+    bottomDimensions: bottomHalfDimensions(state),
+    topDimensions: topHalfDimensions(state),
+    middleTab: state.DragRegion.selectedTab,
+    headerTab: state.Header.headerTab,
   };
 };
 
@@ -33,10 +40,15 @@ const styles = (theme: Theme) =>
       width: LEFT_PANEL_WIDTH,
       bottom: 0,
       top: 0,
-      transition: 'all 0.2s',
+      transition: 'all 0.3s',
       zIndex: 0,
     },
-    bottomSection: {},
+    topSection: {
+      position: 'absolute',
+      display: 'grid',
+      gridTemplateColumns: '100%',
+      gridTemplateRows: '48px auto',
+    },
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -51,16 +63,30 @@ class Component extends React.Component<Props> {
 
     return (
       <Paper
+        id="left-panel"
         elevation={10}
         className={props.classes.container}
         style={{ left: props.isOpen ? 0 : -LEFT_PANEL_WIDTH }}
       >
-        {props.isOpen ? <ActionsList /> : null}
-        <div style={props.bottomDimensions}>
-          <DragRegion />
-          {props.tab === LEFT_PANEL_TABS.STATE && <StateAnalysisComponent />}
-          {props.tab === LEFT_PANEL_TABS.DIFF && <StateDiff />}
-          {props.tab === LEFT_PANEL_TABS.ACTION && <ActionJsonTree />}
+        <div className={props.classes.topSection} style={props.topDimensions}>
+          {props.isOpen && (
+            <React.Fragment>
+              <HeaderTabs />
+              {props.headerTab === HEADER_TABS.ACTIONS && <ActionsList />}
+            </React.Fragment>
+          )}
+        </div>
+        <div style={{ position: 'absolute', ...props.bottomDimensions }}>
+          {props.isOpen && (
+            <React.Fragment>
+              <DragRegion />
+              {props.middleTab === LEFT_PANEL_TABS.STATE && (
+                <StateAnalysisComponent />
+              )}
+              {props.middleTab === LEFT_PANEL_TABS.DIFF && <StateDiff />}
+              {props.middleTab === LEFT_PANEL_TABS.ACTION && <ActionJsonTree />}
+            </React.Fragment>
+          )}
         </div>
       </Paper>
     );

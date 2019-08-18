@@ -5,6 +5,8 @@ import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, Button, Tabs, Tab } from '@material-ui/core';
 import { IState } from '../../../store';
 import { LEFT_PANEL_TABS, TAB_OPTIONS } from '../types';
+import * as d3 from 'd3';
+import { drag } from '../core/actions';
 
 const SmallTab = withStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +31,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         tab,
       });
     },
+    drag,
   };
 };
 
@@ -39,6 +42,7 @@ const styles = (theme: Theme) =>
       height: 48,
       display: 'flex',
       borderBottom: '1px solid #e8e8e8',
+      cursor: 'row-resize',
     },
   });
 
@@ -49,11 +53,28 @@ export interface IPassedProps {}
 type Props = StateProps & DispatchProps & IStyleProps & IPassedProps;
 
 class Component extends React.Component<Props> {
+  public componentDidMount() {
+    const dragArea = document.getElementById('drag-region');
+    if (!dragArea) {
+      return;
+    }
+    d3.select(dragArea).call(
+      d3.drag().on('drag', () => {
+        const root = document.getElementById('left-panel');
+        if (!root) {
+          return;
+        }
+        const [x, y] = d3.mouse(root);
+        this.props.drag(y);
+      })
+    );
+  }
+
   public render() {
     const props = this.props;
 
     return (
-      <div className={props.classes.container}>
+      <div id="drag-region" className={props.classes.container}>
         <Tabs
           value={props.value}
           onChange={(e, val) => props.setTab(val)}

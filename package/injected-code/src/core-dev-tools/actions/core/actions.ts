@@ -7,7 +7,7 @@ const dispatch = () => (window as any).store.dispatch as Dispatch;
 
 export function jumpToState(nextState: any) {
   const store = parentStore(state());
-  store.dispatch({
+  dispatch()({
     type: 'SET_STATE',
     state: nextState,
   });

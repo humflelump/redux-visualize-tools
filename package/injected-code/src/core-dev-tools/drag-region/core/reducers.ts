@@ -18,6 +18,8 @@ export function DragRegionReducer(
   switch (action.type) {
     case 'SET_LEFT_PANEL_TAB':
       return { ...state, selectedTab: action.tab };
+    case 'SET_DRAG_HEIGHT_FRACTION':
+      return { ...state, dividerTop: action.top };
     default:
       return state;
   }

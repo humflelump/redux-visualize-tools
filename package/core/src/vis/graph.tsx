@@ -377,9 +377,11 @@ export class Graph {
         const injectedState = this.injectState(state);
         const result = mapState(injectedState, ...params);
         if (!shallowEqual(prevResult, result)) {
+          console.log("setAction", prevResult, result);
           node.setActionThatCausedCall(this.lastAction);
           node.setDuration(currentTime() - now);
           node.setValue(result);
+          prevResult = result;
         }
         this.stack.pop();
         return result;

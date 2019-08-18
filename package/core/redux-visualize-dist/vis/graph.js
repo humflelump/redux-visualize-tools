@@ -337,9 +337,11 @@ var Graph = /** @class */ (function () {
                     var injectedState = _this.injectState(state);
                     var result = mapState.apply(void 0, [injectedState].concat(params));
                     if (!functions_1.shallowEqual(prevResult, result)) {
+                        console.log("setAction", prevResult, result);
                         node.setActionThatCausedCall(_this.lastAction);
                         node.setDuration(functions_1.currentTime() - now);
                         node.setValue(result);
+                        prevResult = result;
                     }
                     _this.stack.pop();
                     return result;
