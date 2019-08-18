@@ -1,6 +1,6 @@
 import { State } from "../store";
 import { createSelector } from "reselect";
-import { graph } from "redux-visualize-tools";
+import { graph } from "../graph";
 
 const a = graph.add(() => {});
 const b = graph.add(() => {});

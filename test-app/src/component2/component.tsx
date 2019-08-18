@@ -3,7 +3,7 @@ import { State } from "../store";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import * as selectors from "./selectors";
-import { graph } from "redux-visualize-tools";
+import { graph } from "../graph";
 import blah from "./f1";
 import blah2 from "./f2";
 import blah3 from "./f3";

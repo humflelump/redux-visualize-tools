@@ -15,14 +15,14 @@ First, add a button that will launch the dev-tools. Launching can also be done p
 ```javascript
 import { windowManager } from "redux-visualize-tools";
 
-// Create a button that launches the tools in bottom-left of the screen
+// Create a button that launches the tools in bottom-right of the screen
 windowManager.appendIcon(() => {
   // dev-tool window will relaunch after every update to the app until you close the window
   windowManager.autoReloadDevToolsUntilClosed();
 });
 ```
 
-Second, enhance the redux store. This unlocks functionality like debugging actions and time travel debugging.
+Second, enhance the redux store. This unlocks functionality like viewing actions and time travel debugging.
 
 ```javascript
 import { graph } from "redux-visualize-tools";
@@ -55,3 +55,27 @@ const mapState = state => ({
 
 export default graph.add(connect)(mapState, null)(MyComponent);
 ```
+
+# Only Use in Development
+
+The problem with the above code is that it is importing the library in production which will result in a large bundle. To avoid this, we need to set up a file that that only exports the dev-tool in production.
+
+```
+/* Use this code if in development */
+
+import { graph, windowManager } from redux-visualize-tools;
+windowManager.appendIcon(() => {
+  windowManager.autoReloadDevToolsUntilClosed();
+});
+export { graph };
+
+/* Use this code in production */
+
+// A No-op version of the library
+export const graph = {
+  add: f => f,
+  enhance: f => f,
+};
+```
+
+This requires manually editing this file before you make a build which isn't ideal. This can also be achieved automatically with a build script, a conditional import, or, in the future, a chrome extension.
