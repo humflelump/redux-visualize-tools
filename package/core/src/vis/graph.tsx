@@ -119,24 +119,6 @@ export class Graph {
     this.actions = [];
   }
 
-  public setCurrentAction(
-    action: any,
-    prevState: any,
-    nextState: any,
-    startTime: number,
-    endTime: number
-  ) {
-    this.lastAction = {
-      action: action,
-      prevState,
-      nextState,
-      actionNumber: this.lastAction.actionNumber + 1,
-      startTime,
-      endTime
-    };
-    this.actions = [...this.actions, this.lastAction];
-  }
-
   private addNode(node: Node) {
     this.nodes[node.id] = node;
   }
@@ -321,10 +303,25 @@ export class Graph {
       const dispatch = (action: AnyAction) => {
         const prev = store.getState();
         const startTime = currentTime();
+
+        // This object was created before "const result = store.dispatch(action);"
+        // was called so all the functions that are triggered after the dispatch
+        // have a reference to this object. More data is added later
+        this.lastAction = {
+          action,
+          prevState: prev,
+          nextState: null,
+          actionNumber: this.lastAction.actionNumber + 1,
+          startTime,
+          endTime: -1
+        };
         const result = store.dispatch(action);
         const endTime = currentTime();
         const next = store.getState();
-        this.setCurrentAction(action, prev, next, startTime, endTime);
+
+        this.lastAction.nextState = next;
+        this.lastAction.endTime = endTime;
+        this.actions.push(this.lastAction);
         return result;
       };
       return {

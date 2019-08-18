@@ -42,7 +42,6 @@ export declare class Graph {
     private stateInjectorCache;
     private getterCache;
     constructor();
-    setCurrentAction(action: any, prevState: any, nextState: any, startTime: number, endTime: number): void;
     private addNode;
     getNodeById(id: string): Node | undefined;
     private watch;

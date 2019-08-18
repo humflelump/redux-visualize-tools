@@ -79,17 +79,6 @@ var Graph = /** @class */ (function () {
         this.stateInjectorCache = new Map();
         this.actions = [];
     }
-    Graph.prototype.setCurrentAction = function (action, prevState, nextState, startTime, endTime) {
-        this.lastAction = {
-            action: action,
-            prevState: prevState,
-            nextState: nextState,
-            actionNumber: this.lastAction.actionNumber + 1,
-            startTime: startTime,
-            endTime: endTime
-        };
-        this.actions = this.actions.concat([this.lastAction]);
-    };
     Graph.prototype.addNode = function (node) {
         this.nodes[node.id] = node;
     };
@@ -282,10 +271,23 @@ var Graph = /** @class */ (function () {
             var dispatch = function (action) {
                 var prev = store.getState();
                 var startTime = functions_1.currentTime();
+                // This object was created before "const result = store.dispatch(action);"
+                // was called so all the functions that are triggered after the dispatch
+                // have a reference to this object. More data is added later
+                _this.lastAction = {
+                    action: action,
+                    prevState: prev,
+                    nextState: null,
+                    actionNumber: _this.lastAction.actionNumber + 1,
+                    startTime: startTime,
+                    endTime: -1
+                };
                 var result = store.dispatch(action);
                 var endTime = functions_1.currentTime();
                 var next = store.getState();
-                _this.setCurrentAction(action, prev, next, startTime, endTime);
+                _this.lastAction.nextState = next;
+                _this.lastAction.endTime = endTime;
+                _this.actions.push(_this.lastAction);
                 return result;
             };
             return __assign({}, store, { dispatch: dispatch });

@@ -7,9 +7,14 @@ export class MultiWindowCommChannel {
     const dispatch = () =>
       store.dispatch({
         type: 'SET_GRAPH',
-        graph: { ...data, nodes: { ...data.nodes } },
+        graph: {
+          ...data,
+          nodes: { ...data.nodes },
+          actions: [...data.actions],
+        },
       });
-    data.store.subscribe(() => setTimeout(throttle(dispatch, 500)));
+    const throttled = throttle(dispatch, 250);
+    data.store.subscribe(() => setTimeout(throttled));
     dispatch();
     triggerResetZoomWhenGraphIsFinishedCalculating();
   }
