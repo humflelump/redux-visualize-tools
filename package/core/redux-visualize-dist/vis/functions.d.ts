@@ -1,4 +1,4 @@
-import * as constants from "./constants";
+import * as constants from "../constants";
 export declare function getFunctionName(func: Function, defaultName?: string): string;
 export declare function getNameFromComponent(comp: any, defaultName?: string): any;
 export declare function makeId(name: string): string;

@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var constants = __importStar(require("./constants"));
+var constants = __importStar(require("../constants"));
 function getFunctionName(func, defaultName) {
     if (typeof defaultName === "string")
         return defaultName;

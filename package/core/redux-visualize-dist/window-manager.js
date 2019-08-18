@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var injection_1 = require("./injection");
-var graph_1 = require("./vis/graph");
+var graph_1 = require("./graph");
 var injectedHtml = "\n<html>\n    <head>\n        <script id=\"injected-react-code\">\n        " + injection_1.CODE_TO_INJECT.code + " \n        </script>\n    </head>\n    <body>\n        <div id=\"root\" />\n    </body>\n</html>\n";
 var DEFAULT_OPTIONS = "width=800, height=500";
 var AUTO_LOAD_KEY = "_DEV_TOOLS_AUTO_LOAD_ENABLED_";

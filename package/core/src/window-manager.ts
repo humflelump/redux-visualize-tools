@@ -1,5 +1,5 @@
 import { CODE_TO_INJECT } from "./injection";
-import { graph } from "./vis/graph";
+import { graph } from "./graph";
 
 const injectedHtml = `
 <html>

@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var graph_1 = require("./vis/graph");
+var graph_1 = require("./graph");
 exports.graph = graph_1.graph;
 var windowManager = __importStar(require("./window-manager"));
 exports.windowManager = windowManager;

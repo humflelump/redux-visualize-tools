@@ -1,4 +1,4 @@
-import { NODE_TYPES } from "./constants";
+import { NODE_TYPES } from "../constants";
 import { StoreCreator } from "redux";
 export interface NodeMetadata {
     description?: string;
