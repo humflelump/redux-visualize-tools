@@ -293,7 +293,7 @@ export class Graph {
   public enhance<T extends Function>(createStore: StoreCreator): T {
     const result = (reducer: Function, ...params: any[]) => {
       const newReducer = (state: any, action: AnyAction) => {
-        if (action.type === "SET_STATE") {
+        if (action.type === "DEV_TOOLS_SET_STATE") {
           return action.state;
         }
         return reducer(state, action);

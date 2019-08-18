@@ -261,7 +261,7 @@ var Graph = /** @class */ (function () {
                 params[_i - 1] = arguments[_i];
             }
             var newReducer = function (state, action) {
-                if (action.type === "SET_STATE") {
+                if (action.type === "DEV_TOOLS_SET_STATE") {
                     return action.state;
                 }
                 return reducer(state, action);
