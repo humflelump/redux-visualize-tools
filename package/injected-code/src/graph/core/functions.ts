@@ -1,6 +1,6 @@
 import { INode, IUINode } from '../types';
 import * as d3 from 'd3';
-import { keyBy, Dictionary, isEqual } from 'lodash';
+import { keyBy, Dictionary, isEqual, cloneDeep } from 'lodash';
 
 function getDependenciesHelper(node: INode, set: Set<INode>) {
   if (set.has(node)) {
@@ -115,12 +115,12 @@ export function getZoomedOutScales(
   };
   const result = {
     x: pad([
-      d3.min(rectangles.map(d => d.x)),
-      d3.max(rectangles.map(d => d.x + d.width)),
+      d3.min(rectangles.map(d => d.x)) || 0,
+      d3.max(rectangles.map(d => d.x + d.width)) || 0,
     ]),
     y: pad([
-      d3.min(rectangles.map(d => d.y)),
-      d3.max(rectangles.map(d => d.y + d.height)),
+      d3.min(rectangles.map(d => d.y)) || 0,
+      d3.max(rectangles.map(d => d.y + d.height)) || 0,
     ]),
   };
 
@@ -201,4 +201,52 @@ export function isGraphShapeDifferent(nodes: INode[], uiNodes: IUINode[]) {
     }
   }
   return false;
+}
+
+function clone(nodes: INode[]) {
+  nodes = nodes.map(d => ({ ...d }));
+  const map = keyBy(nodes, 'id');
+  nodes.forEach(node => {
+    node.dependencies = node.dependencies.map(d => map[d.id]);
+  });
+  return nodes;
+}
+
+function getChildToParentMapping(nodes: INode[]): Map<string, INode[]> {
+  const map = new Map<string, INode[]>();
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    for (const child of node.dependencies) {
+      const childId = child.id;
+      if (map.has(childId)) {
+        (map.get(childId) as INode[]).push(node);
+      } else {
+        map.set(childId, [node]);
+      }
+    }
+  }
+  return map;
+}
+
+export function filterNodes(nodes: INode[], f: (node: INode) => boolean) {
+  nodes = clone(nodes);
+  const map = getChildToParentMapping(nodes);
+  nodes = nodes.filter(node => {
+    if (f(node)) {
+      return true;
+    }
+    const parents = map.get(node.id) || [];
+    const children = node.dependencies;
+    for (const parent of parents) {
+      const set = new Set(parent.dependencies);
+      set.delete(node);
+      for (const child of children) {
+        set.add(child);
+      }
+      parent.dependencies = Array.from(set);
+    }
+    return false;
+  });
+
+  return nodes;
 }

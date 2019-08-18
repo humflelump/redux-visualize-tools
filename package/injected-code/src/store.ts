@@ -25,6 +25,10 @@ import {
   DragRegionReducer,
 } from './core-dev-tools/drag-region/core/reducers';
 import { IHeaderState, HeaderReducer } from './header/core/reducers';
+import {
+  IFilterState,
+  FilterReducer,
+} from './core-dev-tools/filters/core/reducers';
 
 export interface IState {
   CommChannel: ICommChannelState;
@@ -35,6 +39,7 @@ export interface IState {
   Settings: ISettingsState;
   DragRegion: ILeftPanelDragRegion;
   Header: IHeaderState;
+  Filters: IFilterState;
 }
 
 const appReducer: Reducer<IState> = combineReducers<IState>({
@@ -46,6 +51,7 @@ const appReducer: Reducer<IState> = combineReducers<IState>({
   Settings: SettingsReducer,
   DragRegion: DragRegionReducer,
   Header: HeaderReducer,
+  Filters: FilterReducer,
 });
 
 const withAsyncSelector = (state: IState, action: AnyAction) => {

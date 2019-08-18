@@ -11,9 +11,11 @@ import {
   filterOutIsolatedNodes,
   updateNodeData,
   isGraphShapeDifferent,
+  filterNodes,
 } from './functions';
 import createAsyncSelector from 'async-selector';
 import { asyncGraphRender } from '../../gen-graph-layout';
+import { filterFunction } from '../../core-dev-tools/filters/core/selectors';
 
 export const xTo = (state: IState) => state.Graph.xTo;
 export const xFrom = (state: IState) => state.Graph.xFrom;
@@ -71,8 +73,9 @@ const nodeDataWithoutLoneNodes = createSelector(
 );
 
 export const filteredNodeData = createSelector(
-  [nodeDataWithoutLoneNodes, filter],
-  (data, filter) => {
+  [nodeDataWithoutLoneNodes, filterFunction, filter],
+  (data, filterFunction, filter) => {
+    data = filterNodes(data, filterFunction);
     if (!filter.nodeId) {
       return data;
     } else if (filter.filterType === NODE_FILTER_TYPE.NO_FILTER) {

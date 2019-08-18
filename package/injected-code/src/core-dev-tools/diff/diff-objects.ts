@@ -29,6 +29,7 @@ function createDiffPatcher(objectHash, propertyFilter) {
   });
 }
 
+const differ = createDiffPatcher(undefined, undefined);
 export function diff(a, b) {
-  return createDiffPatcher(undefined, undefined).diff(a, b);
+  return differ.diff(a, b);
 }

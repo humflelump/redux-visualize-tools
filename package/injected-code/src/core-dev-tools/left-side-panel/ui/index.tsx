@@ -17,6 +17,7 @@ import { StateDiff } from '../../diff/index';
 import { ActionJsonTree } from '../../actions/ui/action-json-tree';
 import { HeaderTabs } from '../../../header/ui/tabs';
 import { HEADER_TABS } from '../../../header/types';
+import { FilterComponent } from '../../filters/ui';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -73,6 +74,7 @@ class Component extends React.Component<Props> {
             <React.Fragment>
               <HeaderTabs />
               {props.headerTab === HEADER_TABS.ACTIONS && <ActionsList />}
+              {props.headerTab === HEADER_TABS.FILTERS && <FilterComponent />}
             </React.Fragment>
           )}
         </div>
