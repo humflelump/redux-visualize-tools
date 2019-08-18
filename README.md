@@ -1,2 +1,5 @@
-# redux-visualize-tools
-Dev tools that allow to visualize and debug the dependency graph of your redux app.
+![](dev-tools-video.gif)
+
+# Installation
+
+`yarn add redux-visualize-tools`
