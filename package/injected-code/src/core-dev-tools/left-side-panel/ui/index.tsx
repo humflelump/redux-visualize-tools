@@ -50,6 +50,12 @@ const styles = (theme: Theme) =>
       gridTemplateColumns: '100%',
       gridTemplateRows: '48px auto',
     },
+    bottomSection: {
+      position: 'absolute',
+      display: 'grid',
+      gridTemplateColumns: '100%',
+      gridTemplateRows: '48px auto',
+    },
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -78,15 +84,22 @@ class Component extends React.Component<Props> {
             </React.Fragment>
           )}
         </div>
-        <div style={{ position: 'absolute', ...props.bottomDimensions }}>
+        <div
+          className={props.classes.bottomSection}
+          style={props.bottomDimensions}
+        >
           {props.isOpen && (
             <React.Fragment>
               <DragRegion />
-              {props.middleTab === LEFT_PANEL_TABS.STATE && (
-                <StateAnalysisComponent />
-              )}
-              {props.middleTab === LEFT_PANEL_TABS.DIFF && <StateDiff />}
-              {props.middleTab === LEFT_PANEL_TABS.ACTION && <ActionJsonTree />}
+              <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
+                {props.middleTab === LEFT_PANEL_TABS.STATE && (
+                  <StateAnalysisComponent />
+                )}
+                {props.middleTab === LEFT_PANEL_TABS.DIFF && <StateDiff />}
+                {props.middleTab === LEFT_PANEL_TABS.ACTION && (
+                  <ActionJsonTree />
+                )}
+              </div>
             </React.Fragment>
           )}
         </div>
