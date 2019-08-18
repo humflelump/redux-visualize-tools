@@ -54,3 +54,4 @@ export declare class Graph {
     private addFunction;
     private addReselectSelector;
 }
+export declare const graph: Graph;

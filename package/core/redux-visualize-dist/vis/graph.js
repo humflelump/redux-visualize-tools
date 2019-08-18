@@ -429,3 +429,4 @@ var Graph = /** @class */ (function () {
     return Graph;
 }());
 exports.Graph = Graph;
+exports.graph = new Graph();

@@ -451,3 +451,5 @@ export class Graph {
     return (newFunction as any) as T;
   }
 }
+
+export const graph = new Graph();
