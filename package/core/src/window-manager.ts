@@ -41,7 +41,7 @@ export function openWindow(options = DEFAULT_OPTIONS) {
 }
 
 export function appendIcon(
-  callback: () => any = openWindow,
+  callback: () => void = openWindow,
   buttonText = "Dev Tools",
   cssText = "position:fixed;right:10px;bottom:10px;z-index:100;"
 ) {
@@ -50,6 +50,7 @@ export function appendIcon(
   button.innerText = buttonText;
   button.onclick = callback;
   document.body.appendChild(button);
+  return button;
 }
 
 function isAutoLoadOn() {
@@ -73,5 +74,5 @@ export function autoReloadDevToolsUntilClosed(options = DEFAULT_OPTIONS) {
   }
   window.localStorage.setItem(AUTO_LOAD_KEY, "true");
   window.localStorage.setItem(AUTO_LOAD_OPTIONS_KEY, options);
-  openWindow(options);
+  return openWindow(options);
 }
