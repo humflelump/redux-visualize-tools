@@ -37,6 +37,7 @@ function appendIcon(callback, buttonText, cssText) {
     button.innerText = buttonText;
     button.onclick = callback;
     document.body.appendChild(button);
+    return button;
 }
 exports.appendIcon = appendIcon;
 function isAutoLoadOn() {
@@ -58,6 +59,6 @@ function autoReloadDevToolsUntilClosed(options) {
     }
     window.localStorage.setItem(AUTO_LOAD_KEY, "true");
     window.localStorage.setItem(AUTO_LOAD_OPTIONS_KEY, options);
-    openWindow(options);
+    return openWindow(options);
 }
 exports.autoReloadDevToolsUntilClosed = autoReloadDevToolsUntilClosed;

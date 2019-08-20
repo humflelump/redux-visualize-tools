@@ -45,8 +45,8 @@ export declare class Graph {
     private addNode;
     getNodeById(id: string): Node | undefined;
     private watch;
-    injectObject(d: any, history: string[], cache: Map<any, any>): any;
-    injectImmutable(d: any, history: string[], cache: Map<any, any>): any;
+    injectObject(d: any, history: string[], cache: Map<any, any>, depth?: number): any;
+    injectImmutable(d: any, history: string[], cache: Map<any, any>, depth?: number): any;
     private injectState;
     enhance<T extends Function>(createStore: StoreCreator): T;
     add<T extends Function>(f: T, metadata?: UserNodeMetadata): T;

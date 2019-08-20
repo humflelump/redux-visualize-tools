@@ -109,10 +109,14 @@ var Graph = /** @class */ (function () {
         };
         return { func: func, newNode: newNode };
     };
-    Graph.prototype.injectObject = function (d, history, cache) {
+    Graph.prototype.injectObject = function (d, history, cache, depth) {
         var _this = this;
+        if (depth === void 0) { depth = 0; }
         if (cache.has(d)) {
             return cache.get(d);
+        }
+        if (depth > 10) {
+            return d;
         }
         var newObj = {};
         var keys = Object.keys(d);
@@ -128,10 +132,10 @@ var Graph = /** @class */ (function () {
             }
             var child;
             if (functions_1.isObject(d[key])) {
-                child = this_1.injectObject(d[key], newKeys, cache);
+                child = this_1.injectObject(d[key], newKeys, cache, depth + 1);
             }
             else if (functions_1.isImmutableMap(d[key])) {
-                child = this_1.injectImmutable(d[key], newKeys, cache);
+                child = this_1.injectImmutable(d[key], newKeys, cache, depth + 1);
             }
             else {
                 child = d[key];
@@ -172,10 +176,14 @@ var Graph = /** @class */ (function () {
         cache.set(d, newObj);
         return newObj;
     };
-    Graph.prototype.injectImmutable = function (d, history, cache) {
+    Graph.prototype.injectImmutable = function (d, history, cache, depth) {
         var _this = this;
+        if (depth === void 0) { depth = 0; }
         if (cache.has(d)) {
             return cache.get(d);
+        }
+        if (depth > 10) {
+            return d;
         }
         var newObj = immutable_1.default.fromJS({});
         for (var _i = 0, _a = d.keySeq().toJS(); _i < _a.length; _i++) {
@@ -192,10 +200,10 @@ var Graph = /** @class */ (function () {
             var child = void 0;
             var got = d.get(key);
             if (functions_1.isObject(got)) {
-                child = this.injectObject(got, newKeys, cache);
+                child = this.injectObject(got, newKeys, cache, depth + 1);
             }
             else if (functions_1.isImmutableMap(got)) {
-                child = this.injectImmutable(got, newKeys, cache);
+                child = this.injectImmutable(got, newKeys, cache, depth + 1);
             }
             else {
                 child = got;
@@ -242,15 +250,18 @@ var Graph = /** @class */ (function () {
     Graph.prototype.injectState = function (state) {
         var history = [];
         var cache = this.stateInjectorCache;
+        var result = void 0;
         if (functions_1.isImmutableMap(state)) {
-            return this.injectImmutable(state, history, cache);
+            result = this.injectImmutable(state, history, cache);
         }
         else if (functions_1.isObject(state)) {
-            return this.injectObject(state, history, cache);
+            result = this.injectObject(state, history, cache);
         }
         else {
-            return state;
+            result = state;
         }
+        cache.set(state, result);
+        return result;
     };
     // Main function that enhances create store
     Graph.prototype.enhance = function (createStore) {

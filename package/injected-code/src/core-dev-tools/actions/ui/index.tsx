@@ -47,6 +47,13 @@ interface IStyleProps extends WithStyles<typeof styles> {}
 export interface IPassedProps {}
 type Props = StateProps & DispatchProps & IStyleProps & IPassedProps;
 
+function actionName(action: any) {
+  if (typeof action === 'function') {
+    return 'Action Function';
+  }
+  return action.type;
+}
+
 class Component extends React.Component<Props> {
   public render() {
     console.log({ huh: 'wowwww' });
@@ -77,7 +84,7 @@ class Component extends React.Component<Props> {
                       }}
                     >
                       <ListItemText
-                        primary={action.action.type}
+                        primary={actionName(action.action)}
                         secondary={`${action.actionNumber}: ${(
                           action.endTime - action.startTime
                         ).toFixed(2)} ms`}

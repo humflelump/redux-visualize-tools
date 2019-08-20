@@ -8,6 +8,19 @@ import { Provider } from "react-redux";
 import Immutable from "immutable";
 import { D3Test } from "./component1/test";
 import diff from "deep-diff";
+import serialize from "serialize-javascript";
+
+// const isobj = o => typeof o === 'string' && o !== null && !Array.isArray(o);
+
+// function subtractDiff(o1, o2) {
+//   if (!isobj(o1) || !isobj(o2)) {
+
+//   }
+// }
+
+// let t = performance.now();
+// console.log((window as any).postMessage(L));
+// console.log("took", performance.now() - t);
 
 const store = configureStore();
 (window as any).store = store;

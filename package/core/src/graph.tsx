@@ -153,9 +153,12 @@ export class Graph {
     return { func, newNode };
   }
 
-  injectObject(d: any, history: string[], cache: Map<any, any>) {
+  injectObject(d: any, history: string[], cache: Map<any, any>, depth = 0) {
     if (cache.has(d)) {
       return cache.get(d);
+    }
+    if (depth > 10) {
+      return d;
     }
     const newObj = {};
     const keys = Object.keys(d);
@@ -172,9 +175,9 @@ export class Graph {
 
       let child: any;
       if (isObject(d[key])) {
-        child = this.injectObject(d[key], newKeys, cache);
+        child = this.injectObject(d[key], newKeys, cache, depth + 1);
       } else if (isImmutableMap(d[key])) {
-        child = this.injectImmutable(d[key], newKeys, cache);
+        child = this.injectImmutable(d[key], newKeys, cache, depth + 1);
       } else {
         child = d[key];
       }
@@ -210,9 +213,12 @@ export class Graph {
     return newObj;
   }
 
-  injectImmutable(d: any, history: string[], cache: Map<any, any>) {
+  injectImmutable(d: any, history: string[], cache: Map<any, any>, depth = 0) {
     if (cache.has(d)) {
       return cache.get(d);
+    }
+    if (depth > 10) {
+      return d;
     }
     let newObj = Immutable.fromJS({});
     for (const key of d.keySeq().toJS()) {
@@ -229,9 +235,9 @@ export class Graph {
       let child: any;
       const got = d.get(key);
       if (isObject(got)) {
-        child = this.injectObject(got, newKeys, cache);
+        child = this.injectObject(got, newKeys, cache, depth + 1);
       } else if (isImmutableMap(got)) {
-        child = this.injectImmutable(got, newKeys, cache);
+        child = this.injectImmutable(got, newKeys, cache, depth + 1);
       } else {
         child = got;
       }
@@ -280,13 +286,16 @@ export class Graph {
   private injectState<T extends any>(state: T): T {
     const history: string[] = [];
     const cache = this.stateInjectorCache;
+    let result: any = void 0;
     if (isImmutableMap(state)) {
-      return this.injectImmutable(state, history, cache);
+      result = this.injectImmutable(state, history, cache);
     } else if (isObject(state)) {
-      return (this.injectObject(state, history, cache) as any) as T;
+      result = (this.injectObject(state, history, cache) as any) as T;
     } else {
-      return state;
+      result = state;
     }
+    cache.set(state, result);
+    return result;
   }
 
   // Main function that enhances create store
