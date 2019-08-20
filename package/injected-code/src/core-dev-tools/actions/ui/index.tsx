@@ -49,17 +49,38 @@ type Props = StateProps & DispatchProps & IStyleProps & IPassedProps;
 
 function actionName(action: any) {
   if (typeof action === 'function') {
-    return 'Action Function';
+    return 'Thunk';
   }
   return action.type;
 }
 
 class Component extends React.Component<Props> {
+  private isScrolledDown: boolean;
+  private scrollview: HTMLElement | null;
+
+  constructor(props) {
+    super(props);
+    this.isScrolledDown = true;
+    this.scrollview = null;
+  }
+
+  public componentDidUpdate() {
+    this.listenForScrolling();
+    if (this.isScrolledDown && this.scrollview) {
+      this.scrollview.scrollTop = this.scrollview.scrollHeight;
+    }
+  }
+
+  public componentDidMount() {
+    setTimeout(() => {
+      this.listenForScrolling();
+    });
+  }
+
   public render() {
-    console.log({ huh: 'wowwww' });
     const props = this.props;
     return (
-      <div className={props.classes.container}>
+      <div id="-container" className={props.classes.container}>
         <AutoSizer>
           {({ width, height }) => {
             console.log({ width, height, actions: props.actions });
@@ -98,6 +119,33 @@ class Component extends React.Component<Props> {
         </AutoSizer>
       </div>
     );
+  }
+
+  private listenForScrolling() {
+    try {
+      const container = document.getElementById('-container') as HTMLElement;
+      this.scrollview = container.childNodes[0].childNodes[0] as HTMLElement;
+      let count = 0;
+      this.scrollview.addEventListener('scroll', () => {
+        if (!this.scrollview) {
+          return;
+        }
+        const curscroll =
+          this.scrollview.scrollTop + this.scrollview.offsetHeight;
+        const maxscroll = this.scrollview.scrollHeight;
+
+        if (curscroll === maxscroll) {
+          this.isScrolledDown = true;
+          count = 0;
+        } else if (count < 5) {
+          count += 1;
+        } else {
+          this.isScrolledDown = false;
+        }
+      });
+    } catch (e) {
+      this.scrollview = null;
+    }
   }
 }
 

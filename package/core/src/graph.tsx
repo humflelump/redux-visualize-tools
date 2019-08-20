@@ -157,7 +157,7 @@ export class Graph {
     if (cache.has(d)) {
       return cache.get(d);
     }
-    if (depth > 10) {
+    if (depth > 6) {
       return d;
     }
     const newObj = {};
@@ -217,7 +217,7 @@ export class Graph {
     if (cache.has(d)) {
       return cache.get(d);
     }
-    if (depth > 10) {
+    if (depth > 6) {
       return d;
     }
     let newObj = Immutable.fromJS({});
@@ -286,7 +286,10 @@ export class Graph {
   private injectState<T extends any>(state: T): T {
     const history: string[] = [];
     const cache = this.stateInjectorCache;
-    let result: any = void 0;
+    if (cache.has(state)) {
+      return cache.get(state);
+    }
+    let result;
     if (isImmutableMap(state)) {
       result = this.injectImmutable(state, history, cache);
     } else if (isObject(state)) {
@@ -295,6 +298,7 @@ export class Graph {
       result = state;
     }
     cache.set(state, result);
+    cache.set(result, result); // the second cache is a trick so that selector calls will hit this cache.
     return result;
   }
 
@@ -380,6 +384,7 @@ export class Graph {
       const newMapState = (state: any, ...params: any[]) => {
         this.stack.push(node);
         const now = currentTime();
+        // Turn the store into a listener if it isn't already
         const injectedState = this.injectState(state);
         const result = mapState(injectedState, ...params);
         if (!shallowEqual(prevResult, result)) {
@@ -439,7 +444,6 @@ export class Graph {
           "Last argument of a reselect selector must be a function"
         );
       }
-      console.log(mainFunction);
       const newMainFunc = (...params: any[]) => {
         const t = currentTime();
         const result = mainFunction(...params);
@@ -452,7 +456,12 @@ export class Graph {
       };
       funcs.push(newMainFunc);
       const selector = f(...funcs);
-      const { func, newNode } = this.watch(selector, name, type, metadata);
+      const newSelector = (state: any, ...params: any[]) => {
+        // Turn the store into a listener if it isn't already
+        const injected = this.injectState(state);
+        return selector(injected, ...params);
+      };
+      const { func, newNode } = this.watch(newSelector, name, type, metadata);
       node = newNode;
       node.setFunction(mainFunction);
       return func;

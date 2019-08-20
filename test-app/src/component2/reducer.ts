@@ -10,7 +10,7 @@ const make = () => {
 };
 
 const L = [];
-for (let i = 0; i < 10000; i++) {
+for (let i = 0; i < 100; i++) {
   L.push(make());
 }
 
@@ -36,7 +36,6 @@ export interface Component2State {
   text: string;
   L: any;
   f: any;
-  rec: any;
 }
 
 const initialState: Component2State = {
@@ -45,8 +44,7 @@ const initialState: Component2State = {
   f: () => {
     console.log("werwerwerwrwerwer");
     console.log("6456456456456");
-  },
-  rec
+  }
 };
 
 export function Component2Reducer(

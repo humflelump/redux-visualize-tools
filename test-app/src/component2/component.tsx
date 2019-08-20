@@ -36,7 +36,7 @@ const Component_: React.FC<Props> = props => {
   );
 };
 
-export const Component2 = graph.add(connect, { name: "Component2" })(
+export const Component2 = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Component_);

@@ -115,7 +115,7 @@ var Graph = /** @class */ (function () {
         if (cache.has(d)) {
             return cache.get(d);
         }
-        if (depth > 10) {
+        if (depth > 6) {
             return d;
         }
         var newObj = {};
@@ -182,7 +182,7 @@ var Graph = /** @class */ (function () {
         if (cache.has(d)) {
             return cache.get(d);
         }
-        if (depth > 10) {
+        if (depth > 6) {
             return d;
         }
         var newObj = immutable_1.default.fromJS({});
@@ -250,7 +250,10 @@ var Graph = /** @class */ (function () {
     Graph.prototype.injectState = function (state) {
         var history = [];
         var cache = this.stateInjectorCache;
-        var result = void 0;
+        if (cache.has(state)) {
+            return cache.get(state);
+        }
+        var result;
         if (functions_1.isImmutableMap(state)) {
             result = this.injectImmutable(state, history, cache);
         }
@@ -261,6 +264,7 @@ var Graph = /** @class */ (function () {
             result = state;
         }
         cache.set(state, result);
+        cache.set(result, result); // the second cache is a trick so that selector calls will hit this cache.
         return result;
     };
     // Main function that enhances create store
@@ -347,6 +351,7 @@ var Graph = /** @class */ (function () {
                     }
                     _this.stack.push(node);
                     var now = functions_1.currentTime();
+                    // Turn the store into a listener if it isn't already
                     var injectedState = _this.injectState(state);
                     var result = mapState.apply(void 0, [injectedState].concat(params));
                     if (!functions_1.shallowEqual(prevResult, result)) {
@@ -413,7 +418,6 @@ var Graph = /** @class */ (function () {
             if (typeof mainFunction !== "function") {
                 throw new Error("Last argument of a reselect selector must be a function");
             }
-            console.log(mainFunction);
             var newMainFunc = function () {
                 var params = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
@@ -430,7 +434,16 @@ var Graph = /** @class */ (function () {
             };
             funcs.push(newMainFunc);
             var selector = f.apply(void 0, funcs);
-            var _a = _this.watch(selector, name, type, metadata), func = _a.func, newNode = _a.newNode;
+            var newSelector = function (state) {
+                var params = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    params[_i - 1] = arguments[_i];
+                }
+                // Turn the store into a listener if it isn't already
+                var injected = _this.injectState(state);
+                return selector.apply(void 0, [injected].concat(params));
+            };
+            var _a = _this.watch(newSelector, name, type, metadata), func = _a.func, newNode = _a.newNode;
             node = newNode;
             node.setFunction(mainFunction);
             return func;
