@@ -25,7 +25,12 @@ export declare class Node {
     name: string;
     action?: Action;
     function?: Function;
+    componentInfo: {
+        component?: Function;
+        props?: object;
+    };
     constructor(id: string, name: string, type: NODE_TYPES, metadata?: NodeMetadata);
+    setReactComponent(component?: Function, props?: object): void;
     setActionThatCausedCall(action: Action): void;
     setDuration(duration: number): void;
     setValue(value: any): void;

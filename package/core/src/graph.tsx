@@ -54,6 +54,10 @@ export class Node {
   name: string;
   action?: Action;
   function?: Function;
+  componentInfo: {
+    component?: Function,
+    props?: object,
+  }
 
   constructor(
     id: string,
@@ -71,6 +75,12 @@ export class Node {
     this.duration = undefined;
     this.action = undefined;
     this.function = undefined;
+    this.componentInfo = {};
+  }
+
+  setReactComponent(component?: Function, props?: object) {
+    this.componentInfo.component = component;
+    this.componentInfo.props = props;
   }
 
   setActionThatCausedCall(action: Action) {
@@ -372,6 +382,7 @@ export class Graph {
       mapDispatch?: Function,
       ...params: any[]
     ) => (DumbComponent: new () => React.Component<any, any>) => {
+
       const name = getNameFromComponent(DumbComponent, metadata.name);
       const id = makeId(name);
       const type = NODE_TYPES.CONNECT;
@@ -388,7 +399,6 @@ export class Graph {
         const injectedState = this.injectState(state);
         const result = mapState(injectedState, ...params);
         if (!shallowEqual(prevResult, result)) {
-          console.log("setAction", prevResult, result);
           node.setActionThatCausedCall(this.lastAction);
           node.setDuration(currentTime() - now);
           node.setValue(result);
@@ -404,6 +414,7 @@ export class Graph {
             const parentNode = self.getNodeById(this.context[ctxKey]) as Node;
             parentNode.addDependency(node);
           }
+          node.setReactComponent(DumbComponent as Function, this.props);
           return <DumbComponent {...this.props} />;
         }
       }

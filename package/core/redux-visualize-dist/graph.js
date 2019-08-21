@@ -46,7 +46,12 @@ var Node = /** @class */ (function () {
         this.duration = undefined;
         this.action = undefined;
         this.function = undefined;
+        this.componentInfo = {};
     }
+    Node.prototype.setReactComponent = function (component, props) {
+        this.componentInfo.component = component;
+        this.componentInfo.props = props;
+    };
     Node.prototype.setActionThatCausedCall = function (action) {
         this.action = action;
     };
@@ -355,7 +360,6 @@ var Graph = /** @class */ (function () {
                     var injectedState = _this.injectState(state);
                     var result = mapState.apply(void 0, [injectedState].concat(params));
                     if (!functions_1.shallowEqual(prevResult, result)) {
-                        console.log("setAction", prevResult, result);
                         node.setActionThatCausedCall(_this.lastAction);
                         node.setDuration(functions_1.currentTime() - now);
                         node.setValue(result);
@@ -374,6 +378,7 @@ var Graph = /** @class */ (function () {
                             var parentNode = self.getNodeById(this.context[ctxKey]);
                             parentNode.addDependency(node);
                         }
+                        node.setReactComponent(DumbComponent, this.props);
                         return react_1.default.createElement(DumbComponent, __assign({}, this.props));
                     };
                     return Parent;

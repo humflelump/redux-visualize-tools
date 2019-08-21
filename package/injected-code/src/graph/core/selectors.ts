@@ -56,7 +56,7 @@ export const yScale = createSelector(
   getYScale
 );
 
-const nodeData = createSelector(
+export const nodeData = createSelector(
   [graphData],
   (data: any) => {
     if (!data) {
