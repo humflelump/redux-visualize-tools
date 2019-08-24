@@ -175,6 +175,8 @@ var toConsumableArray = function (arr) {
   }
 };
 
+var count = 0;
+
 var Processor = function () {
   function Processor(options) {
     classCallCheck(this, Processor);
@@ -215,12 +217,17 @@ var Processor = function () {
   }, {
     key: 'process',
     value: function process(input, pipe) {
+      count = 0;
       var context = input;
       context.options = this.options();
       var nextPipe = pipe || input.pipe || 'default';
       var lastPipe = void 0;
       var lastContext = void 0;
       while (nextPipe) {
+        count += 1;
+        if (count > 100000) {
+          throw new Error('Took too long to compute');
+        }
         if (typeof context.nextAfterChildren !== 'undefined') {
           // children processed and coming back to parent
           context.next = context.nextAfterChildren;

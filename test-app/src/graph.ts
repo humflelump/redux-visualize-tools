@@ -4,7 +4,7 @@ export const graph = isProduction
   ? (() => {
       const tools = require("redux-visualize-tools");
       tools.windowManager.appendIcon(() => {
-        tools.windowManager.autoReloadDevToolsUntilClosed();
+        const child = tools.windowManager.autoReloadDevToolsUntilClosed();
       });
       return tools.graph;
     })()

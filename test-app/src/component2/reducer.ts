@@ -9,18 +9,20 @@ const make = () => {
   return o;
 };
 
-const L = [];
-for (let i = 0; i < 100; i++) {
-  L.push(make());
-}
+const make2 = () => {
+  const L = [];
+  for (let i = 0; i < 10000; i++) {
+    L.push(make());
+  }
+  return L;
+};
 
-// setTimeout(() => {
-//   console.log("test");
-//   (window as any).store.dispatch(() => {
-//     console.log("werwerwerwrwerwer");
-//     console.log("6456456456456");
-//   });
-// }, 1000);
+setTimeout(() => {
+  console.log("test");
+  (window as any).store.dispatch({
+    type: "test"
+  });
+}, 1000);
 
 const rec = { rec: null, wow: "string" };
 rec.rec = rec;
@@ -34,17 +36,17 @@ setTimeout(() => {
 
 export interface Component2State {
   text: string;
-  L: any;
   f: any;
+  d: any;
 }
 
 const initialState: Component2State = {
   text: "Component2String",
-  L: L,
   f: () => {
     console.log("werwerwerwrwerwer");
     console.log("6456456456456");
-  }
+  },
+  d: make2()
 };
 
 export function Component2Reducer(
@@ -54,7 +56,7 @@ export function Component2Reducer(
   if (action.type === "test") {
     return {
       ...state,
-      L: L.map((d, i) => (i === 100 ? d : i))
+      d: make2()
     };
   }
 

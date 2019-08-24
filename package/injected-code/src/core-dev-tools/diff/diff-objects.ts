@@ -31,5 +31,12 @@ function createDiffPatcher(objectHash, propertyFilter) {
 
 const differ = createDiffPatcher(undefined, undefined);
 export function diff(a, b) {
-  return differ.diff(a, b);
+  try {
+    // Added code to the library to throw an exception if it is taking too long to compute
+    return differ.diff(a, b);
+  } catch (e) {
+    return {
+      error: String(e),
+    };
+  }
 }
