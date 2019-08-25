@@ -12,14 +12,16 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  IconButton,
 } from '@material-ui/core';
 import { NODE_FILTER_TYPES } from './constants';
 import {
   clickedNode,
   triggerResetZoomWhenGraphIsFinishedCalculating,
 } from '../../graph/core/selectors';
-import { NODE_FILTER_TYPE } from '../../graph/types';
+import { NODE_FILTER_TYPE, INode, IUINode } from '../../graph/types';
 import { JsonViewer } from './json-viewer';
+import DeleteIcon from '@material-ui/icons/Close';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -38,6 +40,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         nodeId,
       });
     },
+    close: () => {
+      dispatch({
+        type: 'CLEAR_CLICKED_NODE',
+      });
+    },
   };
 };
 
@@ -50,6 +57,7 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       padding: 5,
       fontWeight: 600,
+      height: 38,
     },
     label: {
       fontSize: 15,
@@ -65,6 +73,11 @@ const styles = (theme: Theme) =>
     returnValueArea: {
       margin: 10,
       width: 'calc(100% - 20px)',
+    },
+    closeButtonContainer: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
     },
   });
 
@@ -90,6 +103,11 @@ class Component extends React.Component<Props> {
     }
     return (
       <div className={props.classes.container}>
+        <div className={props.classes.closeButtonContainer}>
+          <IconButton onClick={props.close}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
         <div className={props.classes.title}>{props.node.label}</div>
         <Divider />
         <div className={props.classes.functionArea}>
@@ -118,7 +136,7 @@ class Component extends React.Component<Props> {
                   : NODE_FILTER_TYPE.NO_FILTER
               }
               onChange={(e: any) =>
-                props.setFilter(e.target.value, props.node.data.id)
+                props.setFilter(e.target.value, (props.node as IUINode).data.id)
               }
             >
               {NODE_FILTER_TYPES.map(type => {

@@ -49,6 +49,11 @@ export function GraphReducer(
           nodeId: null,
         },
       };
+    case 'CLEAR_CLICKED_NODE':
+      return {
+        ...state,
+        clickedNodeId: null,
+      };
     case 'CLICK_NODE':
       return {
         ...state,
