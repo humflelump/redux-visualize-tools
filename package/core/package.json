@@ -1,9 +1,10 @@
 {
   "name": "redux-visualize-tools",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.6-alpha.0",
   "description": "Visualize the dependency graph of your web app",
   "main": "./redux-visualize-dist/index.js",
   "types": "./redux-visualize-dist/index.d.ts",
+  "homepage": "https://github.com/humflelump/redux-visualize-tools",
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",
