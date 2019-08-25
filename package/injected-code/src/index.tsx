@@ -8,6 +8,7 @@ import { SidePanelComponent } from './side-panel/ui';
 import { HeaderComponent } from './header/ui';
 import { LeftPanelComponent } from './core-dev-tools/left-side-panel/ui';
 import { SearchComponent } from './search/ui';
+import { SelectedComponentContainer } from './selected-component';
 
 setTimeout(() => {
   ReactDOM.render(
@@ -17,6 +18,7 @@ setTimeout(() => {
       <HeaderComponent />
       <LeftPanelComponent />
       <SearchComponent />
+      <SelectedComponentContainer />
     </Provider>,
     document.getElementById('root')
   );

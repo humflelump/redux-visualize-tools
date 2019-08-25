@@ -51,6 +51,10 @@ export interface INode {
   name: string;
   action?: IAction;
   function?: (...d: any[]) => any;
+  componentInfo: {
+    component?: (params: any[]) => any,
+    props?: object,
+  }
 }
 
 export interface IUINode {
