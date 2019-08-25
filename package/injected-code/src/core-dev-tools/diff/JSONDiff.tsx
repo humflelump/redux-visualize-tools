@@ -8,7 +8,7 @@ const styling: any = str => {
   if (str === 'stateDiffEmpty') {
     return {
       padding: '10px',
-      color: 'orange',
+      color: 'rgb(198, 13, 255)',
     };
   } else if (str === 'diff') {
     return {
@@ -24,12 +24,12 @@ const styling: any = str => {
     };
   } else if (str === 'diffAdd') {
     return {
-      backgroundColor: 'green',
+      backgroundColor: 'rgb(191, 255, 194)',
     };
   } else if (str === 'diffUpdateFrom') {
     return {
       textDecoration: 'line-through',
-      backgroundColor: 'red',
+      backgroundColor: 'rgb(255, 212, 191)',
     };
   } else if (str === 'diffUpdateArrow') {
     return {
@@ -37,12 +37,12 @@ const styling: any = str => {
     };
   } else if (str === 'diffUpdateTo') {
     return {
-      backgroundColor: 'green',
+      backgroundColor: 'rgb(191, 255, 194)',
     };
   } else if (str === 'diffRemove') {
     return {
       textDecoration: 'line-through',
-      backgroundColor: 'red',
+      backgroundColor: 'rgb(255, 212, 191)',
     };
   } else if (str === 'treeItemHint') {
     return {

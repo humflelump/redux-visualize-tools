@@ -36,6 +36,7 @@ class Component extends React.Component<Props> {
     return (
       <div className={props.classes.container}>
         <JSONTree
+          hideRoot={true}
           theme={theme}
           invertTheme={true}
           data={props.action ? props.action.nextState : props.currentState}
