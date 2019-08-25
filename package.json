@@ -21,5 +21,6 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$"
-  }
+  },
+  "version": "0.0.9-alpha.0"
 }
