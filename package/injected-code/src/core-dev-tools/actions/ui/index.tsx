@@ -7,7 +7,6 @@ import { IState } from '../../../store';
 import { actions, actionsListDimensions } from '../core/selectors';
 import { jumpToState } from '../core/actions';
 import { FixedSizeList } from 'react-window';
-import { LEFT_PANEL_WIDTH } from '../../left-side-panel/ui/constants';
 import { IAction } from '../../../graph/types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
@@ -83,7 +82,6 @@ class Component extends React.Component<Props> {
       <div id="-container" className={props.classes.container}>
         <AutoSizer>
           {({ width, height }) => {
-            console.log({ width, height, actions: props.actions });
             return (
               <FixedSizeList
                 itemSize={45}

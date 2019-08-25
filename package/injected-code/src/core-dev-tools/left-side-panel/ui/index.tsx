@@ -18,6 +18,7 @@ import { ActionJsonTree } from '../../actions/ui/action-json-tree';
 import { HeaderTabs } from '../../../header/ui/tabs';
 import { HEADER_TABS } from '../../../header/types';
 import { FilterComponent } from '../../filters/ui';
+import { leftPanelEffectiveWidth } from '../core/selectors';
 
 const mapStateToProps = (state: IState) => {
   return {

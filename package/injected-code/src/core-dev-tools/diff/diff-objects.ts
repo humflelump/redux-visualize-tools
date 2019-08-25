@@ -1,4 +1,4 @@
-// The source code of this library contained <Script /> in the source code so the library needed to be forked and fixed to work as an inectino string
+// The source code of this library contained <Script /> so the library needed to be forked and fixed to work as an injection string
 import { DiffPatcher } from './dist/jsondiffpatch.umd.js';
 
 const defaultObjectHash = (o, idx) =>
