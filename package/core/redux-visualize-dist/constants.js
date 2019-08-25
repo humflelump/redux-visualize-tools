@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var NODE_TYPES;
 (function (NODE_TYPES) {
-    NODE_TYPES["RESELECT_SELECTOR"] = "RESELECT_SELECTOR";
-    NODE_TYPES["ASYNC_SELECTOR"] = "ASYNC_SELECTOR";
-    NODE_TYPES["CONNECT"] = "CONNECT";
-    NODE_TYPES["REACT_COMPONENT"] = "REACT_COMPONENT";
-    NODE_TYPES["STATE_VARIABLE"] = "STATE_VARIABLE";
-    NODE_TYPES["FUNCTION"] = "FUNCTION";
+    NODE_TYPES["RESELECT_SELECTOR"] = "Selector";
+    NODE_TYPES["ASYNC_SELECTOR"] = "Async Selector";
+    NODE_TYPES["CONNECT"] = "Connected Component";
+    NODE_TYPES["REACT_COMPONENT"] = "React Component";
+    NODE_TYPES["STATE_VARIABLE"] = "State Variable";
+    NODE_TYPES["FUNCTION"] = "Function";
 })(NODE_TYPES = exports.NODE_TYPES || (exports.NODE_TYPES = {}));

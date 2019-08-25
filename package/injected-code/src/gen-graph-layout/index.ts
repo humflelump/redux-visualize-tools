@@ -25,6 +25,7 @@ export class AsyncGraphRender {
   }
 
   public async compute(nodes: INode[]) {
+    console.log({ nodes });
     if (
       this.prevNodes !== null &&
       !isGraphShapeDifferent(nodes, this.prevNodes)

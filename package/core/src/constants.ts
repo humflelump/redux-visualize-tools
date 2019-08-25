@@ -1,9 +1,9 @@
 
 export enum NODE_TYPES {
-    RESELECT_SELECTOR = 'RESELECT_SELECTOR',
-    ASYNC_SELECTOR = 'ASYNC_SELECTOR',
-    CONNECT = 'CONNECT',
-    REACT_COMPONENT = 'REACT_COMPONENT',
-    STATE_VARIABLE = 'STATE_VARIABLE',
-    FUNCTION = 'FUNCTION',
+    RESELECT_SELECTOR = 'Selector',
+    ASYNC_SELECTOR = 'Async Selector',
+    CONNECT = 'Connected Component',
+    REACT_COMPONENT = 'React Component',
+    STATE_VARIABLE = 'State Variable',
+    FUNCTION = 'Function',
 }

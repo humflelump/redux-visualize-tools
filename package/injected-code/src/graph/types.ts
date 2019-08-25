@@ -26,12 +26,27 @@ export interface IAction {
 }
 
 export enum NODE_TYPES {
-  RESELECT_SELECTOR = 'RESELECT_SELECTOR',
-  ASYNC_SELECTOR = 'ASYNC_SELECTOR',
-  CONNECT = 'CONNECT',
-  REACT_COMPONENT = 'REACT_COMPONENT',
-  STATE_VARIABLE = 'STATE_VARIABLE',
-  FUNCTION = 'FUNCTION',
+  RESELECT_SELECTOR = 'Selector',
+  ASYNC_SELECTOR = 'Async Selector',
+  CONNECT = 'Connected Component',
+  REACT_COMPONENT = 'React Component',
+  STATE_VARIABLE = 'State Variable',
+  FUNCTION = 'Function',
+}
+
+const ALL_NODE_TYPES = [
+  NODE_TYPES.FUNCTION,
+  NODE_TYPES.STATE_VARIABLE,
+  NODE_TYPES.RESELECT_SELECTOR,
+  NODE_TYPES.CONNECT,
+  NODE_TYPES.REACT_COMPONENT,
+  NODE_TYPES.ASYNC_SELECTOR,
+];
+
+export function initialNodeTypeFilters() {
+  const obj = {};
+  ALL_NODE_TYPES.forEach(type => obj[type] = false);
+  return obj;
 }
 
 export enum NODE_FILTER_TYPE {

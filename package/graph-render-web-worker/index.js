@@ -1,7 +1,5 @@
 import dagre from "dagre";
 
-console.log("wow");
-
 function keyBy(L, f) {
   const obj = {};
   for (let i = 0; i < L.length; i++) {
@@ -37,7 +35,6 @@ function createUiNodes(nodes) {
   console.log("it took", performance.now() - t, "to generate the graph");
   const result = g.nodes().map(id => g.node(id));
   giveNodeLinks(result);
-  console.log({ result });
 
   return result;
 }
@@ -55,8 +52,7 @@ function giveNodeLinks(data) {
   }
 }
 
-self.onmessage = function(e) {
+self.onmessage = function (e) {
   const nodes = createUiNodes(e.data);
-  console.log("tried");
   self.postMessage(nodes);
 };

@@ -16,6 +16,7 @@ import {
 import createAsyncSelector from 'async-selector';
 import { asyncGraphRender } from '../../gen-graph-layout';
 import { filterFunction } from '../../core-dev-tools/filters/core/selectors';
+import { nodeData } from './node-data-selector';
 
 export const xTo = (state: IState) => state.Graph.xTo;
 export const xFrom = (state: IState) => state.Graph.xFrom;
@@ -56,24 +57,10 @@ export const yScale = createSelector(
   getYScale
 );
 
-export const nodeData = createSelector(
-  [graphData],
-  (data: any) => {
-    if (!data) {
-      return [] as INode[];
-    }
-    const ids = Object.keys(data.nodes);
-    return ids.map(id => data.nodes[id] as INode);
-  }
-);
 
-const nodeDataWithoutLoneNodes = createSelector(
-  [nodeData],
-  filterOutIsolatedNodes
-);
 
 export const filteredNodeData = createSelector(
-  [nodeDataWithoutLoneNodes, filterFunction, filter],
+  [nodeData, filterFunction, filter],
   (data, filterFunction, filter) => {
     data = filterNodes(data, filterFunction);
     if (!filter.nodeId) {

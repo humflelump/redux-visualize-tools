@@ -4,7 +4,7 @@
   "description": "Visualize the dependency graph of your web app",
   "main": "./redux-visualize-dist/index.js",
   "types": "./redux-visualize-dist/index.d.ts",
-  "homepage": "https://github.com/humflelump/redux-visualize-tools/blob/master/README.md",
+  "homepage": "https://github.com/humflelump/redux-visualize-tools",
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",

@@ -1,7 +1,8 @@
 import { createSelector } from "reselect";
-import { nodeData } from "../graph/core/selectors";
 import { IState } from "../store";
 import React from 'react';
+import { nodeData } from "../graph/core/node-data-selector";
+import { INode } from "../graph/types";
 
 const nodeId = (state: IState) => state.SelectedComponent.nodeIdToShowComponentFor;
 

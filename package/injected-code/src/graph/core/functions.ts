@@ -228,6 +228,7 @@ function getChildToParentMapping(nodes: INode[]): Map<string, INode[]> {
   return map;
 }
 
+
 export function filterNodes(nodes: INode[], f: (node: INode) => boolean) {
   nodes = clone(nodes);
   const map = getChildToParentMapping(nodes);
@@ -237,16 +238,18 @@ export function filterNodes(nodes: INode[], f: (node: INode) => boolean) {
     }
     const parents = map.get(node.id) || [];
     const children = node.dependencies;
+
     for (const parent of parents) {
       const set = new Set(parent.dependencies);
       set.delete(node);
       for (const child of children) {
         set.add(child);
+        map.set(child.id, (map.get(child.id) as INode[]).filter(d => d !== node));
+        (map.get(child.id) as INode[]).push(parent);
       }
       parent.dependencies = Array.from(set);
     }
     return false;
   });
-
   return nodes;
 }

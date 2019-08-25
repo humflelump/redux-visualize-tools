@@ -1,10 +1,10 @@
 import { IState } from '../../store';
-import { nodeData } from '../../graph/core/selectors';
 import { createSelector } from 'reselect';
 import { INode } from '../../graph/types';
 import sortBy from 'lodash/sortBy';
 import { leftPanelEffectiveWidth } from '../../core-dev-tools/left-side-panel/core/selectors';
 import { windowHeight } from '../../window-dimensions/selectors';
+import { nodeData } from '../../graph/core/node-data-selector';
 
 const searchText = (state: IState) => state.Search.searchText;
 
