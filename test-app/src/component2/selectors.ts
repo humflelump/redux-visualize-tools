@@ -7,20 +7,20 @@ import blah3 from "./f3";
 import blah4 from "./f4";
 import blah5 from "./f5";
 
-const a = graph.add(() => {});
-const b = graph.add(() => {});
-const c = graph.add(() => {});
+const a = graph.add(() => { });
+const b = graph.add(() => { });
+const c = graph.add(() => { });
 const d = graph.add(() => {
   a();
   b();
   c();
 });
 
-const e = graph.add(() => {});
-const f = graph.add(() => {});
-const g = graph.add(() => {});
-const h = graph.add(() => {});
-const i = graph.add(() => {});
+const e = graph.add(() => { });
+const f = graph.add(() => { });
+const g = graph.add(() => { });
+const h = graph.add(() => { });
+const i = graph.add(() => { });
 const j = graph.add(() => {
   e();
   f();
@@ -33,7 +33,7 @@ const j = graph.add(() => {
 const test_ = (state: State) => state.Component2.text;
 
 const wow = graph.add(function grr() {
-  console.log("this is my func");
+  console.log("this is my func" as string);
   j();
   f();
   blah();
