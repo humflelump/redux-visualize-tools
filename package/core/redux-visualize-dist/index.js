@@ -11,4 +11,5 @@ var graph_1 = require("./graph");
 exports.graph = graph_1.graph;
 var windowManager = __importStar(require("./window-manager"));
 exports.windowManager = windowManager;
+console.log('hello');
 exports.default = graph_1.graph;

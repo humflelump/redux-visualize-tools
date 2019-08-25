@@ -1,15 +1,22 @@
 {
   "name": "redux-visualize-tools",
-  "version": "0.0.6-alpha.0",
+  "version": "0.0.10-alpha.0",
   "description": "Visualize the dependency graph of your web app",
   "main": "./redux-visualize-dist/index.js",
   "types": "./redux-visualize-dist/index.d.ts",
-  "homepage": "https://github.com/humflelump/redux-visualize-tools",
+  "homepage": "https://github.com/humflelump/redux-visualize-tools/blob/master/README.md",
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",
     "prepublish": "tsc"
   },
+  "keywords": [
+    "redux",
+    "react",
+    "devtool",
+    "dev-tool",
+    "dependency graph"
+  ],
   "author": "Cameron Nokes",
   "license": "MIT",
   "devDependencies": {
