@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, Paper, IconButton } from '@material-ui/core';
 import { IState } from '../store';
-import { component } from './selectors';
 import CloseIcon from '@material-ui/icons/Close';
+import { InjectedComponent } from './Injected';
+import { nodeToShowComponentFor } from './selectors';
 
 const mapStateToProps = (state: IState) => {
   return {
-    isOpen: component(state) !== null,
-    component: component(state),
+    isOpen: nodeToShowComponentFor(state) !== null,
   };
 };
 
@@ -56,7 +56,6 @@ type Props = StateProps & DispatchProps & IStyleProps;
 class Component extends React.Component<Props> {
   public render() {
     const props = this.props;
-    const Component = props.component;
     return (
       <div
         id="SelectedComponent"
@@ -86,7 +85,7 @@ class Component extends React.Component<Props> {
             bottom: props.isOpen ? '10%' : '50%',
           }}
         >
-          {Component && <Component />}
+          {props.isOpen && < InjectedComponent />}
         </Paper>
       </div>
     );

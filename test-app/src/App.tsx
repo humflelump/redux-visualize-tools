@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import { Component1 } from './component1/component';
 import { Component2 } from './component2/component';
 import './App.css';
+import { graph } from 'redux-visualize-tools'
 
 const App: React.FC = () => {
   return (
@@ -13,4 +14,4 @@ const App: React.FC = () => {
   );
 }
 
-export default App;
+export default graph.add(App);

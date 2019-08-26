@@ -23,11 +23,13 @@ import {
 import { NODE_FILTER_TYPE, INode, IUINode } from '../../graph/types';
 import { JsonViewer } from './json-viewer';
 import DeleteIcon from '@material-ui/icons/Close';
+import { canShowComponentForClickedNode } from '../../selected-component/selectors';
 
 const mapStateToProps = (state: IState) => {
   return {
     node: clickedNode(state),
     nodeFilter: state.Graph.nodeFilter,
+    canShowComponent: canShowComponentForClickedNode(state),
   };
 };
 
@@ -90,15 +92,10 @@ const styles = (theme: Theme) =>
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
-interface IStyleProps extends WithStyles<typeof styles> {}
-export interface IPassedProps {}
+interface IStyleProps extends WithStyles<typeof styles> { }
+export interface IPassedProps { }
 type Props = StateProps & DispatchProps & IStyleProps & IPassedProps;
 
-function canShowComponent(node: IUINode | null) {
-  return (
-    node && node.data.componentInfo.component && node.data.componentInfo.props
-  );
-}
 
 class Component extends React.Component<Props> {
   public render() {
@@ -116,7 +113,7 @@ class Component extends React.Component<Props> {
         </div>
         <div className={props.classes.title}>{props.node.label}</div>
         <Divider />
-        {canShowComponent(props.node) && (
+        {props.canShowComponent && (
           <div
             style={{
               marginTop: 10,

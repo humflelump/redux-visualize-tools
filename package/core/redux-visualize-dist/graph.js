@@ -25,6 +25,7 @@ var constants_1 = require("./constants");
 var functions_1 = require("./functions");
 var immutable_1 = __importDefault(require("immutable"));
 var react_1 = __importDefault(require("react"));
+var prop_types_1 = __importDefault(require("prop-types"));
 var ctxKey = "__VIS_PARENT_ID__";
 var emptyAction = {
     action: null,
@@ -83,9 +84,14 @@ var Graph = /** @class */ (function () {
         this.lastAction = emptyAction;
         this.stateInjectorCache = new Map();
         this.actions = [];
+        this.appData = {};
     }
     Graph.prototype.addNode = function (node) {
         this.nodes[node.id] = node;
+    };
+    Graph.prototype.enableViewingComponentsInDevTools = function (ReactDOM, Provider) {
+        this.appData.ReactDOM = ReactDOM;
+        this.appData.Provider = Provider;
     };
     Graph.prototype.getNodeById = function (id) {
         return this.nodes[id];
@@ -327,6 +333,8 @@ var Graph = /** @class */ (function () {
                 return this.addReselectSelector(f, metadata);
             case constants_1.NODE_TYPES.CONNECT:
                 return this.addConnect(f, metadata);
+            case constants_1.NODE_TYPES.REACT_COMPONENT:
+                return this.addReactComponent(f, metadata);
             default:
                 return f;
         }
@@ -341,6 +349,7 @@ var Graph = /** @class */ (function () {
                 params[_i - 2] = arguments[_i];
             }
             return function (DumbComponent) {
+                var _a, _b;
                 var name = functions_1.getNameFromComponent(DumbComponent, metadata.name);
                 var id = functions_1.makeId(name);
                 var type = constants_1.NODE_TYPES.CONNECT;
@@ -373,6 +382,10 @@ var Graph = /** @class */ (function () {
                     function Parent() {
                         return _super !== null && _super.apply(this, arguments) || this;
                     }
+                    Parent.prototype.getChildContext = function () {
+                        var _a;
+                        return _a = {}, _a[ctxKey] = id, _a;
+                    };
                     Parent.prototype.render = function () {
                         if (this.context[ctxKey]) {
                             var parentNode = self.getNodeById(this.context[ctxKey]);
@@ -383,10 +396,53 @@ var Graph = /** @class */ (function () {
                     };
                     return Parent;
                 }(react_1.default.Component));
+                Parent.childContextTypes = (_a = {},
+                    _a[ctxKey] = prop_types_1.default.string,
+                    _a);
+                Parent.contextTypes = (_b = {},
+                    _b[ctxKey] = prop_types_1.default.string,
+                    _b);
                 return f.apply(void 0, [newMapState, mapDispatch].concat(params))(Parent);
             };
         };
         return result;
+    };
+    Graph.prototype.addReactComponent = function (f, metadata) {
+        if (metadata === void 0) { metadata = {}; }
+        var _a, _b;
+        var name = functions_1.getFunctionName(f, metadata.name);
+        var type = constants_1.NODE_TYPES.REACT_COMPONENT;
+        var id = functions_1.makeId(name);
+        var node = new Node(id, name, type, metadata);
+        this.addNode(node);
+        var DumbComponent = f;
+        var self = this;
+        var Parent = /** @class */ (function (_super) {
+            __extends(Parent, _super);
+            function Parent() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            Parent.prototype.getChildContext = function () {
+                var _a;
+                return _a = {}, _a[ctxKey] = id, _a;
+            };
+            Parent.prototype.render = function () {
+                if (this.context[ctxKey]) {
+                    var parentNode = self.getNodeById(this.context[ctxKey]);
+                    parentNode.addDependency(node);
+                }
+                node.setReactComponent(f, this.props);
+                return react_1.default.createElement(DumbComponent, __assign({}, this.props));
+            };
+            return Parent;
+        }(react_1.default.Component));
+        Parent.childContextTypes = (_a = {},
+            _a[ctxKey] = prop_types_1.default.string,
+            _a);
+        Parent.contextTypes = (_b = {},
+            _b[ctxKey] = prop_types_1.default.string,
+            _b);
+        return Parent;
     };
     Graph.prototype.addFunction = function (f, metadata) {
         var _this = this;

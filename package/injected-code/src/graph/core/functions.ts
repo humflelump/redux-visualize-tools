@@ -213,6 +213,7 @@ function clone(nodes: INode[]) {
 }
 
 function getChildToParentMapping(nodes: INode[]): Map<string, INode[]> {
+  console.log({ nodes });
   const map = new Map<string, INode[]>();
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];

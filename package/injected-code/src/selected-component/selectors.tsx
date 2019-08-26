@@ -1,10 +1,13 @@
 import { createSelector } from "reselect";
 import { IState } from "../store";
 import React from 'react';
+import ReactDOM from "react-dom";
 import { nodeData } from "../graph/core/node-data-selector";
-import { INode } from "../graph/types";
+import { INode, IUINode } from "../graph/types";
+import { clickedNode } from "../graph/core/selectors";
 
 const nodeId = (state: IState) => state.SelectedComponent.nodeIdToShowComponentFor;
+const graphData = (state: IState) => state.CommChannel.graph;
 
 export const nodeToShowComponentFor = createSelector(
   [nodeData, nodeId], (nodes, nodeId) => {
@@ -13,13 +16,15 @@ export const nodeToShowComponentFor = createSelector(
   }
 );
 
-export const component = createSelector(
-  [nodeToShowComponentFor], (node) => {
-    if (!node) { return null; }
-    const Component = node.componentInfo.component as any;
-    const props = node.componentInfo.props;
-    if (!Component) { return null; }
-    if (!props) { return null; }
-    return () => <Component {...props} />;
+export const canShowComponentForClickedNode = createSelector(
+  [clickedNode, graphData], (node: IUINode, graph) => {
+    if (!node) return false;
+    if (!graph) return false;
+    if (!graph.store) return false;
+    if (!node.data.componentInfo.component) return false;
+    if (!node.data.componentInfo.props) return false;
+    if (!graph.appData.ReactDOM) return false;
+    if (!graph.appData.Provider) return false;
+    return true;
   }
 )

@@ -44,10 +44,12 @@ export declare class Graph {
     private lastAction;
     private actions;
     private store?;
+    private appData;
     private stateInjectorCache;
     private getterCache;
     constructor();
     private addNode;
+    enableViewingComponentsInDevTools(ReactDOM: any, Provider: any): void;
     getNodeById(id: string): Node | undefined;
     private watch;
     injectObject(d: any, history: string[], cache: Map<any, any>, depth?: number): any;
@@ -56,6 +58,7 @@ export declare class Graph {
     enhance<T extends Function>(createStore: StoreCreator): T;
     add<T extends Function>(f: T, metadata?: UserNodeMetadata): T;
     private addConnect;
+    private addReactComponent;
     private addFunction;
     private addReselectSelector;
 }

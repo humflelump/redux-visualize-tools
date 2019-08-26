@@ -9,6 +9,10 @@ import Immutable from "immutable";
 import { D3Test } from "./component1/test";
 import diff from "deep-diff";
 import serialize from "serialize-javascript";
+import { graph } from 'redux-visualize-tools';
+
+
+graph.enableViewingComponentsInDevTools(ReactDOM, Provider);
 
 // const isobj = o => typeof o === 'string' && o !== null && !Array.isArray(o);
 
