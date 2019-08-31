@@ -50,7 +50,7 @@ function compare(search: string, text: string) {
   text = text.toLowerCase();
   if (text.startsWith(search)) {
     return 2;
-  } else if (text.startsWith(search)) {
+  } else if (text.includes(search)) {
     return 1;
   } else {
     return 0;
@@ -70,9 +70,9 @@ export const searchedNodes = createSelector(
         value: compare(searchText, node.name),
       };
     });
-    const toVal = d => (d.result.length - 10) / 100 + d.value;
-    const filtered = unsorted.filter(d => toVal(d) > 0);
-    return sortBy(filtered, d => -1 * toVal(d)).map(d => d.node);
+    const rank = d => (d.result.length - 10) / 100 + d.value;
+    const filtered = unsorted.filter(d => rank(d) > 0);
+    return sortBy(filtered, d => -1 * rank(d)).map(d => d.node);
   }
 );
 
