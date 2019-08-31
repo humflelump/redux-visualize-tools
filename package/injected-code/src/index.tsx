@@ -9,16 +9,19 @@ import { HeaderComponent } from './header/ui';
 import { LeftPanelComponent } from './core-dev-tools/left-side-panel/ui';
 import { SearchComponent } from './search/ui';
 import { SelectedComponentContainer } from './selected-component';
+import { ErrorBoundary } from './error-boundary';
 
 setTimeout(() => {
   ReactDOM.render(
     <Provider store={store}>
-      <GraphComponent />
-      <SidePanelComponent />
-      <HeaderComponent />
-      <LeftPanelComponent />
-      <SearchComponent />
-      <SelectedComponentContainer />
+      <ErrorBoundary>
+        <GraphComponent />
+        <SidePanelComponent />
+        <HeaderComponent />
+        <LeftPanelComponent />
+        <SearchComponent />
+        <SelectedComponentContainer />
+      </ErrorBoundary>
     </Provider>,
     document.getElementById('root')
   );
