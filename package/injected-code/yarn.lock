@@ -2666,6 +2666,12 @@ commander@~2.19.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
 
+common-substrings@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/common-substrings/-/common-substrings-2.0.4.tgz#2e2cb4f069fd3761d87a25e1cba051d2af679a5d"
+  dependencies:
+    lodash "^4.17.11"
+
 common-tags@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
@@ -6462,6 +6468,10 @@ node-forge@0.7.5:
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
+
+node-lcs@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/node-lcs/-/node-lcs-1.0.2.tgz#f2af41783d1c21857d78f83d61406064dfa13a33"
 
 node-libs-browser@^2.0.0:
   version "2.2.1"

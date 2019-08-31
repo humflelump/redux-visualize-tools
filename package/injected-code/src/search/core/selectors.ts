@@ -6,15 +6,10 @@ import memoize from 'lodash/memoize';
 import { leftPanelEffectiveWidth } from '../../core-dev-tools/left-side-panel/core/selectors';
 import { windowHeight } from '../../window-dimensions/selectors';
 import { nodeData } from '../../graph/core/node-data-selector';
+import { asyncSearcher, ISearchResult } from './compare-async';
+import createAsyncSelector from 'async-selector';
 
 const searchText = (state: IState) => state.Search.searchText;
-
-const removeInvisibleChars = memoize((str: string) => {
-  return str
-    .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
-    .replace(/\s+/g, '')
-    .toLowerCase();
-});
 
 const makeFunctionTextExtractor = () => {
   const map = new Map<any, string>();
@@ -25,21 +20,37 @@ const makeFunctionTextExtractor = () => {
     if (map.has(func)) {
       return map.get(func) as string;
     }
-    const text = removeInvisibleChars(String(func));
+    const text = String(func).slice(0, 10000);
     map.set(func, text);
     return text;
   };
-}
+};
 const funcToString = makeFunctionTextExtractor();
 
-function getSearchValue(node: INode, search: string): number {
-  const textLower = node.name.toLowerCase();
-  const funcText = funcToString(node.function);
-  if (textLower.startsWith(search)) {
-    return 3;
-  } else if (textLower.includes(search)) {
+const searchAsyncSelector = createAsyncSelector(
+  {
+    onResolve: () => {
+      (window as any).store.dispatch({ type: 'RERENDER' });
+    },
+    async: (nodes: INode[], searchText: string) => {
+      const input = {
+        strings: nodes.map(node => funcToString(node.function)),
+        searchText,
+      };
+      return asyncSearcher.compute(input);
+    },
+    sync: () => [],
+  },
+  nodeData,
+  searchText
+);
+
+function compare(search: string, text: string) {
+  search = search.toLowerCase();
+  text = text.toLowerCase();
+  if (text.startsWith(search)) {
     return 2;
-  } else if (funcText.includes(removeInvisibleChars(search))) {
+  } else if (text.startsWith(search)) {
     return 1;
   } else {
     return 0;
@@ -47,16 +58,21 @@ function getSearchValue(node: INode, search: string): number {
 }
 
 export const searchedNodes = createSelector(
-  [searchText, nodeData],
-  (searchText, nodes) => {
-    if (searchText === '') {
-      return [];
-    }
-    const lowerSearch = searchText.toLowerCase();
-    const result = nodes.filter(node => {
-      return getSearchValue(node, lowerSearch) > 0;
+  [searchAsyncSelector, nodeData, searchText],
+  (searchAsyncSelector: any, nodes, searchText) => {
+    const searchResults: ISearchResult[] = searchAsyncSelector.previous || [];
+    if (searchText === '') return [];
+    if (searchResults.length !== nodes.length) return [];
+    const unsorted = nodes.map((node, index) => {
+      return {
+        node,
+        result: searchResults[index],
+        value: compare(searchText, node.name),
+      };
     });
-    return sortBy(result, d => getSearchValue(d, lowerSearch));
+    const toVal = d => (d.result.length - 10) / 100 + d.value;
+    const filtered = unsorted.filter(d => toVal(d) > 0);
+    return sortBy(filtered, d => -1 * toVal(d)).map(d => d.node);
   }
 );
 

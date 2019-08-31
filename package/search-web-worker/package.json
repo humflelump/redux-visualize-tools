@@ -1,0 +1,22 @@
+{
+  "name": "search-web-worker",
+  "version": "1.0.0",
+  "description": "generates a JS bundle that can be used as a web worker for analyzing how similar strings are",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "author": "Mark Metzger",
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.5"
+  },
+  "dependencies": {
+    "node-lcs": "^1.0.2"
+  }
+}
