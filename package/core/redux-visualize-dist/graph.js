@@ -278,6 +278,27 @@ var Graph = /** @class */ (function () {
         cache.set(result, result); // the second cache is a trick so that selector calls will hit this cache.
         return result;
     };
+    Graph.prototype.enhanceUseSelector = function (useSelector) {
+        var _this = this;
+        var result = function () {
+            var params = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                params[_i] = arguments[_i];
+            }
+            if (params.length !== 1 || !_this.store) {
+                return useSelector.apply(void 0, params);
+            }
+            var state = _this.injectState(_this.store.getState());
+            try {
+                params[0](state);
+            }
+            catch (e) {
+                console.log(e);
+            }
+            return useSelector.apply(void 0, params);
+        };
+        return result;
+    };
     // Main function that enhances create store
     Graph.prototype.enhance = function (createStore) {
         var _this = this;
@@ -333,8 +354,10 @@ var Graph = /** @class */ (function () {
                 return this.addReselectSelector(f, metadata);
             case constants_1.NODE_TYPES.CONNECT:
                 return this.addConnect(f, metadata);
-            case constants_1.NODE_TYPES.REACT_COMPONENT:
-                return this.addReactComponent(f, metadata);
+            case constants_1.NODE_TYPES.CLASS_COMPONENT:
+                return this.addClassComponent(f, metadata);
+            case constants_1.NODE_TYPES.FUNCTION_COMPONENT:
+                return this.addFunctionComponent(f, metadata);
             default:
                 return f;
         }
@@ -407,13 +430,63 @@ var Graph = /** @class */ (function () {
         };
         return result;
     };
-    Graph.prototype.addReactComponent = function (f, metadata) {
+    Graph.prototype.addFunctionComponent = function (f, metadata) {
+        var _this = this;
         if (metadata === void 0) { metadata = {}; }
         var _a, _b;
         var name = functions_1.getFunctionName(f, metadata.name);
-        var type = constants_1.NODE_TYPES.REACT_COMPONENT;
+        var type = constants_1.NODE_TYPES.FUNCTION_COMPONENT;
+        var id = functions_1.makeId(name);
+        var _c = this.watch(f, name, type, metadata), func = _c.func, newNode = _c.newNode;
+        newNode.setFunction(f);
+        var returnFunc = function () {
+            var params = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                params[_i] = arguments[_i];
+            }
+            var t = functions_1.currentTime();
+            var result = func.apply(void 0, params);
+            newNode.setDuration(functions_1.currentTime() - t);
+            newNode.setActionThatCausedCall(_this.lastAction);
+            return result;
+        };
+        var DumbComponent = returnFunc;
+        var self = this;
+        var Parent = /** @class */ (function (_super) {
+            __extends(Parent, _super);
+            function Parent() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            Parent.prototype.getChildContext = function () {
+                var _a;
+                return _a = {}, _a[ctxKey] = id, _a;
+            };
+            Parent.prototype.render = function () {
+                if (this.context[ctxKey]) {
+                    var parentNode = self.getNodeById(this.context[ctxKey]);
+                    parentNode.addDependency(newNode);
+                }
+                newNode.setReactComponent(f, this.props);
+                return react_1.default.createElement(DumbComponent, __assign({}, this.props));
+            };
+            return Parent;
+        }(react_1.default.Component));
+        Parent.childContextTypes = (_a = {},
+            _a[ctxKey] = prop_types_1.default.string,
+            _a);
+        Parent.contextTypes = (_b = {},
+            _b[ctxKey] = prop_types_1.default.string,
+            _b);
+        return Parent;
+    };
+    Graph.prototype.addClassComponent = function (f, metadata) {
+        if (metadata === void 0) { metadata = {}; }
+        var _a, _b;
+        var name = functions_1.getFunctionName(f, metadata.name);
+        var type = constants_1.NODE_TYPES.CLASS_COMPONENT;
         var id = functions_1.makeId(name);
         var node = new Node(id, name, type, metadata);
+        node.setFunction(f);
         this.addNode(node);
         var DumbComponent = f;
         var self = this;

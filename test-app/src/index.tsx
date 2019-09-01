@@ -9,8 +9,8 @@ import Immutable from "immutable";
 import { D3Test } from "./component1/test";
 import diff from "deep-diff";
 import serialize from "serialize-javascript";
-import { graph } from 'redux-visualize-tools';
-
+import { graph } from "redux-visualize-tools";
+import { Hook } from "./component1/hook";
 
 graph.enableViewingComponentsInDevTools(ReactDOM, Provider);
 

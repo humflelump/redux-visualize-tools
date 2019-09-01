@@ -55,9 +55,9 @@ export class Node {
   action?: Action;
   function?: Function;
   componentInfo: {
-    component?: Function,
-    props?: object,
-  }
+    component?: Function;
+    props?: object;
+  };
 
   constructor(
     id: string,
@@ -117,9 +117,9 @@ export class Graph {
   private actions: Action[];
   private store?: Store;
   private appData: {
-    ReactDOM?: any,
-    Provider?: any,
-  }
+    ReactDOM?: any;
+    Provider?: any;
+  };
 
   // caches
   private stateInjectorCache: Map<any, any>;
@@ -322,6 +322,22 @@ export class Graph {
     return result;
   }
 
+  public enhanceUseSelector<T extends Function>(useSelector: Function): T {
+    const result = (...params: any[]) => {
+      if (params.length !== 1 || !this.store) {
+        return useSelector(...params);
+      }
+      const state = this.injectState(this.store.getState());
+      try {
+        params[0](state);
+      } catch (e) {
+        console.log(e);
+      }
+      return useSelector(...params);
+    };
+    return (result as any) as T;
+  }
+
   // Main function that enhances create store
   public enhance<T extends Function>(createStore: StoreCreator): T {
     const result = (reducer: Function, ...params: any[]) => {
@@ -377,8 +393,10 @@ export class Graph {
         return this.addReselectSelector(f, metadata);
       case NODE_TYPES.CONNECT:
         return this.addConnect(f, metadata);
-      case NODE_TYPES.REACT_COMPONENT:
-        return this.addReactComponent(f, metadata);
+      case NODE_TYPES.CLASS_COMPONENT:
+        return this.addClassComponent(f, metadata);
+      case NODE_TYPES.FUNCTION_COMPONENT:
+        return this.addFunctionComponent(f, metadata);
       default:
         return f;
     }
@@ -394,7 +412,6 @@ export class Graph {
       mapDispatch?: Function,
       ...params: any[]
     ) => (DumbComponent: new () => React.Component<any, any>) => {
-
       const name = getNameFromComponent(DumbComponent, metadata.name);
       const id = makeId(name);
       const type = NODE_TYPES.CONNECT;
@@ -421,7 +438,6 @@ export class Graph {
       };
 
       class Parent extends React.Component {
-
         getChildContext() {
           return { [ctxKey]: id };
         }
@@ -447,13 +463,64 @@ export class Graph {
     return (result as any) as T;
   }
 
-  private addReactComponent<T extends Function>(f: T, metadata: UserNodeMetadata = {}): T {
+  private addFunctionComponent<T extends Function>(
+    f: T,
+    metadata: UserNodeMetadata = {}
+  ): T {
     const name = getFunctionName(f, metadata.name);
-    const type = NODE_TYPES.REACT_COMPONENT;
+    const type = NODE_TYPES.FUNCTION_COMPONENT;
+    const id = makeId(name);
+    const { func, newNode } = this.watch(f, name, type, metadata);
+    newNode.setFunction(f);
+    const returnFunc = (...params: any[]) => {
+      const t = currentTime();
+      const result = func(...params);
+      newNode.setDuration(currentTime() - t);
+      newNode.setActionThatCausedCall(this.lastAction);
+      return result;
+    };
+    const DumbComponent = (returnFunc as any) as new () => React.Component<
+      any,
+      any
+    >;
+    const self = this;
+
+    class Parent extends React.Component {
+      getChildContext() {
+        return { [ctxKey]: id };
+      }
+
+      render() {
+        if (this.context[ctxKey]) {
+          const parentNode = self.getNodeById(this.context[ctxKey]) as Node;
+          parentNode.addDependency(newNode);
+        }
+        newNode.setReactComponent(f as Function, this.props);
+        return <DumbComponent {...this.props} />;
+      }
+    }
+
+    (Parent as any).childContextTypes = {
+      [ctxKey]: PropTypes.string
+    };
+    (Parent as any).contextTypes = {
+      [ctxKey]: PropTypes.string
+    };
+
+    return (Parent as any) as T;
+  }
+
+  private addClassComponent<T extends Function>(
+    f: T,
+    metadata: UserNodeMetadata = {}
+  ): T {
+    const name = getFunctionName(f, metadata.name);
+    const type = NODE_TYPES.CLASS_COMPONENT;
     const id = makeId(name);
     const node = new Node(id, name, type, metadata);
+    node.setFunction(f);
     this.addNode(node);
-    const DumbComponent = f as any as new () => React.Component<any, any>;
+    const DumbComponent = (f as any) as new () => React.Component<any, any>;
     const self = this;
 
     class Parent extends React.Component {
@@ -478,7 +545,7 @@ export class Graph {
       [ctxKey]: PropTypes.string
     };
 
-    return Parent as any as T;
+    return (Parent as any) as T;
   }
 
   private addFunction<T extends Function>(

@@ -29,7 +29,8 @@ export enum NODE_TYPES {
   RESELECT_SELECTOR = 'Selector',
   ASYNC_SELECTOR = 'Async Selector',
   CONNECT = 'Connected Component',
-  REACT_COMPONENT = 'React Component',
+  CLASS_COMPONENT = 'Class Component',
+  FUNCTION_COMPONENT = 'Function Component',
   STATE_VARIABLE = 'State Variable',
   FUNCTION = 'Function',
 }
@@ -39,13 +40,14 @@ const ALL_NODE_TYPES = [
   NODE_TYPES.STATE_VARIABLE,
   NODE_TYPES.RESELECT_SELECTOR,
   NODE_TYPES.CONNECT,
-  NODE_TYPES.REACT_COMPONENT,
+  NODE_TYPES.CLASS_COMPONENT,
+  NODE_TYPES.FUNCTION_COMPONENT,
   NODE_TYPES.ASYNC_SELECTOR,
 ];
 
 export function initialNodeTypeFilters() {
   const obj = {};
-  ALL_NODE_TYPES.forEach(type => obj[type] = false);
+  ALL_NODE_TYPES.forEach(type => (obj[type] = false));
   return obj;
 }
 
@@ -67,9 +69,9 @@ export interface INode {
   action?: IAction;
   function?: (...d: any[]) => any;
   componentInfo: {
-    component?: (params: any[]) => any,
-    props?: object,
-  }
+    component?: (params: any[]) => any;
+    props?: object;
+  };
 }
 
 export interface IUINode {

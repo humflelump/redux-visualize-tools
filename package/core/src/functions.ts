@@ -65,8 +65,10 @@ export function getType(f: any) {
     }
   } catch (e) {}
 
-  if (isReactComponent(f)) {
-    return constants.NODE_TYPES.REACT_COMPONENT;
+  if (isClassComponent(f)) {
+    return constants.NODE_TYPES.CLASS_COMPONENT;
+  } else if (isFunctionComponent(f)) {
+    return constants.NODE_TYPES.FUNCTION_COMPONENT;
   }
 
   if (typeof f === "function") {

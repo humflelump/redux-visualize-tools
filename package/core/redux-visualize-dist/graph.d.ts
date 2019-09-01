@@ -55,10 +55,12 @@ export declare class Graph {
     injectObject(d: any, history: string[], cache: Map<any, any>, depth?: number): any;
     injectImmutable(d: any, history: string[], cache: Map<any, any>, depth?: number): any;
     private injectState;
+    enhanceUseSelector<T extends Function>(useSelector: Function): T;
     enhance<T extends Function>(createStore: StoreCreator): T;
     add<T extends Function>(f: T, metadata?: UserNodeMetadata): T;
     private addConnect;
-    private addReactComponent;
+    private addFunctionComponent;
+    private addClassComponent;
     private addFunction;
     private addReselectSelector;
 }

@@ -9,11 +9,11 @@ const d = { wow: true };
 (d as any).d = d;
 
 const Comp = graph.add(({ name }) => {
-  return <div>{name}</div>
-})
+  return <div>{name}</div>;
+});
 
 const C2 = graph.add(connect)(
-  state => ({ wow: state.Component1 }),
+  (state: State) => ({ wow: state.Component1 }),
   dispatch => ({})
 )(() => null);
 
