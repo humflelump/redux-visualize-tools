@@ -12,6 +12,7 @@ export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
   }
 
   componentDidCatch(error, errorInfo) {
+    window.localStorage.clear();
     console.log({ error, errorInfo });
   }
 

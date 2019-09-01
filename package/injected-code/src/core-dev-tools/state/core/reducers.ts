@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { IAction } from '../../../graph/types';
 
 export interface IStateAnalysisState {
-  userSelectedAction: IAction | null;
+  userSelectedAction: number | null;
 }
 
 const initialState: IStateAnalysisState = {
@@ -15,7 +15,7 @@ export function StateAnalysisReducer(
 ): IStateAnalysisState {
   switch (action.type) {
     case 'SET_SELECTED_ACTION':
-      return { ...state, userSelectedAction: action.action };
+      return { ...state, userSelectedAction: action.action.actionNumber };
     case 'CLEAR_SELECTED_ACTION':
       return { ...state, userSelectedAction: null };
     default:

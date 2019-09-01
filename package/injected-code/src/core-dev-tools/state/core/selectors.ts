@@ -9,8 +9,12 @@ import { AnyAction, Store } from 'redux';
 import { diff } from '../../diff/diff-objects';
 import { Delta } from '../../diff/dist';
 
-const userSelectedAction = (state: IState) =>
-  state.StateAnalysis.userSelectedAction;
+const userSelectedAction = createSelector(
+  [(state: IState) => state.StateAnalysis.userSelectedAction, actions],
+  (number, actions) => {
+    return actions.find(d => d.actionNumber === number) || null;
+  }
+);
 
 const topFraction = (state: IState) => state.DragRegion.dividerTop;
 

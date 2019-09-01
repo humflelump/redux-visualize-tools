@@ -47,6 +47,7 @@
     "javascript-stringify": "^2.0.0",
     "jsondiffpatch": "^0.3.11",
     "lodash": "^4.17.15",
+    "merge": "^1.2.1",
     "node-lcs": "^1.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

@@ -34,6 +34,8 @@ import {
   ISelectedComponentState,
   SelectedComponentReducer,
 } from './selected-component/reducers';
+import { mergeState, loadPersistedState, persist } from './persist';
+import throttle from 'lodash/throttle';
 
 export interface IState {
   CommChannel: ICommChannelState;
@@ -67,6 +69,9 @@ const withAsyncSelector = (state: IState, action: AnyAction) => {
   if (action.type === 'RERENDER') {
     return { ...state };
   }
+  if (action.type === 'MERGE_PERSISTED_STATE') {
+    return mergeState(state, action.toMerge);
+  }
   return appReducer(state, action);
 };
 
@@ -78,3 +83,19 @@ export const store: Store = createStore(
 );
 listenForResizeEvents(store);
 (window as any).store = store;
+
+(window as any)._unsub_ && (window as any)._unsub_();
+setTimeout(() => {
+  try {
+    store.dispatch({
+      type: 'MERGE_PERSISTED_STATE',
+      toMerge: loadPersistedState(),
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  const throttledPersist = throttle(persist, 500);
+  (window as any)._unsub_ = store.subscribe(() => {
+    throttledPersist(store.getState());
+  });
+});

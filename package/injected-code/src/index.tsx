@@ -11,7 +11,18 @@ import { SearchComponent } from './search/ui';
 import { SelectedComponentContainer } from './selected-component';
 import { ErrorBoundary } from './error-boundary';
 
+function clearChildren(id: string) {
+  const node = document.getElementById(id);
+  if (!node) {
+    return;
+  }
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
+
 setTimeout(() => {
+  clearChildren('root'); // Seems to fix a bug where it sometimes crashes on load.
   ReactDOM.render(
     <Provider store={store}>
       <ErrorBoundary>
