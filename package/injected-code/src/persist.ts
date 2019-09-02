@@ -28,3 +28,7 @@ export function mergeState(state: IState, toMerge: object) {
     ...(merge.recursive(obj, toMerge) as object),
   };
 }
+
+export function clearPersistedState() {
+  delete window.localStorage[KEY];
+}

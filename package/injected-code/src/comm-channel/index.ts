@@ -2,6 +2,7 @@ import { store } from '../store';
 import { throttle } from 'lodash';
 import { triggerResetZoomWhenGraphIsFinishedCalculating } from '../graph/core/selectors';
 import { CommChannelActions } from './reducers';
+import { clearPersistedState } from '../persist';
 
 export class MultiWindowCommChannel {
   private lastPing: number;
@@ -52,4 +53,6 @@ window.clearInterval((window as any).interval);
 window.onunload = () => {
   // When the user closes the window, turn off automatic reloads.
   window.localStorage.setItem('_DEV_TOOLS_AUTO_LOAD_ENABLED_', 'false');
+
+  clearPersistedState();
 };
