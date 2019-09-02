@@ -56,8 +56,9 @@ export const store: Store = createStore(
 listenForResizeEvents(store);
 (window as any).store = store;
 
-(window as any)._unsub_ && (window as any)._unsub_();
-setTimeout(() => {
+function handleStatePersistance() {
+  // clear the subscription from the last app refresh
+  (window as any)._unsub_ && (window as any)._unsub_();
   try {
     store.dispatch({
       type: 'MERGE_PERSISTED_STATE',
@@ -70,4 +71,6 @@ setTimeout(() => {
   (window as any)._unsub_ = store.subscribe(() => {
     throttledPersist(store.getState());
   });
-});
+}
+
+setTimeout(handleStatePersistance);

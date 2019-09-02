@@ -358,6 +358,8 @@ var Graph = /** @class */ (function () {
                 return this.addClassComponent(f, metadata);
             case constants_1.NODE_TYPES.FUNCTION_COMPONENT:
                 return this.addFunctionComponent(f, metadata);
+            case constants_1.NODE_TYPES.ASYNC_SELECTOR:
+                return this.addAsyncSelector(f, metadata);
             default:
                 return f;
         }
@@ -536,6 +538,87 @@ var Graph = /** @class */ (function () {
             return result;
         };
         return returnFunc;
+    };
+    Graph.prototype.addAsyncSelector = function (f, metadata) {
+        var _this = this;
+        if (metadata === void 0) { metadata = {}; }
+        var result = function (obj) {
+            var funcs = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                funcs[_i - 1] = arguments[_i];
+            }
+            obj = __assign({}, obj);
+            var node;
+            var mainFunction = obj.async;
+            var setDispatchIdAfterCallback = function (key) {
+                if (typeof obj[key] !== "function")
+                    return;
+                var f = obj[key];
+                obj[key] = function () {
+                    var params = [];
+                    for (var _i = 0; _i < arguments.length; _i++) {
+                        params[_i] = arguments[_i];
+                    }
+                    var curr = _this.lastAction.actionNumber;
+                    f.apply(void 0, params);
+                    var next = _this.lastAction.actionNumber;
+                    if (next > curr)
+                        node.setActionThatCausedCall(_this.lastAction);
+                };
+            };
+            setDispatchIdAfterCallback("onResolve");
+            setDispatchIdAfterCallback("onReject");
+            var newAsync = function () {
+                var params = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    params[_i] = arguments[_i];
+                }
+                var promise = mainFunction.apply(void 0, params);
+                return new Promise(function (resolve, reject) {
+                    var now = functions_1.currentTime();
+                    return promise
+                        .then(function () {
+                        var d = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            d[_i] = arguments[_i];
+                        }
+                        var duration = functions_1.currentTime() - now;
+                        node.setActionThatCausedCall(_this.lastAction);
+                        node.setDuration(duration);
+                        resolve.apply(void 0, d);
+                    })
+                        .catch(function () {
+                        var e = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            e[_i] = arguments[_i];
+                        }
+                        var duration = functions_1.currentTime() - now;
+                        node.setActionThatCausedCall(_this.lastAction);
+                        node.setDuration(duration);
+                        reject.apply(void 0, e);
+                    });
+                });
+            };
+            var oldAsync = obj.async;
+            obj.async = newAsync;
+            var selector = f.apply(void 0, [obj].concat(funcs));
+            var newSelector = function (state) {
+                var params = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    params[_i - 1] = arguments[_i];
+                }
+                // Turn the store into a listener if it isn't already
+                var injected = _this.injectState(state);
+                return selector.apply(void 0, [injected].concat(params));
+            };
+            var type = constants_1.NODE_TYPES.ASYNC_SELECTOR;
+            var name = functions_1.getFunctionName(mainFunction, metadata.name);
+            var _a = _this.watch(newSelector, name, type, metadata), func = _a.func, newNode = _a.newNode;
+            node = newNode;
+            node.setFunction(oldAsync);
+            return func;
+        };
+        return result;
     };
     Graph.prototype.addReselectSelector = function (f, metadata) {
         var _this = this;

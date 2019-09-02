@@ -397,6 +397,8 @@ export class Graph {
         return this.addClassComponent(f, metadata);
       case NODE_TYPES.FUNCTION_COMPONENT:
         return this.addFunctionComponent(f, metadata);
+      case NODE_TYPES.ASYNC_SELECTOR:
+        return this.addAsyncSelector(f, metadata);
       default:
         return f;
     }
@@ -564,6 +566,66 @@ export class Graph {
       return result;
     };
     return (returnFunc as any) as T;
+  }
+
+  private addAsyncSelector<T extends Function>(
+    f: T,
+    metadata: UserNodeMetadata = {}
+  ): T {
+    const result = (obj: any, ...funcs: Function[]) => {
+      obj = { ...obj };
+      let node: Node;
+      const mainFunction = obj.async;
+
+      const setDispatchIdAfterCallback = (key: string) => {
+        if (typeof obj[key] !== "function") return;
+        const f = obj[key];
+        obj[key] = (...params: any[]) => {
+          let curr = this.lastAction.actionNumber;
+          f(...params);
+          let next = this.lastAction.actionNumber;
+          if (next > curr) node.setActionThatCausedCall(this.lastAction);
+        };
+      };
+      setDispatchIdAfterCallback("onResolve");
+      setDispatchIdAfterCallback("onReject");
+
+      const newAsync = (...params: any[]) => {
+        const promise = mainFunction(...params);
+
+        return new Promise((resolve, reject) => {
+          const now = currentTime();
+          return promise
+            .then((...d: any[]) => {
+              const duration = currentTime() - now;
+              node.setActionThatCausedCall(this.lastAction);
+              node.setDuration(duration);
+              resolve(...d);
+            })
+            .catch((...e: any[]) => {
+              const duration = currentTime() - now;
+              node.setActionThatCausedCall(this.lastAction);
+              node.setDuration(duration);
+              reject(...e);
+            });
+        });
+      };
+      const oldAsync = obj.async;
+      obj.async = newAsync;
+      const selector = f(obj, ...funcs);
+      const newSelector = (state: any, ...params: any[]) => {
+        // Turn the store into a listener if it isn't already
+        const injected = this.injectState(state);
+        return selector(injected, ...params);
+      };
+      const type = NODE_TYPES.ASYNC_SELECTOR;
+      const name = getFunctionName(mainFunction, metadata.name);
+      const { func, newNode } = this.watch(newSelector, name, type, metadata);
+      node = newNode;
+      node.setFunction(oldAsync);
+      return func;
+    };
+    return (result as any) as T;
   }
 
   private addReselectSelector<T extends Function>(

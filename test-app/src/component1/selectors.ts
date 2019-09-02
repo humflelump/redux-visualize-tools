@@ -1,21 +1,31 @@
 import { State } from "../store";
 import { createSelector } from "reselect";
 import { graph } from "../graph";
+import createAsyncSelector from "async-selector";
 
-const a = graph.add(() => { });
-const b = graph.add(() => { });
-const c = graph.add(() => { });
+const api = async () => {
+  await new Promise(res => setTimeout(res, 1000));
+  return 35345;
+};
+
+const asyncSelector = graph.add(createAsyncSelector)({
+  async: api
+});
+
+const a = graph.add(() => {});
+const b = graph.add(() => {});
+const c = graph.add(() => {});
 const d = graph.add(() => {
   a();
   b();
   c();
 });
 
-const e = graph.add(() => { });
-const f = graph.add(() => { });
-const g = graph.add(() => { });
-const h = graph.add(() => { });
-const i = graph.add(() => { });
+const e = graph.add(() => {});
+const f = graph.add(() => {});
+const g = graph.add(() => {});
+const h = graph.add(() => {});
+const i = graph.add(() => {});
 const j = graph.add(() => {
   e();
   f();
@@ -28,13 +38,14 @@ const j = graph.add(() => {
 const text = (state: State) => state.Component1.text;
 const wow = (state: State) => state.Component1.immutableYay.get("wow");
 
-
-
-export const appendedText = graph.add(createSelector)([text, wow], t => {
-  for (let i = 0; i < 1000; i++) { }
-  j();
-  return t + "_wow";
-});
+export const appendedText = graph.add(createSelector)(
+  [text, wow, asyncSelector],
+  t => {
+    for (let i = 0; i < 1000; i++) {}
+    j();
+    return t + "_wow";
+  }
+);
 
 export const isLong = graph.add(createSelector, {
   name: "wow",

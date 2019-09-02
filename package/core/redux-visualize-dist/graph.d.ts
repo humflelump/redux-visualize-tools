@@ -62,6 +62,7 @@ export declare class Graph {
     private addFunctionComponent;
     private addClassComponent;
     private addFunction;
+    private addAsyncSelector;
     private addReselectSelector;
 }
 export declare const graph: Graph;
