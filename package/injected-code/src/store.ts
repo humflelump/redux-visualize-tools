@@ -1,57 +1,27 @@
-import { ICommChannelState, CommChannelReducer } from './comm-channel/reducers';
+import { CommChannelReducer } from './comm-channel/reducers';
 import {
   combineReducers,
-  Reducer,
   createStore,
   Store,
   applyMiddleware,
   AnyAction,
 } from 'redux';
-import { IGraphState, GraphReducer } from './graph/core/reducers';
+import { GraphReducer } from './graph/core/reducers';
 import { listenForResizeEvents } from './window-dimensions/listener';
-import { WindowState, WindowReducer } from './window-dimensions/reducers';
+import { WindowReducer } from './window-dimensions/reducers';
 import { createLogger } from 'redux-logger';
-import {
-  ILeftPanelState,
-  LeftPanelReducer,
-} from './core-dev-tools/left-side-panel/core/reducers';
-import {
-  IStateAnalysisState,
-  StateAnalysisReducer,
-} from './core-dev-tools/state/core/reducers';
-import { ISettingsState, SettingsReducer } from './settings/core/reducers';
-import {
-  ILeftPanelDragRegion,
-  DragRegionReducer,
-} from './core-dev-tools/drag-region/core/reducers';
-import { IHeaderState, HeaderReducer } from './header/core/reducers';
-import {
-  IFilterState,
-  FilterReducer,
-} from './core-dev-tools/filters/core/reducers';
-import { ISearchState, SearchReducer } from './search/core/reducers';
-import {
-  ISelectedComponentState,
-  SelectedComponentReducer,
-} from './selected-component/reducers';
+import { LeftPanelReducer } from './core-dev-tools/left-side-panel/core/reducers';
+import { StateAnalysisReducer } from './core-dev-tools/state/core/reducers';
+import { SettingsReducer } from './settings/core/reducers';
+import { DragRegionReducer } from './core-dev-tools/drag-region/core/reducers';
+import { HeaderReducer } from './header/core/reducers';
+import { FilterReducer } from './core-dev-tools/filters/core/reducers';
+import { SearchReducer } from './search/core/reducers';
+import { SelectedComponentReducer } from './selected-component/reducers';
 import { mergeState, loadPersistedState, persist } from './persist';
 import throttle from 'lodash/throttle';
 
-export interface IState {
-  CommChannel: ICommChannelState;
-  Graph: IGraphState;
-  Window: WindowState;
-  LeftPanel: ILeftPanelState;
-  StateAnalysis: IStateAnalysisState;
-  Settings: ISettingsState;
-  DragRegion: ILeftPanelDragRegion;
-  Header: IHeaderState;
-  Filters: IFilterState;
-  Search: ISearchState;
-  SelectedComponent: ISelectedComponentState;
-}
-
-const appReducer: Reducer<IState> = combineReducers<IState>({
+const appReducer = combineReducers({
   CommChannel: CommChannelReducer,
   Graph: GraphReducer,
   Window: WindowReducer,
@@ -64,6 +34,8 @@ const appReducer: Reducer<IState> = combineReducers<IState>({
   Search: SearchReducer,
   SelectedComponent: SelectedComponentReducer,
 });
+
+export type IState = ReturnType<typeof appReducer>;
 
 const withAsyncSelector = (state: IState, action: AnyAction) => {
   if (action.type === 'RERENDER') {

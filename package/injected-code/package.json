@@ -43,6 +43,7 @@
     "async-selector": "^1.0.18",
     "common-substrings": "^2.0.4",
     "d3": "4.10.0",
+    "immer-reducer": "^0.7.7",
     "immutable": "^4.0.0-rc.12",
     "javascript-stringify": "^2.0.0",
     "jsondiffpatch": "^0.3.11",

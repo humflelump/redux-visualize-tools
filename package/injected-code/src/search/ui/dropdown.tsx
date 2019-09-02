@@ -24,6 +24,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Close';
 import { clickedSearchNode } from '../core/actions';
 import { FixedSizeList } from 'react-window';
+import { SearchActions } from '../core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -35,9 +36,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     closeDropdown: () => {
-      dispatch({
-        type: 'CLOSE_SEARCH_DROPDOWN',
-      });
+      dispatch(SearchActions.closeDropdown());
     },
     select: clickedSearchNode,
   };

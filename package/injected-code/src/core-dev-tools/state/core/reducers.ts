@@ -1,24 +1,20 @@
-import { AnyAction } from 'redux';
-import { IAction } from '../../../graph/types';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
-export interface IStateAnalysisState {
-  userSelectedAction: number | null;
-}
-
-const initialState: IStateAnalysisState = {
-  userSelectedAction: null,
+const initialState = {
+  userSelectedAction: null as number | null,
 };
 
-export function StateAnalysisReducer(
-  state: IStateAnalysisState = initialState,
-  action: AnyAction
-): IStateAnalysisState {
-  switch (action.type) {
-    case 'SET_SELECTED_ACTION':
-      return { ...state, userSelectedAction: action.action.actionNumber };
-    case 'CLEAR_SELECTED_ACTION':
-      return { ...state, userSelectedAction: null };
-    default:
-      return state;
+export type IStateAnalysisState = typeof initialState;
+
+export class StateAnalysisClass extends ImmerReducer<IStateAnalysisState> {
+  selectAction(actionNumber: number) {
+    this.draftState.userSelectedAction = actionNumber;
   }
 }
+
+export const StateAnalysisActions = createActionCreators(StateAnalysisClass);
+export const StateAnalysisReducer = createReducerFunction(
+  StateAnalysisClass,
+  initialState
+);

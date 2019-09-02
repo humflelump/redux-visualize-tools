@@ -27,6 +27,7 @@ import { NodeTooltip } from '../../tooltip/ui';
 import { dimensions } from '../core/dimensions-selectors';
 import { ActionButtons } from './buttons';
 import { LoadingIndicator } from './loading';
+import { GraphActions } from '../core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -45,25 +46,20 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     canvasClicked: onClick,
     setScales: (xScale: Scale, yScale: Scale) => {
-      dispatch({
-        type: 'SET_SCALES',
-        xFrom: xScale.domain(),
-        yFrom: yScale.domain(),
-        xTo: xScale.range(),
-        yTo: yScale.range(),
-      });
+      dispatch(
+        GraphActions.setScales(
+          yScale.range(),
+          yScale.domain(),
+          xScale.range(),
+          xScale.domain()
+        )
+      );
     },
     setMouse: (x: number, y: number) => {
-      dispatch({
-        type: 'SET_MOUSE_POSITION',
-        position: [x, y],
-      });
+      dispatch(GraphActions.setMousePosition([x, y]));
     },
     resetMouse: () => {
-      dispatch({
-        type: 'SET_MOUSE_POSITION',
-        position: null,
-      });
+      dispatch(GraphActions.resetMousePosition());
     },
   };
 };

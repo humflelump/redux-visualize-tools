@@ -1,11 +1,10 @@
 import { Store } from 'redux';
+import { WindowActions } from './reducers';
 
 export function listenForResizeEvents(store: Store) {
   window.addEventListener('resize', () => {
-    store.dispatch({
-      type: 'SET_WINDOW_DIMENSIONS',
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    store.dispatch(
+      WindowActions.setDimensions(window.innerWidth, window.innerHeight)
+    );
   });
 }

@@ -7,6 +7,7 @@ import { IState } from '../../../store';
 import { LEFT_PANEL_TABS, TAB_OPTIONS } from '../types';
 import * as d3 from 'd3';
 import { drag } from '../core/actions';
+import { DragRegionActions } from '../core/reducers';
 
 const SmallTab = withStyles((theme: Theme) =>
   createStyles({
@@ -26,10 +27,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setTab: (tab: LEFT_PANEL_TABS) => {
-      dispatch({
-        type: 'SET_LEFT_PANEL_TAB',
-        tab,
-      });
+      dispatch(DragRegionActions.setLeftPanelTab(tab));
     },
     drag,
   };

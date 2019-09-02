@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add @types/merge -D
+  /usr/local/bin/node /usr/local/bin/yarn add @types/immer-reducer
 
 PATH: 
   /opt/local/bin:/opt/local/sbin:/Users/markmetzger/anaconda/bin:/Users/markmetzger/Desktop/anaconda/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin:/Users/markmetzger/anaconda/bin:/Users/markmetzger/Desktop/anaconda/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin
@@ -59,6 +59,7 @@ npm manifest:
       "async-selector": "^1.0.18",
       "common-substrings": "^2.0.4",
       "d3": "4.10.0",
+      "immer-reducer": "^0.7.7",
       "immutable": "^4.0.0-rc.12",
       "javascript-stringify": "^2.0.0",
       "jsondiffpatch": "^0.3.11",
@@ -4998,9 +4999,19 @@ Lockfile:
     version "4.0.6"
     resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   
+  immer-reducer@^0.7.7:
+    version "0.7.7"
+    resolved "https://registry.yarnpkg.com/immer-reducer/-/immer-reducer-0.7.7.tgz#4386b62f0c80115bb837f867777760c1122c3412"
+    dependencies:
+      immer "^1.4.0 || ^2.0.0 || ^3.0.0"
+  
   immer@1.10.0:
     version "1.10.0"
     resolved "https://registry.yarnpkg.com/immer/-/immer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
+  
+  "immer@^1.4.0 || ^2.0.0 || ^3.0.0":
+    version "3.2.0"
+    resolved "https://registry.yarnpkg.com/immer/-/immer-3.2.0.tgz#53686471e9dd2b070e0fb5500c6fdecd3a99375f"
   
   immutable@^4.0.0-rc.12:
     version "4.0.0-rc.12"
@@ -10087,7 +10098,7 @@ Lockfile:
       yargs-parser "^11.1.1"
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fmerge: Not found
+  Error: https://registry.yarnpkg.com/@types%2fimmer-reducer: Not found
       at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:62098:18)
       at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:123085:22)
       at Request.emit (events.js:182:13)

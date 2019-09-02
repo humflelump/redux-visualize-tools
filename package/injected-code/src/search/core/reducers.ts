@@ -1,37 +1,30 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
-export const initialState = {
+const initialState = {
   searchText: '',
   searchResultsOpen: false,
 };
 
-export interface ISearchState {
-  searchText: string;
-  searchResultsOpen: boolean;
-}
+type ISearchState = typeof initialState;
 
-export function SearchReducer(
-  state: ISearchState = initialState,
-  action: AnyAction
-): ISearchState {
-  switch (action.type) {
-    case 'SET_SEARCH_TEXT':
-      return {
-        ...state,
-        searchText: action.text,
-        searchResultsOpen: action.text !== '',
-      };
-    case 'CLOSE_SEARCH_DROPDOWN':
-      return {
-        ...state,
-        searchResultsOpen: false,
-      };
-    case 'OPEN_SEARCH_DROPDOWN':
-      return {
-        ...state,
-        searchResultsOpen: true,
-      };
-    default:
-      return state;
+class SearchReducerClass extends ImmerReducer<ISearchState> {
+  setSearchText(text: string) {
+    this.draftState.searchText = text;
+    this.draftState.searchResultsOpen = true;
+  }
+
+  closeDropdown() {
+    this.draftState.searchResultsOpen = false;
+  }
+
+  openDropdown() {
+    this.draftState.searchResultsOpen = true;
   }
 }
+
+export const SearchActions = createActionCreators(SearchReducerClass);
+export const SearchReducer = createReducerFunction(
+  SearchReducerClass,
+  initialState
+);

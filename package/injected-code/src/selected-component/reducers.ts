@@ -1,21 +1,24 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
-export const initialState = {
-  nodeIdToShowComponentFor: null,
+const initialState = {
+  nodeIdToShowComponentFor: null as string | null,
 };
 
-export interface ISelectedComponentState {
-  nodeIdToShowComponentFor: string | null;
-}
+type ISelectedComponentState = typeof initialState;
 
-export function SelectedComponentReducer(
-  state: ISelectedComponentState = initialState,
-  action: AnyAction
-): ISelectedComponentState {
-  switch (action.type) {
-    case 'SET_NODE_ID_TO_SHOW_COMPONENT_FOR':
-      return { ...state, nodeIdToShowComponentFor: action.id };
-    default:
-      return state;
+class SelectedComponentReducerClass extends ImmerReducer<
+  ISelectedComponentState
+> {
+  setComponentNode(id: string | null) {
+    this.draftState.nodeIdToShowComponentFor = id;
   }
 }
+
+export const SelectedComponentActions = createActionCreators(
+  SelectedComponentReducerClass
+);
+export const SelectedComponentReducer = createReducerFunction(
+  SelectedComponentReducerClass,
+  initialState
+);

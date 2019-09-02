@@ -1,6 +1,7 @@
 import { store } from '../store';
 import { throttle } from 'lodash';
 import { triggerResetZoomWhenGraphIsFinishedCalculating } from '../graph/core/selectors';
+import { CommChannelActions } from './reducers';
 
 export class MultiWindowCommChannel {
   private lastPing: number;
@@ -10,14 +11,13 @@ export class MultiWindowCommChannel {
 
   public sendGraph(data: any) {
     const dispatch = () =>
-      store.dispatch({
-        type: 'SET_GRAPH',
-        graph: {
+      store.dispatch(
+        CommChannelActions.setGraph({
           ...data,
           nodes: { ...data.nodes },
           actions: [...data.actions],
-        },
-      });
+        })
+      );
     const throttled = throttle(dispatch, 250);
     data.store.subscribe(() => setTimeout(throttled));
     dispatch();

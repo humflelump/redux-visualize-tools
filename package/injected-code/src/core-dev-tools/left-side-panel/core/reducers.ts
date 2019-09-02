@@ -1,24 +1,20 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
 export const initialState = {
   isLeftSidePanelOpen: false,
 };
 
-export interface ILeftPanelState {
-  isLeftSidePanelOpen: boolean;
-}
+export type ILeftPanelState = typeof initialState;
 
-export function LeftPanelReducer(
-  state: ILeftPanelState = initialState,
-  action: AnyAction
-): ILeftPanelState {
-  switch (action.type) {
-    case 'TOGGLE_IF_LEFT_PANEL_OPEN':
-      return {
-        ...state,
-        isLeftSidePanelOpen: !state.isLeftSidePanelOpen,
-      };
-    default:
-      return state;
+export class LeftPanelReducerClass extends ImmerReducer<ILeftPanelState> {
+  toggleIfPanelOpen() {
+    this.draftState.isLeftSidePanelOpen = !this.draftState.isLeftSidePanelOpen;
   }
 }
+
+export const LeftPanelActions = createActionCreators(LeftPanelReducerClass);
+export const LeftPanelReducer = createReducerFunction(
+  LeftPanelReducerClass,
+  initialState
+);

@@ -9,6 +9,7 @@ import { jumpToState } from '../core/actions';
 import { FixedSizeList } from 'react-window';
 import { IAction } from '../../../graph/types';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import { StateAnalysisActions } from '../../state/core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -20,10 +21,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     jumpToState,
     setAction: (action: IAction) => {
-      dispatch({
-        type: 'SET_SELECTED_ACTION',
-        action,
-      });
+      dispatch(StateAnalysisActions.selectAction(action.actionNumber));
     },
   };
 };

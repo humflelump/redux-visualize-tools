@@ -1,42 +1,31 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 import { initialNodeTypeFilters, NODE_TYPES } from '../../../graph/types';
 
-export const initialState = {
+const initialState = {
   filterNodesAffectedByOldActions: false,
   filterIsolatedNodes: true,
-  nodeTypeFilters: initialNodeTypeFilters(),
+  nodeTypeFilters: initialNodeTypeFilters() as { [key: string]: boolean },
 };
 
-export interface IFilterState {
-  filterNodesAffectedByOldActions: boolean;
-  filterIsolatedNodes: boolean;
-  nodeTypeFilters: { [key: string]: boolean };
-}
+type IFilterState = typeof initialState;
 
-export function FilterReducer(
-  state: IFilterState = initialState,
-  action: AnyAction
-): IFilterState {
-  switch (action.type) {
-    case 'SET_filterNodesAffectedByOldActions':
-      return {
-        ...state,
-        filterNodesAffectedByOldActions: action.bool,
-      };
-    case 'SET_filterIsolatedNodes':
-      return {
-        ...state,
-        filterIsolatedNodes: action.bool,
-      };
-    case 'APPLY_NODE_TYPE_FILTER':
-      return {
-        ...state,
-        nodeTypeFilters: {
-          ...state.nodeTypeFilters,
-          [action.nodeType]: action.bool,
-        },
-      };
-    default:
-      return state;
+class FilterReducerClass extends ImmerReducer<IFilterState> {
+  filterNodesEffectedByOldActions(bool: boolean) {
+    this.draftState.filterNodesAffectedByOldActions = bool;
+  }
+
+  filterIsolatedNodes(bool: boolean) {
+    this.draftState.filterIsolatedNodes = bool;
+  }
+
+  applyNodeTypeFilter(nodeType: string, bool: boolean) {
+    this.draftState.nodeTypeFilters[nodeType] = bool;
   }
 }
+
+export const FilterActions = createActionCreators(FilterReducerClass);
+export const FilterReducer = createReducerFunction(
+  FilterReducerClass,
+  initialState
+);

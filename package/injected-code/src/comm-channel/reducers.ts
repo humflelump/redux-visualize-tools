@@ -1,25 +1,20 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
-export interface ICommChannelState {
-  graph: any;
-}
-
-const initialState: ICommChannelState = {
-  graph: null,
+const initialState = {
+  graph: null as any | null,
 };
 
-// export type SetTextAction = {type: 'SET_TEXT1', text: string}
-// export type SetNumberAction = {type: 'SET_NUMBER1', num: number}
-// type Union = SetTextAction | SetNumberAction;
+type ICommChannelState = typeof initialState;
 
-export function CommChannelReducer(
-  state: ICommChannelState = initialState,
-  action: AnyAction
-): ICommChannelState {
-  switch (action.type) {
-    case 'SET_GRAPH':
-      return { ...state, graph: action.graph };
-    default:
-      return state;
+class CommChannelReducerClass extends ImmerReducer<ICommChannelState> {
+  setGraph(graph: any) {
+    this.draftState.graph = graph;
   }
 }
+
+export const CommChannelActions = createActionCreators(CommChannelReducerClass);
+export const CommChannelReducer = createReducerFunction(
+  CommChannelReducerClass,
+  initialState
+);

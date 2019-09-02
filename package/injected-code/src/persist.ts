@@ -13,7 +13,6 @@ const KEY = '__DEV_TOOLS_PERSISTED_STATE__';
 export function persist(state: IState) {
   const obj = createSerializableObject(state);
   const str = JSON.stringify(obj);
-  console.log(str);
   window.localStorage.setItem(KEY, str);
 }
 

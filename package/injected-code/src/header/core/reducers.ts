@@ -1,22 +1,21 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 import { HEADER_TAB_OPTIONS, HEADER_TABS } from '../types';
 
-export const initialState = {
+const initialState = {
   headerTab: HEADER_TAB_OPTIONS[0],
 };
 
-export interface IHeaderState {
-  headerTab: HEADER_TABS;
-}
+type IHeaderState = typeof initialState;
 
-export function HeaderReducer(
-  state: IHeaderState = initialState,
-  action: AnyAction
-): IHeaderState {
-  switch (action.type) {
-    case 'SET_HEADER_TAB':
-      return { ...state, headerTab: action.tab };
-    default:
-      return state;
+class HeaderReducerClass extends ImmerReducer<IHeaderState> {
+  setHeaderTab(tab: HEADER_TABS) {
+    this.draftState.headerTab = tab;
   }
 }
+
+export const HeaderActions = createActionCreators(HeaderReducerClass);
+export const HeaderReducer = createReducerFunction(
+  HeaderReducerClass,
+  initialState
+);

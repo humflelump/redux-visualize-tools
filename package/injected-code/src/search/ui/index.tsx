@@ -16,6 +16,7 @@ import { searchDimensions } from '../core/selectors';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Close';
 import { SearchDropdownComponent } from './dropdown';
+import { SearchActions } from '../core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -28,15 +29,10 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     search: (str: string) => {
-      dispatch({
-        type: 'SET_SEARCH_TEXT',
-        text: str,
-      });
+      dispatch(SearchActions.setSearchText(str));
     },
     openDropdown: () => {
-      dispatch({
-        type: 'OPEN_SEARCH_DROPDOWN',
-      });
+      dispatch(SearchActions.openDropdown());
     },
   };
 };

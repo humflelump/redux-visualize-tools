@@ -1,24 +1,22 @@
-import { AnyAction } from 'redux';
+import { ImmerReducer } from 'immer-reducer';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
 
-export const initialState = {
+const initialState = {
   width: window.innerWidth,
   height: window.innerHeight,
 };
 
-export type WindowState = typeof initialState;
+type WindowState = typeof initialState;
 
-export function WindowReducer(
-  state: WindowState = initialState,
-  action: AnyAction
-): WindowState {
-  switch (action.type) {
-    case 'SET_WINDOW_DIMENSIONS':
-      return {
-        ...state,
-        width: action.width,
-        height: action.height,
-      };
-    default:
-      return state;
+class DimensionsReducer extends ImmerReducer<WindowState> {
+  setDimensions(width: number, height: number) {
+    this.draftState.width = width;
+    this.draftState.height = height;
   }
 }
+
+export const WindowActions = createActionCreators(DimensionsReducer);
+export const WindowReducer = createReducerFunction(
+  DimensionsReducer,
+  initialState
+);

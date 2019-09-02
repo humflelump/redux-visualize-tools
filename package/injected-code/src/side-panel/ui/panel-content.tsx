@@ -24,6 +24,8 @@ import { NODE_FILTER_TYPE, INode, IUINode } from '../../graph/types';
 import { JsonViewer } from './json-viewer';
 import DeleteIcon from '@material-ui/icons/Close';
 import { canShowComponentForClickedNode } from '../../selected-component/selectors';
+import { SelectedComponentActions } from '../../selected-component/reducers';
+import { GraphActions } from '../../graph/core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -36,23 +38,15 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     viewNodeComponent: (node: IUINode | null) => {
-      dispatch({
-        type: 'SET_NODE_ID_TO_SHOW_COMPONENT_FOR',
-        id: node ? node.data.id : null,
-      });
+      const id = node ? node.data.id : null;
+      dispatch(SelectedComponentActions.setComponentNode(id));
     },
     setFilter: (str: NODE_FILTER_TYPE, nodeId: string) => {
       triggerResetZoomWhenGraphIsFinishedCalculating();
-      dispatch({
-        type: 'SET_NODE_FILTER',
-        filterType: str,
-        nodeId,
-      });
+      dispatch(GraphActions.setNodeFilter(str, nodeId));
     },
     close: () => {
-      dispatch({
-        type: 'CLEAR_CLICKED_NODE',
-      });
+      dispatch(GraphActions.clearClickedNode());
     },
   };
 };
@@ -92,10 +86,9 @@ const styles = (theme: Theme) =>
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
-interface IStyleProps extends WithStyles<typeof styles> { }
-export interface IPassedProps { }
+interface IStyleProps extends WithStyles<typeof styles> {}
+export interface IPassedProps {}
 type Props = StateProps & DispatchProps & IStyleProps & IPassedProps;
-
 
 class Component extends React.Component<Props> {
   public render() {

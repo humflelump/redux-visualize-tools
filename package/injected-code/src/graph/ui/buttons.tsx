@@ -8,6 +8,7 @@ import { isZoomedOut } from '../core/zoom-selectors';
 import { resetZoom } from '../core/actions';
 import { NODE_FILTER_TYPE } from '../types';
 import { triggerResetZoomWhenGraphIsFinishedCalculating } from '../core/selectors';
+import { GraphActions } from '../core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -22,7 +23,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     resetZoom,
     clearFilter: () => {
-      dispatch({ type: 'CLEAR_NODE_FILTER' });
+      dispatch(GraphActions.clearNodeFilter());
       triggerResetZoomWhenGraphIsFinishedCalculating();
     },
   };

@@ -7,6 +7,7 @@ import { WithStyles, Theme, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import { LEFT_PANEL_WIDTH } from '../../core-dev-tools/left-side-panel/ui/constants';
+import { LeftPanelActions } from '../../core-dev-tools/left-side-panel/core/reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -18,9 +19,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     togglePanel: () => {
-      dispatch({
-        type: 'TOGGLE_IF_LEFT_PANEL_OPEN',
-      });
+      dispatch(LeftPanelActions.toggleIfPanelOpen());
     },
   };
 };

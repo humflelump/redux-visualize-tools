@@ -5,6 +5,7 @@ import { withStyles, createStyles } from '@material-ui/styles';
 import { WithStyles, Theme, Button, Tabs, Tab } from '@material-ui/core';
 import { IState } from '../../store';
 import { HEADER_TABS, HEADER_TAB_OPTIONS } from '../types';
+import { HeaderActions } from '../core/reducers';
 
 const SmallTab = withStyles((theme: Theme) =>
   createStyles({
@@ -24,10 +25,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setTab: (tab: HEADER_TABS) => {
-      dispatch({
-        type: 'SET_HEADER_TAB',
-        tab,
-      });
+      dispatch(HeaderActions.setHeaderTab(tab));
     },
   };
 };

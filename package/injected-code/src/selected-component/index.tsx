@@ -7,6 +7,7 @@ import { IState } from '../store';
 import CloseIcon from '@material-ui/icons/Close';
 import { InjectedComponent } from './Injected';
 import { nodeToShowComponentFor } from './selectors';
+import { SelectedComponentActions } from './reducers';
 
 const mapStateToProps = (state: IState) => {
   return {
@@ -17,10 +18,7 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     close: () => {
-      dispatch({
-        type: 'SET_NODE_ID_TO_SHOW_COMPONENT_FOR',
-        id: null,
-      });
+      dispatch(SelectedComponentActions.setComponentNode(null));
     },
   };
 };
@@ -45,12 +43,12 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       right: 0,
       top: 0,
-    }
+    },
   });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
-interface IStyleProps extends WithStyles<typeof styles> { }
+interface IStyleProps extends WithStyles<typeof styles> {}
 type Props = StateProps & DispatchProps & IStyleProps;
 
 class Component extends React.Component<Props> {
@@ -66,13 +64,13 @@ class Component extends React.Component<Props> {
         }}
         onClick={props.close}
       >
-        {
-          props.isOpen && <div className={props.classes.closeButton}>
+        {props.isOpen && (
+          <div className={props.classes.closeButton}>
             <IconButton aria-label="delete">
               <CloseIcon fontSize="large" />
             </IconButton>
           </div>
-        }
+        )}
 
         <Paper
           onClick={e => e.stopPropagation()}
@@ -85,7 +83,7 @@ class Component extends React.Component<Props> {
             bottom: props.isOpen ? '10%' : '50%',
           }}
         >
-          {props.isOpen && < InjectedComponent />}
+          {props.isOpen && <InjectedComponent />}
         </Paper>
       </div>
     );
