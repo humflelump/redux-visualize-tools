@@ -21,7 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "typescript": "2.9",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^3.0.8"
   },
   "dependencies": {
     "@types/react": "16.8.23",
